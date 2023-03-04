@@ -5,12 +5,15 @@ services:
     build:
       dockerfile: Dockerfile
       context: .
+      target: install-dependencies
+    command: yarn start:inspect
     volumes:
       - .:/usr/src/app
     env_file:
       - .env
     ports:
       - ${PORT}:${PORT}
+      - ${DEBUG_PORT}:${DEBUG_PORT}
     depends_on:
       - postgres
     networks:
