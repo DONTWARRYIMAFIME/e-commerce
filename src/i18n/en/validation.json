@@ -1,0 +1,12 @@
+{
+  "IS_EMAIL": "Invalid email address",
+  "INVALID_BOOLEAN": "Field: [{property}] is not a boolean",
+  "MIN_LENGTH": "Field: [{property}] with value: [{value}] needs to be at least {constraints.0}",
+  "MAX_LENGTH": "Field: [{property}] with value: [{value}] needs to be less than {constraints.0}",
+  "LENGTH": "Field: [{property}] needs to have length {constraints.0}-{constraints.1}",
+  "IS_SNAKE_CASE": "Field: [{property}] should be in a snake case format",
+  "IS_HEX_COLOR": "Field: [{property}] must be a hexadecimal color",
+  "IS_UPPER_CASE": "Field: [{property}] must be in a upper case format",
+  "IS_BIG_INT": "Field: [{property}] must be a BigInt",
+  "IS_NOT_EMPTY": "Field: [{property}] cannot be empty"
+}

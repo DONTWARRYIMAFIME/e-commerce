@@ -1,0 +1,12 @@
+{
+  "IS_EMAIL": "Некорректный email адрес",
+  "INVALID_BOOLEAN": "Поле: [{property}] не явялется типом 'Boolean'",
+  "MIN_LENGTH": "Поле: [{property}] длинной: [{value}] должно иметь длину как минимум {constraints.0} символов",
+  "MAX_LENGTH": "Поле: [{property}] длинной: [{value}] не должно превышать длину в {constraints.0} символов",
+  "LENGTH": "Поле: [{property}] должно иметь длину {constraints.0}-{constraints.1} символов",
+  "IS_SNAKE_CASE": "Поле: [{property}] должно быть в формате 'Snake Case'",
+  "IS_HEX_COLOR": "Поле: [{property}] должно иметь формать шестнадцатиричного числа",
+  "IS_UPPER_CASE": "Поле: [{property}] должно быть описано заглавными буквами",
+  "IS_BIG_INT": "Поле: [{property}] должно иметь тип 'BigInt'",
+  "IS_NOT_EMPTY": "Поле: [{property}] не должно быть пустым"
+}
