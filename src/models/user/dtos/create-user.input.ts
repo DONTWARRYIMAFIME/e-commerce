@@ -1,10 +1,11 @@
 import { Field, InputType } from "@nestjs/graphql";
-import { Allow, IsEmail } from "class-validator";
+import { Allow } from "class-validator";
+import { IsEmailI18N } from "../../../i18n/i18n.decorators";
 import { User } from "../entities/user.entity";
 
 @InputType()
 export class CreateUserInput implements Partial<User> {
-  @IsEmail()
+  @IsEmailI18N()
   @Field()
   email!: string;
 
