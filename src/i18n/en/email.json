@@ -1,0 +1,25 @@
+{
+  "common": {
+    "footer": [
+      "If you have any questions or require further information, please do not hesitate to contact us at. We look forward to seeing you at the event!",
+      "Best regards,",
+      "{projectName} team"
+    ]
+  },
+  "registration": {
+    "subject": "Registration for {name}",
+    "html": {
+      "header": "Registration Email",
+      "content": [
+        "Dear {name},",
+        "We are delighted to inform you that registration for the upcoming {projectName} is now open! This event is going to be a great opportunity for you to learn from experts, network with peers and take your business to the next level.",
+        "Event Details:",
+        "To approve your email address press the button below"
+      ],
+      "date": "Date:",
+      "time:": "Time:",
+      "location:": "Location:",
+      "button": "Approve"
+    }
+  }
+}

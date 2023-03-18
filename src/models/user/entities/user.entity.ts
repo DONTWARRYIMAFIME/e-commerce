@@ -1,15 +1,19 @@
-import { FilterableField } from "@nestjs-query/query-graphql";
+import { FilterableField, FilterableRelation } from "@nestjs-query/query-graphql";
 import { HideField, ObjectType } from "@nestjs/graphql";
-import { Column, Entity, Unique } from "typeorm";
+import { Column, Entity, ManyToOne } from "typeorm";
 import { BaseEntity } from "../../base.entity";
+import { EmailAddress } from "../../email-address/entities/email-address.entity";
 
+@FilterableRelation("emailAddress", () => EmailAddress)
 @ObjectType()
-@Unique("UNQ_user_email", ["email"])
 @Entity()
 export class User extends BaseEntity {
   @FilterableField()
-  @Column()
   email!: string;
+
+  @HideField()
+  @ManyToOne(() => EmailAddress, { eager: true, cascade: true, onUpdate: "CASCADE", onDelete: "CASCADE" })
+  emailAddress!: EmailAddress;
 
   @FilterableField({ nullable: true })
   @Column({ nullable: true })

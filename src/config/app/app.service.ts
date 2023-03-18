@@ -6,6 +6,10 @@ import { AppConstants } from "./app.constants";
 export class AppConfigService {
   constructor(private configService: ConfigService) {}
 
+  get projectName(): string {
+    return this.configService.getOrThrow<string>(AppConstants.PROJECT_NAME);
+  }
+
   get baseUrl(): string {
     return this.configService.getOrThrow<string>(AppConstants.BASE_URL);
   }
