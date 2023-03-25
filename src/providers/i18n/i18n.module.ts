@@ -14,6 +14,5 @@ import { join } from "path";
       typesOutputPath: join(process.cwd(), "src", "i18n", "i18n.generated.ts"),
     }),
   ],
-  exports: [NestI18nModule],
 })
 export class I18nModule {}

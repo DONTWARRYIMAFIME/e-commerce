@@ -24,7 +24,7 @@ import { PostgresConfigService } from "../../../config/database/postgres/postgre
         namingStrategy: new SnakeNamingStrategy(),
         logging: false,
         autoLoadEntities: true,
-        synchronize: true,
+        synchronize: process.env.NODE_ENV !== "production",
       }),
     } as TypeOrmModuleAsyncOptions),
   ],

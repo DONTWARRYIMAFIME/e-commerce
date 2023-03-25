@@ -1,0 +1,21 @@
+{
+  "common": {
+    "footer": [
+      "Need help? Contact us at:",
+      "Team {projectName}",
+      "To reduce CO2, delete this email if you no longer need it."
+    ]
+  },
+  "registration": {
+    "subject": "Registration for {name}",
+    "html": {
+      "header": "Thank you for registering!",
+      "content": [
+        "Dear {name},",
+        "You have just registered on {projectName}, thank you!",
+        "To get started, please click the button below:"
+      ],
+      "button": "Confirm my account"
+    }
+  }
+}

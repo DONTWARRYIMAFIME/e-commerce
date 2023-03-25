@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang={{ i18nLang }}>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width">
+  <title>{{ headerTitle }}</title>
+</head>
+<body class="container">
+<header>
+  {{> header headerTitle=headerTitle }}
+</header>
+<main>
+  {{> @partial-block }}
+</main>
+<footer>
+  {{> footer }}
+</footer>
+</body>
+</html>
