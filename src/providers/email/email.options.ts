@@ -2,7 +2,7 @@ import { MailerOptions, MailerOptionsFactory } from "@nestjs-modules/mailer";
 import { HandlebarsAdapter } from "@nestjs-modules/mailer/dist/adapters/handlebars.adapter";
 import { Injectable } from "@nestjs/common";
 import { I18nService } from "nestjs-i18n";
-import { Address, Options } from "nodemailer/lib/mailer";
+import { Options } from "nodemailer/lib/mailer";
 import { join } from "path";
 import { EmailConfigService } from "../../config/email/email.service";
 
@@ -15,8 +15,10 @@ export class EmailOptions implements MailerOptionsFactory {
       transport: {
         host: this.config.host,
         port: this.config.port,
-        secure: false,
+        secure: this.config.port === 587,
         auth: {
+          type: "custom",
+          method: "CRAM-MD5",
           user: this.config.username,
           pass: this.config.password,
         },
@@ -24,7 +26,7 @@ export class EmailOptions implements MailerOptionsFactory {
       defaults: {
         from: {
           name: "e-commerce",
-          address: "no-reply@e-commerce.com",
+          address: "customersupport@e-commerce.com",
         },
       },
       template: {
@@ -68,7 +70,11 @@ export class EmailOptions implements MailerOptionsFactory {
     return this.createMailerOptions().options.partials.dir;
   }
 
-  getDefaultSenderEmailAddress(): string | Address {
-    return (this.createMailerOptions().defaults as Options).from;
+  getDefaultSenderEmailAddress(): string {
+    const email = (this.createMailerOptions().defaults as Options).from;
+    if (typeof email !== "string") {
+      return email.address;
+    }
+    return email;
   }
 }

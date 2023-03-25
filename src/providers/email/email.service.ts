@@ -103,6 +103,7 @@ export class EmailService {
     return {
       ...context,
       projectName: this.appConfigService.projectName,
+      supportEmail: this.emailOptions.getDefaultSenderEmailAddress(),
       i18nLang: lang,
     };
   }
