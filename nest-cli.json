@@ -6,6 +6,8 @@
     "deleteOutDir": true,
     "assets": [
       {"include": "i18n/**/*"},
+      {"include": "**/partials/**/*.hbs"},
+      {"include": "**/partials/**/*.css"},
       {"include": "**/templates/**/*.hbs"},
       {"include": "**/templates/**/*.css"}
     ],

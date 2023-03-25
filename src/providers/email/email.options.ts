@@ -50,7 +50,7 @@ export class EmailOptions implements MailerOptionsFactory {
       },
       options: {
         partials: {
-          dir: join(__dirname, "templates", "partials"),
+          dir: join(__dirname, "partials"),
           options: {
             strict: true,
           },
@@ -60,11 +60,11 @@ export class EmailOptions implements MailerOptionsFactory {
     };
   }
 
-  getTemplateDir(): string {
+  getPathToTemplates(): string {
     return this.createMailerOptions().template.dir;
   }
 
-  getPartialTemplateDir(): string {
+  getPathToPartials(): string {
     return this.createMailerOptions().options.partials.dir;
   }
 
