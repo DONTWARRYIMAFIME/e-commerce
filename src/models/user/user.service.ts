@@ -11,12 +11,12 @@ export class UserService extends TypeOrmQueryService<UserEntity> {
     super(repo);
   }
 
-  public findOneById(id: Id): Promise<UserEntity | undefined> {
-    return this.repo.findOneBy({ id });
+  public findById(id: Id): Promise<UserEntity | undefined> {
+    return this.repo.findOne({ where: { id }, relations: { emailAddressEntity: true, roleEntities: true } });
   }
 
   public findOneByEmail(email: string): Promise<UserEntity> {
-    return this.repo.findOne({ relations: { emailAddressEntity: true }, where: { emailAddressEntity: { address: email } } });
+    return this.repo.findOne({ relations: { emailAddressEntity: true, roleEntities: true }, where: { emailAddressEntity: { address: email } } });
   }
 
   public createOne(input: DeepPartial<UserEntity>): Promise<UserEntity> {

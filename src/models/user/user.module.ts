@@ -1,7 +1,9 @@
 import { NestjsQueryTypeOrmModule } from "@nestjs-query/query-typeorm";
 import { Global, Module } from "@nestjs/common";
 import { SecurityConfigModule } from "../../config/security/security.module";
+import { IsPublic } from "../../providers/security/authentication/decorators/isPublic.decorator";
 import { CaslGraphQLModule } from "../../providers/security/authorization/casl-graphql.module";
+import { UserAssembler } from "./assemblers/user.assembler";
 import { CreateUserInput } from "./dto/create-user.input";
 import { UpdateUserInput } from "./dto/update-user.input";
 import { UserEntity } from "./entities/user.entity";
@@ -16,6 +18,7 @@ import { UserService } from "./user.service";
     CaslGraphQLModule.forFeature({
       imports: [SecurityConfigModule, NestjsQueryTypeOrmModule.forFeature([UserEntity])],
       services: [UserService],
+      assemblers: [UserAssembler],
       resolvers: [
         {
           DTOClass: UserEntity,
@@ -23,11 +26,12 @@ import { UserService } from "./user.service";
           CreateDTOClass: CreateUserInput,
           UpdateDTOClass: UpdateUserInput,
           ServiceClass: UserService,
+          AssemblerClass: UserAssembler,
         },
       ],
     }),
   ],
-  providers: [UserService, UserSubscriber, UserHook],
+  providers: [UserService, UserHook],
   exports: [UserService, UserHook],
 })
 export class UserModule {}

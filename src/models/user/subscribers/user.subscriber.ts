@@ -18,10 +18,11 @@ export class UserSubscriber implements EntitySubscriberInterface<UserEntity> {
     return UserEntity;
   }
 
-  public afterLoad(entity: UserEntity) {
+  public async afterLoad(entity: UserEntity) {
     entity.tempPassword = entity.password;
-    entity.email = entity.emailAddressEntity.address;
-    entity.roles = entity.roleEntities.map(role => role.name);
+    console.log("entity", entity);
+    entity.email = entity.emailAddressEntity?.address;
+    entity.roles = entity.roleEntities?.map(role => role.name);
   }
 
   public afterInsert(event: InsertEvent<UserEntity>) {

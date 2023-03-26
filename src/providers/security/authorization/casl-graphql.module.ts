@@ -3,8 +3,6 @@ import { NestjsQueryGraphqlModuleOpts } from "@nestjs-query/query-graphql/dist/s
 import { DynamicModule, Module } from "@nestjs/common";
 import { UseAbility } from "nest-casl";
 import { Actions } from "./action.enum";
-import { AuthorizationModule } from "./authorization.module";
-import { permissions } from "./permission.factory";
 
 @Module({})
 export class CaslGraphQLModule extends NestjsQueryGraphQLModule {
@@ -36,7 +34,7 @@ export class CaslGraphQLModule extends NestjsQueryGraphQLModule {
 
     return super.forFeature({
       ...options,
-      imports: [...options.imports, AuthorizationModule.forFeature({ permissions })],
+      imports: [...options.imports],
       resolvers,
     });
   }
