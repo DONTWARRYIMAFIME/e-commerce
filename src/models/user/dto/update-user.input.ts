@@ -1,10 +1,10 @@
 import { CreateOneInputType, MutationArgsType } from "@nestjs-query/query-graphql";
 import { ArgsType, Field, InputType } from "@nestjs/graphql";
 import { Length } from "class-validator";
-import { User } from "../entities/user.entity";
+import { UserEntity } from "../entities/user.entity";
 
 @InputType()
-export class UpdateUserInput implements Partial<User> {
+export class UpdateUserInput implements Partial<UserEntity> {
   @Length(2, 64)
   @Field({ nullable: true })
   firstName: string;

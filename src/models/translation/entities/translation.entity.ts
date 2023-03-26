@@ -1,13 +1,14 @@
 import { FilterableField } from "@nestjs-query/query-graphql";
-import { ID, ObjectType } from "@nestjs/graphql";
-import { Column, Entity, ManyToOne, Unique } from "typeorm";
+import { ID } from "@nestjs/graphql";
+import { Column, ManyToOne, Unique } from "typeorm";
+import { Entity, ObjectType } from "../../../common/decorators";
 import { BaseEntity } from "../../base.entity";
-import { Language } from "../../language/entities/language.entity";
+import { LanguageEntity } from "../../language/entities/language.entity";
 
 @ObjectType()
 @Unique("UNQ_translation_key_and_value", ["key", "value"])
 @Entity()
-export class Translation extends BaseEntity {
+export class TranslationEntity extends BaseEntity {
   @FilterableField()
   @Column({ length: 128 })
   key!: string;
@@ -20,6 +21,6 @@ export class Translation extends BaseEntity {
   @Column()
   localeId!: string;
 
-  @ManyToOne(() => Language)
-  locale!: Language;
+  @ManyToOne(() => LanguageEntity)
+  locale!: LanguageEntity;
 }

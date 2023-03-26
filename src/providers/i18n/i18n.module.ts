@@ -7,11 +7,11 @@ import { join } from "path";
     NestI18nModule.forRoot({
       fallbackLanguage: "en",
       loaderOptions: {
-        path: join(process.cwd(), "src", "i18n"),
+        path: __dirname,
         watch: process.env.NODE_ENV !== "production",
       },
       resolvers: [{ use: HeaderResolver, options: ["language", "lang", "l"] }, AcceptLanguageResolver],
-      typesOutputPath: join(process.cwd(), "src", "i18n", "i18n.generated.ts"),
+      typesOutputPath: join(process.cwd(), "src", "providers", "i18n", "i18n.generated.ts"),
     }),
   ],
 })

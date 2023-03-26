@@ -5,7 +5,7 @@
   "compilerOptions": {
     "deleteOutDir": true,
     "assets": [
-      {"include": "i18n/**/*"},
+      {"include": "providers/i18n/**/*"},
       {"include": "**/partials/**/*.hbs"},
       {"include": "**/partials/**/*.css"},
       {"include": "**/templates/**/*.hbs"},

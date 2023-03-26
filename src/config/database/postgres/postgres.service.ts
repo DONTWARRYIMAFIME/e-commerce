@@ -1,28 +1,28 @@
 import { Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
-import { PostgresConstants } from "./postgres.constants";
+import { POSTGRES_DATABASE, POSTGRES_HOST, POSTGRES_PASSWORD, POSTGRES_PORT, POSTGRES_USERNAME } from "./postgres.constants";
 
 @Injectable()
 export class PostgresConfigService {
   constructor(private configService: ConfigService) {}
 
   get host(): string {
-    return this.configService.getOrThrow<string>(PostgresConstants.POSTGRES_HOST);
+    return this.configService.getOrThrow<string>(POSTGRES_HOST);
   }
 
   get database(): string {
-    return this.configService.getOrThrow<string>(PostgresConstants.POSTGRES_DATABASE);
+    return this.configService.getOrThrow<string>(POSTGRES_DATABASE);
   }
 
   get username(): string {
-    return this.configService.getOrThrow<string>(PostgresConstants.POSTGRES_USERNAME);
+    return this.configService.getOrThrow<string>(POSTGRES_USERNAME);
   }
 
   get password(): string {
-    return this.configService.getOrThrow<string>(PostgresConstants.POSTGRES_PASSWORD);
+    return this.configService.getOrThrow<string>(POSTGRES_PASSWORD);
   }
 
   get port(): number {
-    return Number(this.configService.getOrThrow<number>(PostgresConstants.POSTGRES_PORT));
+    return Number(this.configService.getOrThrow<string>(POSTGRES_PORT));
   }
 }

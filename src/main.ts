@@ -1,5 +1,6 @@
 import { ValidationPipe } from "@nestjs/common";
 import { NestFactory } from "@nestjs/core";
+import * as cookieParser from "cookie-parser";
 import { i18nValidationErrorFactory, I18nValidationExceptionFilter } from "nestjs-i18n";
 import { AppModule } from "./app.module";
 import { AppConfigService } from "./config/app/app.service";
@@ -14,6 +15,8 @@ import { AppConfigService } from "./config/app/app.service";
 
   app.useGlobalPipes(new ValidationPipe({ exceptionFactory: i18nValidationErrorFactory }));
   app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
+
+  app.use(cookieParser());
 
   await app.listen(port, () => {
     console.log("[WEB]", baseUrl + ":" + port);

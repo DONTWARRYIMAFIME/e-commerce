@@ -1,20 +1,21 @@
 import { FilterableField, FilterableRelation } from "@nestjs-query/query-graphql";
 import { ID, ObjectType } from "@nestjs/graphql";
-import { AfterLoad, Column, Entity, JoinColumn, OneToOne } from "typeorm";
+import { AfterLoad, Column, JoinColumn, OneToOne } from "typeorm";
+import { Entity } from "../../../common/decorators";
 import { BaseEntity } from "../../base.entity";
-import { User } from "../../user/entities/user.entity";
+import { UserEntity } from "../../user/entities/user.entity";
 
-@FilterableRelation("user", () => User)
-@ObjectType()
+@FilterableRelation("user", () => UserEntity)
+@ObjectType("emailAddressConfirmation")
 @Entity()
-export class EmailAddressConfirmation extends BaseEntity {
+export class EmailAddressConfirmationEntity extends BaseEntity {
   @FilterableField(() => ID)
   @Column()
   userId!: number;
 
-  @OneToOne(() => User, { onUpdate: "CASCADE", onDelete: "CASCADE" })
+  @OneToOne(() => UserEntity, { onUpdate: "CASCADE", onDelete: "CASCADE" })
   @JoinColumn()
-  user!: User;
+  user!: UserEntity;
 
   @FilterableField()
   @Column()

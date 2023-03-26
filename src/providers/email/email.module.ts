@@ -15,7 +15,7 @@ import { UserCreatedListener } from "./listeners/user-created.listener";
       useClass: EmailOptions,
     }),
   ],
-  providers: [EmailOptions, EmailService, UserCreatedListener],
+  providers: [EmailOptions, EmailService], // Removed UserCreatedListener for testing
   exports: [EmailOptions, EmailService],
 })
 export class EmailModule {}

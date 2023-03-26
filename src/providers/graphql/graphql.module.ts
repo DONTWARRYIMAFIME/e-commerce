@@ -20,6 +20,5 @@ import { Context } from "../../common/types/context.type";
       context: (ctx: Context) => ctx,
     } as ApolloDriverConfig),
   ],
-  exports: [NestGraphQLModule],
 })
 export class GraphQLModule {}

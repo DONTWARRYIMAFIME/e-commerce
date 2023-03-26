@@ -2,23 +2,25 @@ import { QueryService } from "@nestjs-query/core";
 import { TypeOrmQueryService } from "@nestjs-query/query-typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
 import { DeepPartial, Repository } from "typeorm";
-import { User } from "./entities/user.entity";
+import { Id } from "../../common/types/id.type";
+import { UserEntity } from "./entities/user.entity";
 
-@QueryService(User)
-export class UserService extends TypeOrmQueryService<User> {
-  constructor(@InjectRepository(User) repo: Repository<User>) {
+@QueryService(UserEntity)
+export class UserService extends TypeOrmQueryService<UserEntity> {
+  constructor(@InjectRepository(UserEntity) repo: Repository<UserEntity>) {
     super(repo);
   }
 
-  public findOneByEmail(email: string): Promise<User> {
-    return this.repo.findOneBy({ email });
+  public findOneById(id: Id): Promise<UserEntity | undefined> {
+    return this.repo.findOneBy({ id });
   }
 
-  public findOneByPhone(phone: string): Promise<User> {
-    return this.repo.findOneBy({ phone });
+  public findOneByEmail(email: string): Promise<UserEntity> {
+    return this.repo.findOne({ relations: { emailAddressEntity: true }, where: { emailAddressEntity: { address: email } } });
   }
 
-  public createOne(input: DeepPartial<User>): Promise<User> {
-    return super.createOne({ ...input, emailAddress: { email: input.email } });
+  public createOne(input: DeepPartial<UserEntity>): Promise<UserEntity> {
+    const { email, ...rest } = input;
+    return super.createOne({ ...rest, emailAddressEntity: { address: email, name: `${rest.firstName} ${rest.lastName}` } });
   }
 }

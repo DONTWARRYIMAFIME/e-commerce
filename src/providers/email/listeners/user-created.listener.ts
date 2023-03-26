@@ -16,7 +16,7 @@ export class UserCreatedListener {
       to: user.email,
       template: REGISTRATION_EMAIL,
       context: {
-        name: "TEST USER NAME",
+        name: `${user.firstName} ${user.lastName}`,
       },
     });
   }

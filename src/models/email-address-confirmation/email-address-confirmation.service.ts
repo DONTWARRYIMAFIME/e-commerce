@@ -5,13 +5,13 @@ import { Repository } from "typeorm";
 import { Id } from "../../common/types/id.type";
 import { EmailService } from "../../providers/email/email.service";
 import { EmailAddressService } from "../email-address/email-address.service";
-import { User } from "../user/entities/user.entity";
-import { EmailAddressConfirmation } from "./entities/email-address-confirmation.entity";
+import { UserEntity } from "../user/entities/user.entity";
+import { EmailAddressConfirmationEntity } from "./entities/email-address-confirmation.entity";
 
-@QueryService(EmailAddressConfirmation)
-export class EmailAddressConfirmationService extends TypeOrmQueryService<EmailAddressConfirmation> {
+@QueryService(EmailAddressConfirmationEntity)
+export class EmailAddressConfirmationService extends TypeOrmQueryService<EmailAddressConfirmationEntity> {
   constructor(
-    @InjectRepository(EmailAddressConfirmation) repo: Repository<EmailAddressConfirmation>,
+    @InjectRepository(EmailAddressConfirmationEntity) repo: Repository<EmailAddressConfirmationEntity>,
     private readonly emailService: EmailService,
     private readonly emailAddressService: EmailAddressService,
   ) {
@@ -22,7 +22,7 @@ export class EmailAddressConfirmationService extends TypeOrmQueryService<EmailAd
     return this.emailAddressService.verifyEmail(email);
   }
 
-  public async sendConfirmationEmail(user: User): Promise<EmailAddressConfirmation> {
+  public async sendConfirmationEmail(user: UserEntity): Promise<EmailAddressConfirmationEntity> {
     // await this.emailService.sendMail({
     //   to: user.email,
     // });

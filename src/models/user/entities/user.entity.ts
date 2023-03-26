@@ -1,19 +1,29 @@
-import { FilterableField, FilterableRelation } from "@nestjs-query/query-graphql";
-import { HideField, ObjectType } from "@nestjs/graphql";
-import { Column, Entity, ManyToOne } from "typeorm";
+import { FilterableField, FilterableRelation, UnPagedRelation } from "@nestjs-query/query-graphql";
+import { Field, HideField } from "@nestjs/graphql";
+import { Column, JoinColumn, JoinTable, ManyToMany, OneToOne } from "typeorm";
+import { Entity, ObjectType } from "../../../common/decorators";
+import { RoleEntity } from "../../../providers/security/authorization/role/entities/role.entity";
+import { Roles } from "../../../providers/security/authorization/role/role.enum";
 import { BaseEntity } from "../../base.entity";
-import { EmailAddress } from "../../email-address/entities/email-address.entity";
+import { EmailAddressEntity } from "../../email-address/entities/email-address.entity";
 
-@FilterableRelation("emailAddress", () => EmailAddress)
+@FilterableRelation("emailAddressEntity", () => EmailAddressEntity)
+@UnPagedRelation("roleEntities", () => RoleEntity)
 @ObjectType()
 @Entity()
-export class User extends BaseEntity {
+export class UserEntity extends BaseEntity {
   @FilterableField()
-  email!: string;
+  email: string;
 
   @HideField()
-  @ManyToOne(() => EmailAddress, { eager: true, cascade: true, onUpdate: "CASCADE", onDelete: "CASCADE" })
-  emailAddress!: EmailAddress;
+  @OneToOne(() => EmailAddressEntity, {
+    eager: true,
+    cascade: true,
+    onUpdate: "CASCADE",
+    onDelete: "CASCADE",
+  })
+  @JoinColumn()
+  emailAddressEntity!: EmailAddressEntity;
 
   @FilterableField({ nullable: true })
   @Column({ nullable: true })
@@ -33,4 +43,12 @@ export class User extends BaseEntity {
 
   @HideField()
   tempPassword: string;
+
+  @Field(() => [Roles])
+  roles: Roles[];
+
+  @HideField()
+  @ManyToMany(() => RoleEntity, { eager: true })
+  @JoinTable({ name: "user_roles" })
+  roleEntities!: RoleEntity[];
 }

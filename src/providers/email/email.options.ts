@@ -5,10 +5,11 @@ import { I18nService } from "nestjs-i18n";
 import { Options } from "nodemailer/lib/mailer";
 import { join } from "path";
 import { EmailConfigService } from "../../config/email/email.service";
+import { I18nTranslations } from "../i18n/i18n.generated";
 
 @Injectable()
 export class EmailOptions implements MailerOptionsFactory {
-  constructor(private readonly config: EmailConfigService, private readonly i18n: I18nService) {}
+  constructor(private readonly config: EmailConfigService, private readonly i18n: I18nService<I18nTranslations>) {}
 
   createMailerOptions(): MailerOptions {
     return {

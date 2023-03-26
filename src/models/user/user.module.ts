@@ -1,22 +1,25 @@
-import { NestjsQueryGraphQLModule } from "@nestjs-query/query-graphql";
 import { NestjsQueryTypeOrmModule } from "@nestjs-query/query-typeorm";
-import { Module } from "@nestjs/common";
+import { Global, Module } from "@nestjs/common";
 import { SecurityConfigModule } from "../../config/security/security.module";
-import { CreateUserInput } from "./dtos/create-user.input";
-import { UpdateUserInput } from "./dtos/update-user.input";
-import { User } from "./entities/user.entity";
+import { CaslGraphQLModule } from "../../providers/security/authorization/casl-graphql.module";
+import { CreateUserInput } from "./dto/create-user.input";
+import { UpdateUserInput } from "./dto/update-user.input";
+import { UserEntity } from "./entities/user.entity";
+import { UserHook } from "./hooks/user.hook";
 import { UserSubscriber } from "./subscribers/user.subscriber";
 import { UserService } from "./user.service";
 
+// Module should be global to use UserHook
+@Global()
 @Module({
   imports: [
-    NestjsQueryGraphQLModule.forFeature({
-      imports: [SecurityConfigModule, NestjsQueryTypeOrmModule.forFeature([User])],
+    CaslGraphQLModule.forFeature({
+      imports: [SecurityConfigModule, NestjsQueryTypeOrmModule.forFeature([UserEntity])],
       services: [UserService],
       resolvers: [
         {
-          DTOClass: User,
-          EntityClass: User,
+          DTOClass: UserEntity,
+          EntityClass: UserEntity,
           CreateDTOClass: CreateUserInput,
           UpdateDTOClass: UpdateUserInput,
           ServiceClass: UserService,
@@ -24,7 +27,7 @@ import { UserService } from "./user.service";
       ],
     }),
   ],
-  providers: [UserService, UserSubscriber],
-  exports: [UserService],
+  providers: [UserService, UserSubscriber, UserHook],
+  exports: [UserService, UserHook],
 })
 export class UserModule {}
