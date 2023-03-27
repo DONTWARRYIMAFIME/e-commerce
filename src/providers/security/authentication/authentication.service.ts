@@ -44,7 +44,7 @@ export class AuthenticationService {
   }
 
   public async login(user: UserEntity, res: Response): Promise<LoginResponse> {
-    const payload = { id: user.id, roles: user.roles };
+    const payload = { id: user.id, roles: user.roles.map(role => role.name) };
 
     // Create tokens
     const accessToken = this.jwtService.createAccessToken(payload);
@@ -69,7 +69,7 @@ export class AuthenticationService {
     const role = await this.roleService.customerRole;
     const newUser = await this.userService.createOne({
       ...userInput,
-      roleEntities: [role],
+      roles: [role],
     });
 
     return this.login(newUser, res);

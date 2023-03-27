@@ -1,5 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { PassportStrategy } from "@nestjs/passport";
+import { omit } from "lodash";
 import { ExtractJwt, Strategy } from "passport-jwt";
 import { decodeFromBase64 } from "../../../../common/helpers/base64.helper";
 import { SecurityConfigService } from "../../../../config/security/security.service";
@@ -21,8 +22,6 @@ export class AccessTokenStrategy extends PassportStrategy(Strategy, Authenticati
   }
 
   public validate(payload: TokenPayload): CachedUser {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { iat, exp, ...user } = payload;
-    return user;
+    return omit(payload, "iat", "exp");
   }
 }

@@ -1,19 +1,16 @@
-import { FilterableField } from "@nestjs-query/query-graphql";
-import { Field, HideField } from "@nestjs/graphql";
+import { FilterableField, FilterableRelation, UnPagedRelation } from "@nestjs-query/query-graphql";
+import { HideField } from "@nestjs/graphql";
 import { Column, JoinColumn, JoinTable, ManyToMany, OneToOne } from "typeorm";
 import { Entity, ObjectType } from "../../../common/decorators";
 import { RoleEntity } from "../../../providers/security/authorization/role/entities/role.entity";
-import { Roles } from "../../../providers/security/authorization/role/role.enum";
 import { BaseEntity } from "../../base.entity";
 import { EmailAddressEntity } from "../../email-address/entities/email-address.entity";
 
+@FilterableRelation("emailAddress", () => EmailAddressEntity)
+@UnPagedRelation("roles", () => RoleEntity)
 @ObjectType()
 @Entity()
 export class UserEntity extends BaseEntity {
-  @Field()
-  email: string;
-
-  @HideField()
   @OneToOne(() => EmailAddressEntity, {
     eager: true,
     cascade: true,
@@ -21,7 +18,7 @@ export class UserEntity extends BaseEntity {
     onDelete: "CASCADE",
   })
   @JoinColumn()
-  emailAddressEntity!: EmailAddressEntity;
+  emailAddress!: EmailAddressEntity;
 
   @FilterableField({ nullable: true })
   @Column({ nullable: true })
@@ -42,11 +39,7 @@ export class UserEntity extends BaseEntity {
   @HideField()
   tempPassword: string;
 
-  @Field(() => [Roles])
-  roles: Roles[];
-
-  @HideField()
   @ManyToMany(() => RoleEntity, { eager: true })
   @JoinTable({ name: "user_roles" })
-  roleEntities!: RoleEntity[];
+  roles!: RoleEntity[];
 }

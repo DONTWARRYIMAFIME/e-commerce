@@ -27,7 +27,7 @@ export class EmailAddressConfirmationService extends TypeOrmQueryService<EmailAd
     //   to: user.email,
     // });
 
-    return this.createOne({ user, email: user.email });
+    return this.createOne({ user, emailAddress: user.emailAddress });
   }
 
   private generateToken(): string {

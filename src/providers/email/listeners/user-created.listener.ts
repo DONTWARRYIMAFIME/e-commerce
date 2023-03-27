@@ -13,7 +13,7 @@ export class UserCreatedListener {
   public async handleUserCreatedEvent(payload: UserCreatedEvent) {
     const { user } = payload;
     await this.emailService.sendMail({
-      to: user.email,
+      to: user.emailAddress.address,
       template: REGISTRATION_EMAIL,
       context: {
         name: `${user.firstName} ${user.lastName}`,

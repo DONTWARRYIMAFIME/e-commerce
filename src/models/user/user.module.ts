@@ -5,7 +5,6 @@ import { CaslGraphQLModule } from "../../providers/security/authorization/casl-g
 import { CreateUserInput } from "./dto/create-user.input";
 import { UpdateUserInput } from "./dto/update-user.input";
 import { UserEntity } from "./entities/user.entity";
-import { UserHook } from "./hooks/user.hook";
 import { UserSubscriber } from "./subscribers/user.subscriber";
 import { UserService } from "./user.service";
 
@@ -27,7 +26,7 @@ import { UserService } from "./user.service";
       ],
     }),
   ],
-  providers: [UserService, UserHook, UserSubscriber],
-  exports: [UserService, UserHook],
+  providers: [UserService, UserSubscriber],
+  exports: [UserService],
 })
 export class UserModule {}

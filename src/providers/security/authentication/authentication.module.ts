@@ -2,14 +2,12 @@ import { Module } from "@nestjs/common";
 import { APP_GUARD } from "@nestjs/core";
 import { JwtModule } from "@nestjs/jwt";
 import { PassportModule } from "@nestjs/passport";
-import { CaslModule } from "nest-casl";
 import { SecurityConfigModule } from "../../../config/security/security.module";
-import { UserHook } from "../../../models/user/hooks/user.hook";
+import { UserEntity } from "../../../models/user/entities/user.entity";
+import { UserService } from "../../../models/user/user.service";
 import { AuthorizationModule } from "../authorization/authorization.module";
-import { permissions } from "../authorization/permission.factory";
 import { Roles } from "../authorization/role/role.enum";
 import { RoleModule } from "../authorization/role/role.module";
-import { CachedUser } from "../authorization/types/request-user.interface";
 import { AuthenticationResolver } from "./authentication.resolver";
 import { AuthenticationService } from "./authentication.service";
 import { AuthenticationCookieService } from "./cookie.service";
@@ -25,9 +23,14 @@ import { RefreshTokenStrategy } from "./strategies/refresh-token.strategy";
     PassportModule,
     RoleModule,
     JwtModule.register({}),
-    AuthorizationModule.forRoot<Roles, CachedUser>({
+    AuthorizationModule.forRoot<Roles, UserEntity>({
       superuserRole: Roles.ADMIN,
-      getUserHook: UserHook,
+      getUserHook: [
+        UserService,
+        async (service: UserService, user) => {
+          return service.findById(user.id);
+        },
+      ],
     }),
   ],
   providers: [
