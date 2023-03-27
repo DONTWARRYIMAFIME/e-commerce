@@ -26,6 +26,18 @@ export type I18nTranslations = {
                 "location:": string;
             };
         };
+        "email-address-confirmation": {
+            "subject": string;
+            "html": {
+                "header": string;
+                "content": [
+                    string,
+                    string,
+                    string
+                ];
+                "button": string;
+            };
+        };
     };
     "validation": {
         "IS_EMAIL": string;

@@ -17,5 +17,17 @@
       ],
       "button": "Confirm my account"
     }
+  },
+  "email-address-confirmation": {
+    "subject": "Confirm email address",
+    "html": {
+      "header": "Confirm email address",
+      "content": [
+        "Dear {name},",
+        "Protect your account by verifying email address",
+        "Please click the button below:"
+      ],
+      "button": "Confirm"
+    }
   }
 }

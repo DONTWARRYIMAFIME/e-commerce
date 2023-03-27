@@ -8,7 +8,6 @@ import { UserEntity } from "./entities/user.entity";
 import { UserSubscriber } from "./subscribers/user.subscriber";
 import { UserService } from "./user.service";
 
-// Module should be global to use UserHook
 @Global()
 @Module({
   imports: [

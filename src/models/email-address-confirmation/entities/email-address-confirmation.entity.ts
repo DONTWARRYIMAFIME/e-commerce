@@ -1,6 +1,6 @@
 import { FilterableField, FilterableRelation } from "@nestjs-query/query-graphql";
 import { ID, ObjectType } from "@nestjs/graphql";
-import { BeforeInsert, BeforeUpdate, Column, JoinColumn, ManyToOne, OneToOne, Unique } from "typeorm";
+import { Column, JoinColumn, OneToOne, Unique } from "typeorm";
 import { Entity } from "../../../common/decorators";
 import { Id } from "../../../common/types/id.type";
 import { BaseEntity } from "../../base.entity";
@@ -28,27 +28,15 @@ export class EmailAddressConfirmationEntity extends BaseEntity {
   @Column()
   emailAddressId: Id;
 
-  @ManyToOne(() => EmailAddressEntity, {
+  @OneToOne(() => EmailAddressEntity, {
+    eager: true,
     onUpdate: "CASCADE",
     onDelete: "CASCADE",
   })
+  @JoinColumn()
   emailAddress!: EmailAddressEntity;
 
   @FilterableField()
   @Column()
   token!: string;
-
-  @FilterableField({ nullable: true })
-  @Column({ nullable: true })
-  expiresAt!: Date;
-
-  @FilterableField()
-  @Column()
-  expired!: boolean;
-
-  @BeforeInsert()
-  @BeforeUpdate()
-  isExpired() {
-    this.expired = this.expiresAt ? this.createdAt.getTime() < this.expiresAt?.getTime() : false;
-  }
 }

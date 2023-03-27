@@ -10,7 +10,7 @@ import { EmailService } from "../email.service";
 export class UserCreatedListener {
   constructor(private readonly emailService: EmailService) {}
 
-  @OnEvent(JSON.stringify({ subject: UserEntity, action: Actions.CREATE }))
+  @OnEvent(JSON.stringify({ subject: UserEntity.name, action: Actions.CREATE }))
   public async handleUserCreatedEvent(payload: UserCreateEvent) {
     const { user } = payload;
     await this.emailService.sendMail({
