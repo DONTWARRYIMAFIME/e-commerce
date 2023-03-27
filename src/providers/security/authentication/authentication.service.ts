@@ -69,6 +69,10 @@ export class AuthenticationService {
     const role = await this.roleService.customerRole;
     const newUser = await this.userService.createOne({
       ...userInput,
+      emailAddress: {
+        address: userInput.email,
+        name: `${userInput.firstName} ${userInput.lastName}`,
+      },
       roles: [role],
     });
 

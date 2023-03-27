@@ -1,16 +1,17 @@
 import { Injectable } from "@nestjs/common";
 import { OnEvent } from "@nestjs/event-emitter";
-import { UserCreatedEvent } from "../../../models/user/events/user-created.event";
-import { UserEvents } from "../../../models/user/events/user.events";
-import { EmailService } from "../email.service";
+import { UserEntity } from "../../../models/user/entities/user.entity";
+import { UserCreateEvent } from "../../../models/user/events/user-create.event";
+import { Actions } from "../../security/authorization/action.enum";
 import { REGISTRATION_EMAIL } from "../email.constants";
+import { EmailService } from "../email.service";
 
 @Injectable()
 export class UserCreatedListener {
   constructor(private readonly emailService: EmailService) {}
 
-  @OnEvent(UserEvents.USER_CREATED)
-  public async handleUserCreatedEvent(payload: UserCreatedEvent) {
+  @OnEvent(JSON.stringify({ subject: UserEntity, action: Actions.CREATE }))
+  public async handleUserCreatedEvent(payload: UserCreateEvent) {
     const { user } = payload;
     await this.emailService.sendMail({
       to: user.emailAddress.address,

@@ -1,5 +1,5 @@
 import { FilterableField, FilterableRelation, UnPagedRelation } from "@nestjs-query/query-graphql";
-import { HideField } from "@nestjs/graphql";
+import { Field, HideField } from "@nestjs/graphql";
 import { Column, JoinColumn, JoinTable, ManyToMany, OneToOne } from "typeorm";
 import { Entity, ObjectType } from "../../../common/decorators";
 import { RoleEntity } from "../../../providers/security/authorization/role/entities/role.entity";
@@ -26,11 +26,14 @@ export class UserEntity extends BaseEntity {
 
   @FilterableField({ nullable: true })
   @Column({ length: 64, nullable: true })
-  firstName?: string;
+  firstName!: string;
 
   @FilterableField({ nullable: true })
   @Column({ length: 128, nullable: true })
-  lastName?: string;
+  lastName!: string;
+
+  @Field()
+  fullName!: string;
 
   @HideField()
   @Column()

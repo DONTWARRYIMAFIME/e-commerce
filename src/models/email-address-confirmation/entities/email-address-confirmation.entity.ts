@@ -1,7 +1,8 @@
 import { FilterableField, FilterableRelation } from "@nestjs-query/query-graphql";
-import { ObjectType } from "@nestjs/graphql";
-import { AfterLoad, Column, JoinColumn, ManyToOne, OneToOne } from "typeorm";
+import { ID, ObjectType } from "@nestjs/graphql";
+import { BeforeInsert, BeforeUpdate, Column, JoinColumn, ManyToOne, OneToOne, Unique } from "typeorm";
 import { Entity } from "../../../common/decorators";
+import { Id } from "../../../common/types/id.type";
 import { BaseEntity } from "../../base.entity";
 import { EmailAddressEntity } from "../../email-address/entities/email-address.entity";
 import { UserEntity } from "../../user/entities/user.entity";
@@ -9,14 +10,23 @@ import { UserEntity } from "../../user/entities/user.entity";
 @FilterableRelation("user", () => UserEntity)
 @FilterableRelation("emailAddress", () => EmailAddressEntity)
 @ObjectType("emailAddressConfirmation")
+@Unique("UNQ_email_address_confirmation_token", ["token"])
 @Entity()
 export class EmailAddressConfirmationEntity extends BaseEntity {
+  @FilterableField(() => ID)
+  @Column()
+  userId: Id;
+
   @OneToOne(() => UserEntity, {
     onUpdate: "CASCADE",
     onDelete: "CASCADE",
   })
   @JoinColumn()
   user!: UserEntity;
+
+  @FilterableField(() => ID)
+  @Column()
+  emailAddressId: Id;
 
   @ManyToOne(() => EmailAddressEntity, {
     onUpdate: "CASCADE",
@@ -33,10 +43,12 @@ export class EmailAddressConfirmationEntity extends BaseEntity {
   expiresAt!: Date;
 
   @FilterableField()
+  @Column()
   expired!: boolean;
 
-  @AfterLoad()
+  @BeforeInsert()
+  @BeforeUpdate()
   isExpired() {
-    this.expired = this.createdAt.getTime() < this.expiresAt?.getTime();
+    this.expired = this.expiresAt ? this.createdAt.getTime() < this.expiresAt?.getTime() : false;
   }
 }

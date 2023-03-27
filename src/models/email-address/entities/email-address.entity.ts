@@ -4,7 +4,7 @@ import { Entity, ObjectType } from "../../../common/decorators";
 import { BaseEntity } from "../../base.entity";
 
 @ObjectType()
-@Unique("UNQ_email_address_email", ["address"])
+@Unique("UNQ_email_address_address", ["address"])
 @Index("INX_email_address_email_name", ["address", "name"])
 @Entity()
 export class EmailAddressEntity extends BaseEntity {

@@ -2,9 +2,9 @@ import { EventEmitter2 } from "@nestjs/event-emitter";
 import { hash } from "argon2";
 import { DataSource, EntitySubscriberInterface, EventSubscriber, InsertEvent, UpdateEvent } from "typeorm";
 import { SecurityConfigService } from "../../../config/security/security.service";
+import { Actions } from "../../../providers/security/authorization/action.enum";
 import { UserEntity } from "../entities/user.entity";
-import { UserCreatedEvent } from "../events/user-created.event";
-import { UserEvents } from "../events/user.events";
+import { UserCreateEvent } from "../events/user-create.event";
 
 @EventSubscriber()
 export class UserSubscriber implements EntitySubscriberInterface<UserEntity> {
@@ -18,18 +18,21 @@ export class UserSubscriber implements EntitySubscriberInterface<UserEntity> {
 
   public async afterLoad(entity: UserEntity) {
     entity.tempPassword = entity.password;
+    this.concatName(entity);
   }
 
   public afterInsert(event: InsertEvent<UserEntity>) {
-    this.eventEmitter.emit(UserEvents.USER_CREATED, new UserCreatedEvent(event.entity));
+    this.eventEmitter.emit(JSON.stringify({ subject: UserEntity.name, action: Actions.CREATE }), new UserCreateEvent(event.entity));
   }
 
   public async beforeInsert(event: InsertEvent<UserEntity>) {
     await this.hashPassword(event.entity);
+    this.concatName(event.entity);
   }
 
   public async beforeUpdate(event: UpdateEvent<UserEntity>) {
     await this.hashPassword(event.entity as UserEntity);
+    this.concatName(event.entity as UserEntity);
   }
 
   private async hashPassword(user: UserEntity) {
@@ -38,5 +41,9 @@ export class UserSubscriber implements EntitySubscriberInterface<UserEntity> {
       user.password = await hash(user.password, { saltLength });
       user.tempPassword = user.password;
     }
+  }
+
+  private concatName(entity: UserEntity) {
+    entity.fullName = `${entity.firstName} ${entity.lastName}`;
   }
 }
