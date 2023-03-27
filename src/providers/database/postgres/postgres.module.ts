@@ -22,7 +22,7 @@ import { PostgresConfigService } from "../../../config/database/postgres/postgre
         migrationsTableName: "migrations",
         migrationsRun: false,
         namingStrategy: new SnakeNamingStrategy(),
-        logging: false,
+        logging: true,
         autoLoadEntities: true,
         synchronize: process.env.NODE_ENV !== "production",
       }),

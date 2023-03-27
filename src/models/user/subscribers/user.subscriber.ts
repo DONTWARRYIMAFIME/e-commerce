@@ -1,17 +1,15 @@
-import { Injectable } from "@nestjs/common";
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import { hash } from "argon2";
-import { EntityManager, EntitySubscriberInterface, EventSubscriber, InsertEvent, UpdateEvent } from "typeorm";
+import { DataSource, EntitySubscriberInterface, EventSubscriber, InsertEvent, UpdateEvent } from "typeorm";
 import { SecurityConfigService } from "../../../config/security/security.service";
 import { UserEntity } from "../entities/user.entity";
 import { UserCreatedEvent } from "../events/user-created.event";
 import { UserEvents } from "../events/user.events";
 
-@Injectable()
 @EventSubscriber()
 export class UserSubscriber implements EntitySubscriberInterface<UserEntity> {
-  constructor(private readonly entityManager: EntityManager, private readonly config: SecurityConfigService, private readonly eventEmitter: EventEmitter2) {
-    entityManager.connection.subscribers.push(this);
+  constructor(private readonly dataSource: DataSource, private readonly config: SecurityConfigService, private readonly eventEmitter: EventEmitter2) {
+    dataSource.subscribers.push(this);
   }
 
   public listenTo() {

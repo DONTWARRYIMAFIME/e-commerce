@@ -1,6 +1,6 @@
 import { FilterableField } from "@nestjs-query/query-graphql";
 import { Field, HideField } from "@nestjs/graphql";
-import { AfterLoad, Column, JoinColumn, JoinTable, ManyToMany, OneToOne } from "typeorm";
+import { Column, JoinColumn, JoinTable, ManyToMany, OneToOne } from "typeorm";
 import { Entity, ObjectType } from "../../../common/decorators";
 import { RoleEntity } from "../../../providers/security/authorization/role/entities/role.entity";
 import { Roles } from "../../../providers/security/authorization/role/role.enum";
@@ -10,7 +10,7 @@ import { EmailAddressEntity } from "../../email-address/entities/email-address.e
 @ObjectType()
 @Entity()
 export class UserEntity extends BaseEntity {
-  @FilterableField()
+  @Field()
   email: string;
 
   @HideField()
@@ -49,10 +49,4 @@ export class UserEntity extends BaseEntity {
   @ManyToMany(() => RoleEntity, { eager: true })
   @JoinTable({ name: "user_roles" })
   roleEntities!: RoleEntity[];
-
-  @AfterLoad()
-  test() {
-    console.log("this.emailAddressEntity", this.emailAddressEntity);
-    console.log("this.roleEntities", this.roleEntities);
-  }
 }

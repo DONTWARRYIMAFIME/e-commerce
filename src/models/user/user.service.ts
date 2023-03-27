@@ -1,4 +1,4 @@
-import { QueryService } from "@nestjs-query/core";
+import { Query, QueryService } from "@nestjs-query/core";
 import { TypeOrmQueryService } from "@nestjs-query/query-typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
 import { DeepPartial, Repository } from "typeorm";
@@ -17,6 +17,15 @@ export class UserService extends TypeOrmQueryService<UserEntity> {
 
   public findOneByEmail(email: string): Promise<UserEntity> {
     return this.repo.findOne({ relations: { emailAddressEntity: true, roleEntities: true }, where: { emailAddressEntity: { address: email } } });
+  }
+
+  public query(query: Query<UserEntity>): Promise<UserEntity[]> {
+    // Joining EmailAddress and Roles during many query
+    return this.filterQueryBuilder
+      .select(query)
+      .leftJoinAndSelect(UserEntity.name + ".emailAddressEntity", "emailAddressEntity")
+      .leftJoinAndSelect(UserEntity.name + ".roleEntities", "roleEntities")
+      .getMany();
   }
 
   public createOne(input: DeepPartial<UserEntity>): Promise<UserEntity> {
