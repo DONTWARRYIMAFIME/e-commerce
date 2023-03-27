@@ -1,4 +1,4 @@
-import { FilterableField, FilterableRelation, UnPagedRelation } from "@nestjs-query/query-graphql";
+import { FilterableField } from "@nestjs-query/query-graphql";
 import { Field, HideField } from "@nestjs/graphql";
 import { AfterLoad, Column, JoinColumn, JoinTable, ManyToMany, OneToOne } from "typeorm";
 import { Entity, ObjectType } from "../../../common/decorators";
@@ -7,8 +7,6 @@ import { Roles } from "../../../providers/security/authorization/role/role.enum"
 import { BaseEntity } from "../../base.entity";
 import { EmailAddressEntity } from "../../email-address/entities/email-address.entity";
 
-@FilterableRelation("emailAddressEntity", () => EmailAddressEntity)
-@UnPagedRelation("roleEntities", () => RoleEntity)
 @ObjectType()
 @Entity()
 export class UserEntity extends BaseEntity {

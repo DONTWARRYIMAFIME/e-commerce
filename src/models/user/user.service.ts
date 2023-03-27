@@ -11,7 +11,7 @@ export class UserService extends TypeOrmQueryService<UserEntity> {
     super(repo);
   }
 
-  public findById(id: Id): Promise<UserEntity | undefined> {
+  public findOneById(id: Id): Promise<UserEntity | undefined> {
     return this.repo.findOne({ where: { id }, relations: { emailAddressEntity: true, roleEntities: true } });
   }
 

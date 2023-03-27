@@ -11,7 +11,7 @@ export class UserHook implements UserBeforeFilterHook {
     console.log("user", user);
     return {
       ...user,
-      ...(await this.userService.findById(user.id)),
+      ...(await this.userService.findOneById(user.id)),
     };
   }
 }

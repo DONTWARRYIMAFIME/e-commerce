@@ -1,7 +1,6 @@
 import { NestjsQueryTypeOrmModule } from "@nestjs-query/query-typeorm";
 import { Global, Module } from "@nestjs/common";
 import { SecurityConfigModule } from "../../config/security/security.module";
-import { IsPublic } from "../../providers/security/authentication/decorators/isPublic.decorator";
 import { CaslGraphQLModule } from "../../providers/security/authorization/casl-graphql.module";
 import { UserAssembler } from "./assemblers/user.assembler";
 import { CreateUserInput } from "./dto/create-user.input";
@@ -31,7 +30,7 @@ import { UserService } from "./user.service";
       ],
     }),
   ],
-  providers: [UserService, UserHook],
+  providers: [UserService, UserHook, UserSubscriber],
   exports: [UserService, UserHook],
 })
 export class UserModule {}

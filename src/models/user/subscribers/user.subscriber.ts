@@ -7,8 +7,8 @@ import { UserEntity } from "../entities/user.entity";
 import { UserCreatedEvent } from "../events/user-created.event";
 import { UserEvents } from "../events/user.events";
 
-@EventSubscriber()
 @Injectable()
+@EventSubscriber()
 export class UserSubscriber implements EntitySubscriberInterface<UserEntity> {
   constructor(private readonly entityManager: EntityManager, private readonly config: SecurityConfigService, private readonly eventEmitter: EventEmitter2) {
     entityManager.connection.subscribers.push(this);
