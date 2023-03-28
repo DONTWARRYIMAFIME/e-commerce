@@ -9,7 +9,7 @@ import { AuthenticationType } from "../authentication.enum";
 import { TokenPayload } from "../types/token-payload.interface";
 
 @Injectable()
-export class AccessTokenStrategy extends PassportStrategy(Strategy, AuthenticationType.JWT_ACCESS) {
+export class AccessTokenStrategy extends PassportStrategy(Strategy, AuthenticationType.jwt_access) {
   constructor(private readonly config: SecurityConfigService) {
     const publicKey = decodeFromBase64(config.accessTokenPublicKey);
 

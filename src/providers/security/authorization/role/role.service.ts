@@ -16,6 +16,6 @@ export class RoleService extends TypeOrmQueryService<RoleEntity> {
   }
 
   public get customerRole(): Promise<RoleEntity> {
-    return this.repo.findOneBy({ name: Roles.CUSTOMER });
+    return this.repo.findOneBy({ name: Roles.customer });
   }
 }

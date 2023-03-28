@@ -6,7 +6,7 @@ import { AuthenticationType } from "../authentication.enum";
 import { IS_PUBLIC } from "../decorators/isPublic.decorator";
 
 @Injectable()
-export class AccessTokenAuthGuard extends AuthGuard(AuthenticationType.JWT_ACCESS) implements CanActivate {
+export class AccessTokenAuthGuard extends AuthGuard(AuthenticationType.jwt_access) implements CanActivate {
   constructor(readonly reflector: Reflector) {
     super();
   }

@@ -1,8 +1,8 @@
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import { hash } from "argon2";
+import { Actions } from "nest-casl";
 import { DataSource, EntitySubscriberInterface, EventSubscriber, InsertEvent, UpdateEvent } from "typeorm";
 import { SecurityConfigService } from "../../../config/security/security.service";
-import { Actions } from "../../../providers/security/authorization/action.enum";
 import { UserEntity } from "../entities/user.entity";
 import { UserCreateEvent } from "../events/user-create.event";
 
@@ -22,7 +22,7 @@ export class UserSubscriber implements EntitySubscriberInterface<UserEntity> {
   }
 
   public afterInsert(event: InsertEvent<UserEntity>) {
-    this.eventEmitter.emit(JSON.stringify({ subject: UserEntity.name, action: Actions.CREATE }), new UserCreateEvent(event.entity));
+    this.eventEmitter.emit(JSON.stringify({ subject: UserEntity.name, action: Actions.create }), new UserCreateEvent(event.entity));
   }
 
   public async beforeInsert(event: InsertEvent<UserEntity>) {

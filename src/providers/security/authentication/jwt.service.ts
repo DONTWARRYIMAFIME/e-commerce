@@ -1,22 +1,22 @@
 import { Injectable } from "@nestjs/common";
-import { ConfigService } from "@nestjs/config";
 import { JwtService as NestJwtService, JwtSignOptions } from "@nestjs/jwt";
 import { decodeFromBase64 } from "../../../common/helpers/base64.helper";
+import { SecurityConfigService } from "../../../config/security/security.service";
 import { TokenPayload } from "./types/token-payload.interface";
 
 @Injectable()
 export class JwtService {
-  constructor(private readonly nestJwtService: NestJwtService, private readonly config: ConfigService) {}
+  constructor(private readonly nestJwtService: NestJwtService, private readonly config: SecurityConfigService) {}
 
   public createAccessToken(payload: TokenPayload): string {
-    const accessTokenTTL = this.config.get<string>("ACCESS_TOKEN_TTL");
-    const privateKey = this.config.get<string>("ACCESS_TOKEN_PRIVATE_KEY");
+    const accessTokenTTL = this.config.accessTokenTTL;
+    const privateKey = this.config.accessTokenPrivateKey;
     return this.createJsonWebToken(payload, privateKey, { expiresIn: accessTokenTTL });
   }
 
   public createRefreshToken(payload: TokenPayload): string {
-    const refreshTokenTTL = this.config.get<string>("REFRESH_TOKEN_TTL");
-    const privateKey = this.config.get<string>("REFRESH_TOKEN_PRIVATE_KEY");
+    const refreshTokenTTL = this.config.refreshTokenTTL;
+    const privateKey = this.config.refreshTokenPrivateKey;
     return this.createJsonWebToken(payload, privateKey, { expiresIn: refreshTokenTTL });
   }
 

@@ -1,10 +1,10 @@
 import { registerEnumType } from "@nestjs/graphql";
 
 export enum Roles {
-  CUSTOMER = "customer",
-  PARTNER = "partner",
-  CUSTOMER_SUPPORT = "customer_support",
-  ADMIN = "admin",
+  customer = "customer",
+  partner = "partner",
+  customer_support = "customer_support",
+  admin = "admin",
 }
 
 registerEnumType(Roles, {
