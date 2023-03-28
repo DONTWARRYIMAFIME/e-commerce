@@ -4,6 +4,8 @@ import { verify } from "argon2";
 import { Response } from "express";
 import { UserEntity } from "../../../models/user/entities/user.entity";
 import { UserService } from "../../../models/user/user.service";
+import { REGISTRATION_EMAIL } from "../../email/email.constants";
+import { EmailService } from "../../email/email.service";
 import { RoleService } from "../authorization/role/role.service";
 import { CachedUser } from "../authorization/types/request-user.interface";
 import { AuthenticationCookieService } from "./cookie.service";
@@ -21,6 +23,7 @@ export class AuthenticationService {
     private readonly roleService: RoleService,
     private readonly jwtService: JwtService,
     private readonly cookieService: AuthenticationCookieService,
+    private readonly emailService: EmailService,
   ) {}
 
   public async validateUserByEmail(email: string, password: string): Promise<UserEntity> {
@@ -67,7 +70,7 @@ export class AuthenticationService {
     }
 
     const role = await this.roleService.customerRole;
-    const newUser = await this.userService.createOne({
+    const createdUser = await this.userService.createOne({
       ...userInput,
       emailAddress: {
         address: userInput.email,
@@ -76,7 +79,8 @@ export class AuthenticationService {
       roles: [role],
     });
 
-    return this.login(newUser, res);
+    await this.sendRegistrationEmail(createdUser);
+    return this.login(createdUser, res);
   }
 
   public async reissueAccessToken(user: CachedUser): Promise<AccessTokenResponse> {
@@ -86,5 +90,15 @@ export class AuthenticationService {
   public async logout(res: Response): Promise<LogoutResponse> {
     this.cookieService.clearCookies(res);
     return { status: "success" };
+  }
+
+  private sendRegistrationEmail(user: UserEntity): Promise<any> {
+    return this.emailService.sendMail({
+      to: user.emailAddress.address,
+      template: REGISTRATION_EMAIL,
+      context: {
+        name: `${user.firstName} ${user.lastName}`,
+      },
+    });
   }
 }

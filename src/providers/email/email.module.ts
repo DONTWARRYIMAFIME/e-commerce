@@ -1,11 +1,11 @@
 import { MailerModule } from "@nestjs-modules/mailer";
-import { Module } from "@nestjs/common";
+import { Global, Module } from "@nestjs/common";
 import { AppConfigModule } from "../../config/app/app.module";
 import { EmailConfigModule } from "../../config/email/email.module";
 import { EmailOptions } from "./email.options";
 import { EmailService } from "./email.service";
-import { UserCreatedListener } from "./listeners/user-created.listener";
 
+@Global()
 @Module({
   imports: [
     AppConfigModule,
@@ -15,7 +15,7 @@ import { UserCreatedListener } from "./listeners/user-created.listener";
       useClass: EmailOptions,
     }),
   ],
-  providers: [EmailOptions, EmailService], // Removed UserCreatedListener for testing
+  providers: [EmailOptions, EmailService],
   exports: [EmailOptions, EmailService],
 })
 export class EmailModule {}
