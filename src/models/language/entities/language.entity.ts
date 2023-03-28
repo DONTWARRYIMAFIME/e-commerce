@@ -1,12 +1,12 @@
 import { FilterableField } from "@nestjs-query/query-graphql";
-import { ObjectType } from "@nestjs/graphql";
-import { Column, Entity, Unique } from "typeorm";
+import { Column, Unique } from "typeorm";
+import { Entity, ObjectType } from "../../../common/decorators";
 import { BaseEntity } from "../../base.entity";
 
 @ObjectType()
 @Unique("UNQ_language_code", ["code"])
 @Entity()
-export class Language extends BaseEntity {
+export class LanguageEntity extends BaseEntity {
   @FilterableField()
   @Column({ length: 2 })
   code!: string;

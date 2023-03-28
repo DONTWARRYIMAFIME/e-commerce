@@ -1,21 +1,20 @@
 import { FilterableField } from "@nestjs-query/query-graphql";
-import { ObjectType } from "@nestjs/graphql";
-import { Column, Entity, Index, Unique } from "typeorm";
+import { Column, Index, Unique } from "typeorm";
+import { Entity, ObjectType } from "../../../common/decorators";
 import { BaseEntity } from "../../base.entity";
 
 @ObjectType()
-@Unique("UNQ_email_address_email", ["email"])
-@Unique("UNQ_email_address_display_name", ["displayName"])
-@Index("INX_email_address_email_name", ["email", "displayName"])
+@Unique("UNQ_email_address_address", ["address"])
+@Index("INX_email_address_email_name", ["address", "name"])
 @Entity()
-export class EmailAddress extends BaseEntity {
+export class EmailAddressEntity extends BaseEntity {
   @FilterableField()
   @Column({ length: 192 })
-  email!: string;
+  address!: string;
 
   @FilterableField({ nullable: true })
   @Column({ length: 256, nullable: true })
-  displayName!: string;
+  name!: string;
 
   @FilterableField()
   @Column({ default: false })

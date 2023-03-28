@@ -1,20 +1,20 @@
-import { NestjsQueryGraphQLModule } from "@nestjs-query/query-graphql";
 import { NestjsQueryTypeOrmModule } from "@nestjs-query/query-typeorm";
 import { Module } from "@nestjs/common";
+import { CaslGraphQLModule } from "../../providers/security/authorization/casl-graphql.module";
 import { CreateLanguageInput } from "./dto/create-language.input";
 import { UpdateLanguageInput } from "./dto/update-language.input";
-import { Language } from "./entities/language.entity";
+import { LanguageEntity } from "./entities/language.entity";
 import { LanguageService } from "./language.service";
 
 @Module({
   imports: [
-    NestjsQueryGraphQLModule.forFeature({
-      imports: [NestjsQueryTypeOrmModule.forFeature([Language])],
+    CaslGraphQLModule.forFeature({
+      imports: [NestjsQueryTypeOrmModule.forFeature([LanguageEntity])],
       services: [LanguageService],
       resolvers: [
         {
-          DTOClass: Language,
-          EntityClass: Language,
+          DTOClass: LanguageEntity,
+          EntityClass: LanguageEntity,
           CreateDTOClass: CreateLanguageInput,
           UpdateDTOClass: UpdateLanguageInput,
           ServiceClass: LanguageService,

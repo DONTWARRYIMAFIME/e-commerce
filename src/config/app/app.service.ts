@@ -1,20 +1,24 @@
 import { Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
-import { AppConstants } from "./app.constants";
+import { BASE_URL, FRONT_PORT, PORT, PROJECT_NAME } from "./app.constants";
 
 @Injectable()
 export class AppConfigService {
   constructor(private configService: ConfigService) {}
 
   get projectName(): string {
-    return this.configService.getOrThrow<string>(AppConstants.PROJECT_NAME);
+    return this.configService.getOrThrow<string>(PROJECT_NAME);
   }
 
   get baseUrl(): string {
-    return this.configService.getOrThrow<string>(AppConstants.BASE_URL);
+    return this.configService.getOrThrow<string>(BASE_URL);
   }
 
   get port(): number {
-    return Number(this.configService.getOrThrow<number>(AppConstants.PORT));
+    return Number(this.configService.getOrThrow<string>(PORT));
+  }
+
+  get frontPort(): number {
+    return Number(this.configService.getOrThrow<string>(FRONT_PORT));
   }
 }

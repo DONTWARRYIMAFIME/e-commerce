@@ -1,38 +1,42 @@
 import { FilterableField, FilterableRelation } from "@nestjs-query/query-graphql";
 import { ID, ObjectType } from "@nestjs/graphql";
-import { AfterLoad, Column, Entity, JoinColumn, OneToOne } from "typeorm";
+import { Column, JoinColumn, OneToOne, Unique } from "typeorm";
+import { Entity } from "../../../common/decorators";
+import { Id } from "../../../common/types/id.type";
 import { BaseEntity } from "../../base.entity";
-import { User } from "../../user/entities/user.entity";
+import { EmailAddressEntity } from "../../email-address/entities/email-address.entity";
+import { UserEntity } from "../../user/entities/user.entity";
 
-@FilterableRelation("user", () => User)
-@ObjectType()
+@FilterableRelation("user", () => UserEntity)
+@FilterableRelation("emailAddress", () => EmailAddressEntity)
+@ObjectType("emailAddressConfirmation")
+@Unique("UNQ_email_address_confirmation_token", ["token"])
 @Entity()
-export class EmailAddressConfirmation extends BaseEntity {
+export class EmailAddressConfirmationEntity extends BaseEntity {
   @FilterableField(() => ID)
   @Column()
-  userId!: number;
+  userId: Id;
 
-  @OneToOne(() => User, { onUpdate: "CASCADE", onDelete: "CASCADE" })
+  @OneToOne(() => UserEntity, {
+    onUpdate: "CASCADE",
+    onDelete: "CASCADE",
+  })
   @JoinColumn()
-  user!: User;
+  user!: UserEntity;
 
-  @FilterableField()
+  @FilterableField(() => ID)
   @Column()
-  email!: string;
+  emailAddressId: Id;
+
+  @OneToOne(() => EmailAddressEntity, {
+    eager: true,
+    onUpdate: "CASCADE",
+    onDelete: "CASCADE",
+  })
+  @JoinColumn()
+  emailAddress!: EmailAddressEntity;
 
   @FilterableField()
   @Column()
   token!: string;
-
-  @FilterableField()
-  @Column()
-  expiresAt!: Date;
-
-  @FilterableField()
-  expired!: boolean;
-
-  @AfterLoad()
-  isExpired() {
-    this.expired = this.createdAt.getTime() < this.expiresAt.getTime();
-  }
 }
