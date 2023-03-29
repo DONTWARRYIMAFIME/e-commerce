@@ -5,12 +5,13 @@ import { BaseEntity } from "../../base.entity";
 import { MediaType } from "../media.enum";
 
 @ObjectType()
+@Unique("UNQ_media_secure_id", ["publicId"])
 @Unique("UNQ_media_url", ["url"])
 @Entity()
 export class MediaEntity extends BaseEntity {
   @FilterableField()
   @Column({ length: 256 })
-  secureId!: string;
+  publicId!: string;
 
   @FilterableField()
   @Column({ length: 256 })

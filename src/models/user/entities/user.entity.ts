@@ -5,7 +5,9 @@ import { Entity, ObjectType } from "../../../common/decorators";
 import { RoleEntity } from "../../../providers/security/authorization/role/entities/role.entity";
 import { BaseEntity } from "../../base.entity";
 import { EmailAddressEntity } from "../../email-address/entities/email-address.entity";
+import { MediaEntity } from "../../media/entities/media.entity";
 
+@FilterableRelation("avatar", () => MediaEntity, { nullable: true })
 @FilterableRelation("emailAddress", () => EmailAddressEntity)
 @UnPagedRelation("roles", () => RoleEntity)
 @ObjectType()
@@ -19,6 +21,10 @@ export class UserEntity extends BaseEntity {
   })
   @JoinColumn()
   emailAddress!: EmailAddressEntity;
+
+  @OneToOne(() => MediaEntity, { nullable: true, eager: true })
+  @JoinColumn()
+  avatar?: MediaEntity;
 
   @FilterableField({ nullable: true })
   @Column({ nullable: true })

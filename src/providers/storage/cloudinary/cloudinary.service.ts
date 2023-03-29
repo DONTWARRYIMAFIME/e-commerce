@@ -1,13 +1,12 @@
 import { Injectable } from "@nestjs/common";
-import { UploadApiErrorResponse, UploadApiOptions, UploadApiResponse, v2 } from "cloudinary";
-import { extname } from "path";
+import { ImageFormat, UploadApiErrorResponse, UploadApiOptions, UploadApiResponse, v2, VideoFormat } from "cloudinary";
 import { Readable } from "stream";
 
 @Injectable()
 export class CloudinaryService {
-  public async uploadFile(stream: Readable, filename: string, path: string): Promise<UploadApiResponse | UploadApiErrorResponse> {
+  public async uploadFile(stream: Readable, format: VideoFormat | ImageFormat, path: string): Promise<UploadApiResponse | UploadApiErrorResponse> {
     const options: UploadApiOptions = {
-      format: extname(filename).replace(".", ""),
+      format,
       resource_type: "auto",
       folder: path,
       overwrite: true,
@@ -24,7 +23,7 @@ export class CloudinaryService {
     });
   }
 
-  public async removeFile(secureId: string): Promise<any> {
-    return v2.uploader.destroy(secureId);
+  public async removeFile(publicId: string): Promise<any> {
+    return v2.uploader.destroy(publicId);
   }
 }

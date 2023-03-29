@@ -2,17 +2,20 @@ import { NestjsQueryTypeOrmModule } from "@nestjs-query/query-typeorm";
 import { Global, Module } from "@nestjs/common";
 import { SecurityConfigModule } from "../../config/security/security.module";
 import { CaslGraphQLModule } from "../../providers/security/authorization/casl-graphql.module";
+import { MediaModule } from "../media/media.module";
 import { CreateUserInput } from "./dto/create-user.input";
 import { UpdateUserInput } from "./dto/update-user.input";
 import { UserEntity } from "./entities/user.entity";
+import { UserHook } from "./hooks/user.hook";
 import { UserSubscriber } from "./subscribers/user.subscriber";
+import { UserResolver } from "./user.resolver";
 import { UserService } from "./user.service";
 
 @Global()
 @Module({
   imports: [
     CaslGraphQLModule.forFeature({
-      imports: [SecurityConfigModule, NestjsQueryTypeOrmModule.forFeature([UserEntity])],
+      imports: [SecurityConfigModule, MediaModule, NestjsQueryTypeOrmModule.forFeature([UserEntity])],
       services: [UserService],
       resolvers: [
         {
@@ -25,7 +28,7 @@ import { UserService } from "./user.service";
       ],
     }),
   ],
-  providers: [UserService, UserSubscriber],
-  exports: [UserService],
+  providers: [UserResolver, UserService, UserSubscriber, UserHook],
+  exports: [UserService, UserHook],
 })
 export class UserModule {}

@@ -4,7 +4,7 @@ import { JwtModule } from "@nestjs/jwt";
 import { PassportModule } from "@nestjs/passport";
 import { SecurityConfigModule } from "../../../config/security/security.module";
 import { UserEntity } from "../../../models/user/entities/user.entity";
-import { UserService } from "../../../models/user/user.service";
+import { UserHook } from "../../../models/user/hooks/user.hook";
 import { AuthorizationModule } from "../authorization/authorization.module";
 import { Roles } from "../authorization/role/role.enum";
 import { RoleModule } from "../authorization/role/role.module";
@@ -25,12 +25,7 @@ import { RefreshTokenStrategy } from "./strategies/refresh-token.strategy";
     JwtModule.register({}),
     AuthorizationModule.forRoot<Roles, UserEntity>({
       superuserRole: Roles.admin,
-      getUserHook: [
-        UserService,
-        async (service: UserService, user) => {
-          return service.findById(user.id);
-        },
-      ],
+      getUserHook: UserHook,
     }),
   ],
   providers: [

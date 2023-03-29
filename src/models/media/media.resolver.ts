@@ -11,6 +11,6 @@ export class MediaResolver {
   @IsPublic()
   @Mutation(() => MediaEntity)
   async uploadMedia(@Args("file", { type: () => GraphQLUpload }) file: FileUpload): Promise<MediaEntity> {
-    return this.mediaService.createMedia(file);
+    return this.mediaService.saveMedia(file.createReadStream(), file.filename, "media");
   }
 }

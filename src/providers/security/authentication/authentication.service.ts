@@ -47,6 +47,7 @@ export class AuthenticationService {
   }
 
   public async login(user: UserEntity, res: Response): Promise<LoginResponse> {
+    console.log(user);
     const payload = { id: user.id, roles: user.roles.map(role => role.name) };
 
     // Create tokens
