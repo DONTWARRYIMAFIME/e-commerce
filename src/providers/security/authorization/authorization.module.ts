@@ -1,15 +1,6 @@
-import { AnyObject } from "@casl/ability/dist/types/types";
 import { DynamicModule, Module } from "@nestjs/common";
 import { APP_GUARD } from "@nestjs/core";
-import {
-  AccessService,
-  AuthorizableRequest,
-  AuthorizableUser,
-  CaslModule as NestCaslModule,
-  DefaultActions,
-  OptionsForFeature,
-  OptionsForRoot,
-} from "nest-casl";
+import { AccessService, AuthorizableRequest, AuthorizableUser, CaslModule as NestCaslModule, OptionsForRoot } from "nest-casl";
 import { CaslConfig } from "nest-casl/dist/casl.config";
 import { CASL_FEATURE_OPTIONS, CASL_ROOT_OPTIONS } from "nest-casl/dist/casl.constants";
 import { AbilityFactory } from "nest-casl/dist/factories/ability.factory";

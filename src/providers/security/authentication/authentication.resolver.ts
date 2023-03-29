@@ -3,7 +3,6 @@ import { Args, Mutation, Query, Resolver } from "@nestjs/graphql";
 import { Response } from "express";
 import { CaslUser, UserProxy } from "nest-casl";
 import { UserEntity } from "../../../models/user/entities/user.entity";
-import { AccessGuard } from "../authorization/guards/access.guard";
 import { CachedUser } from "../authorization/types/request-user.interface";
 import { AuthenticationService } from "./authentication.service";
 import { IsPublic } from "./decorators/isPublic.decorator";
@@ -21,7 +20,8 @@ import { RefreshTokenAuthGuard } from "./guards/refresh-token-auth.guard";
 export class AuthenticationResolver {
   constructor(private readonly authService: AuthenticationService) {}
 
-  @UseGuards(EmailAuthGuard, AccessGuard)
+  @IsPublic()
+  @UseGuards(EmailAuthGuard)
   @Mutation(() => LoginResponse)
   public async login(@Args("input") input: LoginInput, @CaslUser() userProxy: UserProxy<UserEntity>, @Res() response: Response): Promise<LoginResponse> {
     const user = await userProxy.getFromHook();

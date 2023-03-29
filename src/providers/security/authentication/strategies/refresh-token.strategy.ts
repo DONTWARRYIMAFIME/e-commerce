@@ -10,7 +10,7 @@ import { AuthenticationCookieService } from "../cookie.service";
 import { TokenPayload } from "../types/token-payload.interface";
 
 @Injectable()
-export class RefreshTokenStrategy extends PassportStrategy(Strategy, AuthenticationType.JWT_REFRESH) {
+export class RefreshTokenStrategy extends PassportStrategy(Strategy, AuthenticationType.jwt_refresh) {
   constructor(private readonly cookiesService: AuthenticationCookieService, private readonly config: SecurityConfigService) {
     const publicKey = decodeFromBase64(config.refreshTokenPublicKey);
 
