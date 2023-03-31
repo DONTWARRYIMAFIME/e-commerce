@@ -17,6 +17,10 @@ export class RedisInterceptor implements NestInterceptor {
   }
 
   public async intercept(context: ExecutionContext, next: CallHandler): Promise<Observable<any>> {
+    if ((context.getType() as any) !== "graphql") {
+      return next.handle();
+    }
+
     const noCache = this.reflector.get<boolean>(NO_CACHE, context.getHandler());
 
     if (noCache) {

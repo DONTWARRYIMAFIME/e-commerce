@@ -1,5 +1,5 @@
 import { Module } from "@nestjs/common";
-import { AcceptLanguageResolver, HeaderResolver, I18nModule as NestI18nModule } from "nestjs-i18n";
+import { HeaderResolver, I18nModule as NestI18nModule } from "nestjs-i18n";
 import { join } from "path";
 
 @Module({
@@ -10,7 +10,7 @@ import { join } from "path";
         path: __dirname,
         watch: process.env.NODE_ENV !== "production",
       },
-      resolvers: [{ use: HeaderResolver, options: ["language", "lang", "l"] }, AcceptLanguageResolver],
+      resolvers: [new HeaderResolver(["language", "lang", "l"])],
       typesOutputPath: join(process.cwd(), "src", "providers", "i18n", "i18n.generated.ts"),
     }),
   ],

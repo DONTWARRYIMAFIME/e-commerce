@@ -7,10 +7,11 @@ import { EmailModule } from "./providers/email/email.module";
 import { EventModule } from "./providers/event/event.module";
 import { GraphQLModule } from "./providers/graphql/graphql.module";
 import { I18nModule } from "./providers/i18n/i18n.module";
+import { BullModule } from "./providers/queues/bull/bull.module";
 import { AuthenticationModule } from "./providers/security/authentication/authentication.module";
 import { ThrottlerModule } from "./providers/security/throttler/throttler.module";
 
 @Module({
-  imports: [AppConfigModule, DatabaseModule, GraphQLModule, EventModule, I18nModule, EmailModule, ModelsModule, AuthenticationModule, CacheModule, ThrottlerModule],
+  imports: [AppConfigModule, DatabaseModule, GraphQLModule, EventModule, I18nModule, EmailModule, ModelsModule, AuthenticationModule, CacheModule, BullModule, ThrottlerModule],
 })
 export class AppModule {}

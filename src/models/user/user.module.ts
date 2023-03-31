@@ -7,7 +7,6 @@ import { CreateUserInput } from "./dto/create-user.input";
 import { UpdateUserInput } from "./dto/update-user.input";
 import { UserEntity } from "./entities/user.entity";
 import { UserHook } from "./hooks/user.hook";
-import { UserSubscriber } from "./subscribers/user.subscriber";
 import { UserResolver } from "./user.resolver";
 import { UserService } from "./user.service";
 
@@ -28,7 +27,7 @@ import { UserService } from "./user.service";
       ],
     }),
   ],
-  providers: [UserResolver, UserService, UserSubscriber, UserHook],
+  providers: [UserResolver, UserService, UserHook],
   exports: [UserService, UserHook],
 })
 export class UserModule {}

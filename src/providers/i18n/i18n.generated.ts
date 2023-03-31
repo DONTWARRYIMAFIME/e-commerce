@@ -17,13 +17,9 @@ export type I18nTranslations = {
                 "content": [
                     string,
                     string,
-                    string,
                     string
                 ];
                 "button": string;
-                "date": string;
-                "time:": string;
-                "location:": string;
             };
         };
         "email-address-confirmation": {

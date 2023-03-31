@@ -19,7 +19,7 @@ import { RedisResolver } from "./redis.resolver";
             host: redisConfigService.host,
             port: redisConfigService.port,
             password: redisConfigService.password,
-          } as any,
+          },
         };
       },
     }),

@@ -32,7 +32,7 @@ export class AuthenticationResolver {
   @IsPublic()
   @Mutation(() => SignupResponse)
   public signup(@Args("input") input: SignupInput, @Res() response: Response): Promise<SignupResponse> {
-    return this.authService.signup(input, response);
+    return this.authService.signupAsCustomer(input, response);
   }
 
   @UseGuards(RefreshTokenAuthGuard)
