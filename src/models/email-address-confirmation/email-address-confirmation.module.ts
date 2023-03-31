@@ -14,6 +14,15 @@ import { UserCreatedListener } from "./listeners/user-create.listener";
     CaslGraphQLModule.forFeature({
       imports: [AppConfigModule, EmailAddressModule, NestjsQueryTypeOrmModule.forFeature([EmailAddressConfirmationEntity])],
       services: [EmailAddressConfirmationService],
+      resolvers: [
+        {
+          DTOClass: EmailAddressConfirmationEntity,
+          EntityClass: EmailAddressConfirmationEntity,
+          create: { disabled: true },
+          update: { disabled: true },
+          delete: { disabled: true },
+        },
+      ],
     }),
   ],
   controllers: [EmailAddressConfirmationController],

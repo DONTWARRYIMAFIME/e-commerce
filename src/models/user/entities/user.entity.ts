@@ -1,6 +1,7 @@
 import { FilterableField, FilterableRelation, UnPagedRelation } from "@nestjs-query/query-graphql";
 import { Field, HideField } from "@nestjs/graphql";
-import { Column, JoinColumn, JoinTable, ManyToMany, OneToOne } from "typeorm";
+import { hash } from "argon2";
+import { AfterLoad, BeforeInsert, BeforeUpdate, Column, JoinColumn, JoinTable, ManyToMany, OneToOne } from "typeorm";
 import { Entity, ObjectType } from "../../../common/decorators";
 import { RoleEntity } from "../../../providers/security/authorization/role/entities/role.entity";
 import { BaseEntity } from "../../base.entity";
@@ -51,4 +52,20 @@ export class UserEntity extends BaseEntity {
   @ManyToMany(() => RoleEntity, { eager: true })
   @JoinTable({ name: "user_roles" })
   roles!: RoleEntity[];
+
+  @AfterLoad()
+  afterLoad() {
+    this.tempPassword = this.password;
+    this.fullName = `${this.firstName} ${this.lastName}`;
+  }
+
+  @BeforeInsert()
+  @BeforeUpdate()
+  async beforeInsertOrUpdate() {
+    this.fullName = `${this.firstName} ${this.lastName}`;
+    if (this.password !== this.tempPassword) {
+      this.password = await hash(this.password, { saltLength: 15 });
+      this.tempPassword = this.password;
+    }
+  }
 }

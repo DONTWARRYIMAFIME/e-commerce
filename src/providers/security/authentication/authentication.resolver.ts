@@ -3,6 +3,7 @@ import { Args, Mutation, Query, Resolver } from "@nestjs/graphql";
 import { Response } from "express";
 import { CaslUser, UserProxy } from "nest-casl";
 import { UserEntity } from "../../../models/user/entities/user.entity";
+import { NoCache } from "../../cache/redis/noCache.decorator";
 import { CachedUser } from "../authorization/types/request-user.interface";
 import { AuthenticationService } from "./authentication.service";
 import { IsPublic } from "./decorators/isPublic.decorator";
@@ -31,7 +32,7 @@ export class AuthenticationResolver {
   @IsPublic()
   @Mutation(() => SignupResponse)
   public signup(@Args("input") input: SignupInput, @Res() response: Response): Promise<SignupResponse> {
-    return this.authService.signup(input, response);
+    return this.authService.signupAsCustomer(input, response);
   }
 
   @UseGuards(RefreshTokenAuthGuard)
@@ -41,6 +42,7 @@ export class AuthenticationResolver {
     return this.authService.reissueAccessToken(user);
   }
 
+  @NoCache()
   @Query(() => UserEntity, { name: "me", nullable: true })
   public async getLoggedInUser(@CaslUser() userProxy: UserProxy<UserEntity>): Promise<UserEntity> {
     return userProxy.getFromHook();

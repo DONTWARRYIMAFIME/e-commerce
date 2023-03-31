@@ -3,7 +3,6 @@ import { Injectable, Logger } from "@nestjs/common";
 import * as fs from "fs";
 import * as Handlebars from "handlebars";
 import * as juice from "juice";
-import { I18nContext } from "nestjs-i18n";
 import { SentMessageInfo } from "nodemailer";
 import { join } from "path";
 import { scanDirNames } from "../../common/helpers/scan-dir.helper";
@@ -39,17 +38,22 @@ export class EmailService {
     this.registerPartials(this.emailOptions.getPathToPartials());
   }
 
-  public async sendMail(sendMailOptions: ISendMailOptions): Promise<SentMessageInfo> {
+  public async sendEmail(sendMailOptions: ISendMailOptions): Promise<SentMessageInfo> {
     const { template, context, ...rest } = sendMailOptions;
 
-    const email = await this.renderAll(template, this.prepareContext(context));
+    this.logger.log(`Prepare to send [${template}] to [${rest.to}]`);
 
-    await this.mailerService.sendMail({
+    const fulfilledContext = this.prepareContext(context);
+    const email = this.renderAll(template, fulfilledContext);
+    const sentMessageInfo = await this.mailerService.sendMail({
       ...rest,
       ...email,
-      context: this.prepareContext(context),
+      context: fulfilledContext,
     });
 
+    this.logger.log(`Email send successfully`);
+
+    return sentMessageInfo;
     // TODO: emit an event 'email-sent'. Then catch it in EmailHistory and save subject and body
     // Or just inject EmailHistory service and save it manually
   }
@@ -98,13 +102,10 @@ export class EmailService {
   }
 
   private prepareContext(context: EmailContext): EmailContext {
-    const { lang } = I18nContext.current();
-
     return {
       ...context,
       projectName: this.appConfigService.projectName,
       supportEmail: this.emailOptions.getDefaultSenderEmailAddress(),
-      i18nLang: lang,
     };
   }
 }

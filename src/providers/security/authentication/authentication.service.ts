@@ -1,11 +1,13 @@
 import { Injectable } from "@nestjs/common";
+import { EventEmitter2 } from "@nestjs/event-emitter";
 import { ApolloError } from "apollo-server-express";
 import { verify } from "argon2";
 import { Response } from "express";
+import { Actions } from "nest-casl";
 import { UserEntity } from "../../../models/user/entities/user.entity";
+import { UserCreateEvent } from "../../../models/user/events/user-create.event";
 import { UserService } from "../../../models/user/user.service";
-import { REGISTRATION_EMAIL } from "../../email/email.constants";
-import { EmailService } from "../../email/email.service";
+import { Roles } from "../authorization/role/role.enum";
 import { RoleService } from "../authorization/role/role.service";
 import { CachedUser } from "../authorization/types/request-user.interface";
 import { AuthenticationCookieService } from "./cookie.service";
@@ -23,7 +25,7 @@ export class AuthenticationService {
     private readonly roleService: RoleService,
     private readonly jwtService: JwtService,
     private readonly cookieService: AuthenticationCookieService,
-    private readonly emailService: EmailService,
+    private readonly eventEmitter: EventEmitter2,
   ) {}
 
   public async validateUserByEmail(email: string, password: string): Promise<UserEntity> {
@@ -47,7 +49,6 @@ export class AuthenticationService {
   }
 
   public async login(user: UserEntity, res: Response): Promise<LoginResponse> {
-    console.log(user);
     const payload = { id: user.id, roles: user.roles.map(role => role.name) };
 
     // Create tokens
@@ -63,24 +64,33 @@ export class AuthenticationService {
     };
   }
 
-  public async signup(userInput: SignupInput, res: Response): Promise<SignupResponse> {
+  public async signupAsCustomer(userInput: SignupInput, res: Response): Promise<SignupResponse> {
+    return this.signup(userInput, res, [Roles.customer]);
+  }
+
+  public async signupAsPartner(userInput: SignupInput, res: Response): Promise<SignupResponse> {
+    return this.signup(userInput, res, [Roles.partner]);
+  }
+
+  private async signup(userInput: SignupInput, res: Response, roles: Roles[]): Promise<SignupResponse> {
     const user = await this.userService.findOneByEmail(userInput.email);
 
     if (user) {
       throw new ApolloError("User already exists", "404");
     }
 
-    const role = await this.roleService.customerRole;
+    const roleEntities = await this.roleService.findManyByNames(roles);
     const createdUser = await this.userService.createOne({
       ...userInput,
       emailAddress: {
         address: userInput.email,
         name: `${userInput.firstName} ${userInput.lastName}`,
       },
-      roles: [role],
+      roles: roleEntities,
     });
 
-    await this.sendRegistrationEmail(createdUser);
+    // Emit an event to notify all listeners that User was registered
+    this.eventEmitter.emit(JSON.stringify({ subject: UserEntity.name, action: Actions.create }), new UserCreateEvent(createdUser));
     return this.login(createdUser, res);
   }
 
@@ -91,15 +101,5 @@ export class AuthenticationService {
   public async logout(res: Response): Promise<LogoutResponse> {
     this.cookieService.clearCookies(res);
     return { status: "success" };
-  }
-
-  private sendRegistrationEmail(user: UserEntity): Promise<any> {
-    return this.emailService.sendMail({
-      to: user.emailAddress.address,
-      template: REGISTRATION_EMAIL,
-      context: {
-        name: `${user.firstName} ${user.lastName}`,
-      },
-    });
   }
 }
