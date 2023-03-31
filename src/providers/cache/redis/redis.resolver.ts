@@ -15,8 +15,6 @@ export class RedisResolver {
   @IsPublic()
   @Query(() => Boolean)
   public async healthCheckRedis(): Promise<boolean> {
-    const client = this.redisService.getClient();
-    console.log(client);
-    return true;
+    return !!this.redisService.getClient();
   }
 }

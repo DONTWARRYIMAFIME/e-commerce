@@ -1,8 +1,6 @@
-import { InjectRedis } from "@liaoliaots/nestjs-redis";
 import { QueryService } from "@nestjs-query/core";
 import { TypeOrmQueryService } from "@nestjs-query/query-typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
-import Redis from "ioredis";
 import { join } from "path";
 import { Readable } from "stream";
 import { FindOptionsWhere, Repository } from "typeorm";
@@ -12,7 +10,7 @@ import { UserEntity } from "./entities/user.entity";
 
 @QueryService(UserEntity)
 export class UserService extends TypeOrmQueryService<UserEntity> {
-  constructor(@InjectRepository(UserEntity) repo: Repository<UserEntity>, private readonly mediaService: MediaService, @InjectRedis() private readonly redis: Redis) {
+  constructor(@InjectRepository(UserEntity) repo: Repository<UserEntity>, private readonly mediaService: MediaService) {
     super(repo);
   }
 

@@ -1,0 +1,2 @@
+export const THROTTLER_TTL = "THROTTLER_TTL";
+export const THROTTLER_LIMIT = "THROTTLER_LIMIT";

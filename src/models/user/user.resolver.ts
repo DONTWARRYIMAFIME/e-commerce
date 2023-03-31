@@ -10,9 +10,7 @@ export class UserResolver {
 
   @Mutation(() => UserEntity)
   public async updateAvatar(@Args("file", { nullable: true, type: () => GraphQLUpload }) file: FileUpload, @CaslUser() userProxy: UserProxy<UserEntity>) {
-    console.log(file);
     const user = await userProxy.getFromHook();
-    console.log(user);
     return this.userService.updateAvatar(user, file.createReadStream(), file.filename);
   }
 }
