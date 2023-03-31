@@ -1,8 +1,7 @@
-import { ValidationPipe } from "@nestjs/common";
 import { NestFactory } from "@nestjs/core";
 import * as cookieParser from "cookie-parser";
 import { graphqlUploadExpress } from "graphql-upload";
-import { i18nValidationErrorFactory, I18nValidationExceptionFilter } from "nestjs-i18n";
+import { I18nValidationExceptionFilter, I18nValidationPipe } from "nestjs-i18n";
 import { AppModule } from "./app.module";
 import { AppConfigService } from "./config/app/app.service";
 
@@ -13,9 +12,7 @@ import { AppConfigService } from "./config/app/app.service";
   const baseUrl = config.baseUrl;
 
   app.useGlobalFilters(new I18nValidationExceptionFilter());
-
-  app.useGlobalPipes(new ValidationPipe({ exceptionFactory: i18nValidationErrorFactory }));
-  app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
+  app.useGlobalPipes(new I18nValidationPipe({ whitelist: true, transform: true }));
 
   app.use(cookieParser());
 
