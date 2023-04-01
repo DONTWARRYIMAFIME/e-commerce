@@ -6,7 +6,7 @@ import { AuthenticationType } from "../authentication.enum";
 import { AuthenticationService } from "../authentication.service";
 
 @Injectable()
-export class EmailStrategy extends PassportStrategy(Strategy, AuthenticationType.email) {
+export class EmailStrategy extends PassportStrategy(Strategy, AuthenticationType.EMAIL) {
   constructor(private readonly authService: AuthenticationService) {
     // Define field name for local strategy. Default is username
     super({ usernameField: "email" });

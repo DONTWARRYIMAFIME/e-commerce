@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { OnEvent } from "@nestjs/event-emitter";
-import { Actions } from "nest-casl";
 import { REGISTRATION_EMAIL } from "../../../providers/email/email.constants";
+import { Actions } from "../../../providers/security/authorization/enums/actions.enum";
 import { UserEntity } from "../../user/entities/user.entity";
 import { UserCreateEvent } from "../../user/events/user-create.event";
 import { EmailAddressConfirmationService } from "../email-address-confirmation.service";
@@ -10,7 +10,7 @@ import { EmailAddressConfirmationService } from "../email-address-confirmation.s
 export class UserCreatedListener {
   constructor(private readonly service: EmailAddressConfirmationService) {}
 
-  @OnEvent(JSON.stringify({ subject: UserEntity.name, action: Actions.create }))
+  @OnEvent(JSON.stringify({ subject: UserEntity.name, action: Actions.CREATE }))
   public async handleUserCreatedEvent(payload: UserCreateEvent) {
     await this.service.sendConfirmationEmail(payload.user, REGISTRATION_EMAIL);
   }

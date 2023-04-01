@@ -13,7 +13,6 @@ import { ProductEntity } from "../../product/entities/product.entity";
 @FilterableRelation("color", () => ColorEntity)
 @ObjectType()
 @Index("INX_product_variant_product_id", ["productId"])
-@Index("INX_product_variant_price_id", ["priceId"])
 @Index("INX_product_variant_color_id", ["colorId"])
 @Entity()
 export class ProductVariantEntity extends BaseEntity {
@@ -26,10 +25,6 @@ export class ProductVariantEntity extends BaseEntity {
     onDelete: "CASCADE",
   })
   product!: ProductEntity;
-
-  @FilterableField(() => ID)
-  @Column({ nullable: true })
-  priceId!: Id;
 
   @OneToOne(() => PriceEntity, {
     eager: true,

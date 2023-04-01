@@ -3,10 +3,10 @@ import { EventEmitter2 } from "@nestjs/event-emitter";
 import { ApolloError } from "apollo-server-express";
 import { verify } from "argon2";
 import { Response } from "express";
-import { Actions } from "nest-casl";
 import { UserEntity } from "../../../models/user/entities/user.entity";
 import { UserCreateEvent } from "../../../models/user/events/user-create.event";
 import { UserService } from "../../../models/user/user.service";
+import { Actions } from "../authorization/enums/actions.enum";
 import { Roles } from "../authorization/role/role.enum";
 import { RoleService } from "../authorization/role/role.service";
 import { CachedUser } from "../authorization/types/request-user.interface";
@@ -65,11 +65,11 @@ export class AuthenticationService {
   }
 
   public async signupAsCustomer(userInput: SignupInput, res: Response): Promise<SignupResponse> {
-    return this.signup(userInput, res, [Roles.customer]);
+    return this.signup(userInput, res, [Roles.CUSTOMER]);
   }
 
   public async signupAsPartner(userInput: SignupInput, res: Response): Promise<SignupResponse> {
-    return this.signup(userInput, res, [Roles.partner]);
+    return this.signup(userInput, res, [Roles.PARTNER]);
   }
 
   private async signup(userInput: SignupInput, res: Response, roles: Roles[]): Promise<SignupResponse> {
@@ -90,7 +90,7 @@ export class AuthenticationService {
     });
 
     // Emit an event to notify all listeners that User was registered
-    this.eventEmitter.emit(JSON.stringify({ subject: UserEntity.name, action: Actions.create }), new UserCreateEvent(createdUser));
+    this.eventEmitter.emit(JSON.stringify({ subject: UserEntity.name, action: Actions.CREATE }), new UserCreateEvent(createdUser));
     return this.login(createdUser, res);
   }
 

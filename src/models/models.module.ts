@@ -10,6 +10,8 @@ import { ProductVariantModule } from "./product-variant/product-variant.module";
 import { ProductModule } from "./product/product.module";
 import { TranslationModule } from "./translation/translation.module";
 import { UserModule } from "./user/user.module";
+import { WarehouseStatusModule } from "./warehouse-status/warehouse-status.module";
+import { WarehouseModule } from "./warehouse/warehouse.module";
 
 @Module({
   imports: [
@@ -24,6 +26,8 @@ import { UserModule } from "./user/user.module";
     ColorModule,
     PriceModule,
     CurrencyModule,
+    WarehouseModule,
+    WarehouseStatusModule,
   ],
 })
 export class ModelsModule {}

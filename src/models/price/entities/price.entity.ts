@@ -38,7 +38,7 @@ export class PriceEntity extends BaseEntity {
   @BeforeUpdate()
   private async beforeInsertOrUpdate() {
     // If currency isn't specified use default one
-    if (!this.currencyId && !this.currency) {
+    if (!this.currencyId) {
       this.currency = await CurrencyEntity.findOneBy({ isDefault: true });
     }
   }

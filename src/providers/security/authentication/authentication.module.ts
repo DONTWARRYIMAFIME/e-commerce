@@ -24,7 +24,7 @@ import { RefreshTokenStrategy } from "./strategies/refresh-token.strategy";
     RoleModule,
     JwtModule.register({}),
     AuthorizationModule.forRoot<Roles, UserEntity>({
-      superuserRole: Roles.admin,
+      superuserRole: Roles.ADMIN,
       getUserHook: UserHook,
     }),
   ],

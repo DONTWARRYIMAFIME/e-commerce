@@ -1,10 +1,11 @@
 import { InferSubjects } from "@casl/ability";
-import { Actions, Permissions } from "nest-casl";
+import { Permissions } from "nest-casl";
 import { EmailAddressConfirmationEntity } from "../../../models/email-address-confirmation/entities/email-address-confirmation.entity";
 import { EmailAddressEntity } from "../../../models/email-address/entities/email-address.entity";
 import { LanguageEntity } from "../../../models/language/entities/language.entity";
 import { TranslationEntity } from "../../../models/translation/entities/translation.entity";
 import { UserEntity } from "../../../models/user/entities/user.entity";
+import { Actions } from "./enums/actions.enum";
 import { RoleEntity } from "./role/entities/role.entity";
 import { Roles } from "./role/role.enum";
 
@@ -19,23 +20,23 @@ export type Subjects = InferSubjects<typeof RoleEntity
 export const permissions: Permissions<Roles, Subjects, Actions> = {
   everyone({ can }) {
     // Public permission
-    can(Actions.read, UserEntity);
+    can(Actions.READ, UserEntity);
   },
 
-  [Roles.customer]({ can }) {
+  [Roles.CUSTOMER]({ can }) {
     // Customer permission
   },
 
-  [Roles.partner]({ can }) {
+  [Roles.PARTNER]({ can }) {
     // Partner permission
   },
 
-  [Roles.customer_support]({ can }) {
+  [Roles.CUSTOMER_SUPPORT]({ can }) {
     // Customer support permission
-    can(Actions.read, RoleEntity);
+    can(Actions.READ, RoleEntity);
   },
 
-  [Roles.admin]({ can }) {
+  [Roles.ADMIN]({ can }) {
     // Admin permission
   },
 };
