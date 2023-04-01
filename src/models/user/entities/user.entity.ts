@@ -23,7 +23,12 @@ export class UserEntity extends BaseEntity {
   @JoinColumn()
   emailAddress!: EmailAddressEntity;
 
-  @OneToOne(() => MediaEntity, { nullable: true, eager: true })
+  @OneToOne(() => MediaEntity, {
+    nullable: true,
+    eager: true,
+    onUpdate: "CASCADE",
+    onDelete: "SET NULL",
+  })
   @JoinColumn()
   avatar?: MediaEntity;
 

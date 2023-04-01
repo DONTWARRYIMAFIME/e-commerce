@@ -1,5 +1,18 @@
 /* eslint-disable */
-import { IsBoolean, IsEmail, IsHexColor, IsNotEmpty, IsUppercase, Length, MaxLength, MinLength, ValidationOptions } from "class-validator";
+import {
+  IsBoolean,
+  IsEmail, IsEnum,
+  IsHexColor,
+  IsNotEmpty,
+  IsPositive,
+  IsUppercase,
+  IsUUID,
+  Length,
+  MaxLength,
+  MinLength,
+  UUIDVersion,
+  ValidationOptions,
+} from "class-validator";
 import { i18nValidationMessage } from "nestjs-i18n";
 import ValidatorJS from "validator";
 import { IsBigInt, IsSnakeCase } from "../../common/decorators";
@@ -25,3 +38,12 @@ export const IsBooleanI18N = (validationOptions?: ValidationOptions) =>
   IsBoolean({ ...validationOptions, message: i18nValidationMessage<I18nTranslations>("validation.IS_BOOLEAN") });
 export const IsNotEmptyI18N = (validationOptions?: ValidationOptions) =>
   IsNotEmpty({ ...validationOptions, message: i18nValidationMessage<I18nTranslations>("validation.IS_NOT_EMPTY") });
+
+export const IsUUIDI18N = (version?: UUIDVersion, validationOptions?: ValidationOptions) =>
+  IsUUID(version, { ...validationOptions, message: i18nValidationMessage<I18nTranslations>("validation.IS_UUID") });
+
+export const IsPositiveI18N = (validationOptions?: ValidationOptions) =>
+  IsPositive({ ...validationOptions, message: i18nValidationMessage<I18nTranslations>("validation.IS_POSITIVE") });
+
+export const IsEnumI18N = (entity: object, validationOptions?: ValidationOptions) =>
+  IsEnum(entity, { ...validationOptions, message: i18nValidationMessage<I18nTranslations>("validation.IS_ENUM") });
