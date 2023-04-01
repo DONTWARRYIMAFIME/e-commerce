@@ -1,7 +1,7 @@
 import { Field, InputType } from "@nestjs/graphql";
 import { Allow } from "class-validator";
 import { Id } from "../../../common/types/id.type";
-import { IsBigIntI18N } from "../../../providers/i18n/i18n.decorators";
+import { IsBigIntI18N, IsUUIDI18N } from "../../../providers/i18n/i18n.decorators";
 import { UpdatePriceInput } from "../../price/dto/update-price.input";
 import { PriceEntity } from "../../price/entities/price.entity";
 import { ProductVariantEntity } from "../entities/product-variant.entity";
@@ -12,7 +12,7 @@ export class CreateProductVariantInput implements Partial<ProductVariantEntity> 
   @Field()
   productId!: Id;
 
-  @IsBigIntI18N()
+  @IsUUIDI18N()
   @Field()
   colorId!: Id;
 

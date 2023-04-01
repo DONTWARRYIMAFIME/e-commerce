@@ -1,6 +1,6 @@
 import { FilterableField, FilterableRelation } from "@nestjs-query/query-graphql";
 import { ID } from "@nestjs/graphql";
-import { Column, Index, ManyToOne } from "typeorm";
+import { BeforeInsert, BeforeUpdate, Column, Index, ManyToOne } from "typeorm";
 import { Entity, ObjectType } from "../../../common/decorators";
 import { ColumnNumericTransformer } from "../../../common/helpers/typeorm/numeric.transformer";
 import { Id } from "../../../common/types/id.type";
@@ -33,4 +33,13 @@ export class PriceEntity extends BaseEntity {
     onDelete: "CASCADE",
   })
   currency!: CurrencyEntity;
+
+  @BeforeInsert()
+  @BeforeUpdate()
+  private async beforeInsertOrUpdate() {
+    // If currency isn't specified use default one
+    if (!this.currencyId && !this.currency) {
+      this.currency = await CurrencyEntity.findOneBy({ isDefault: true });
+    }
+  }
 }

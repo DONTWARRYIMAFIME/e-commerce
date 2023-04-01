@@ -79,7 +79,7 @@ VALUES
     ('black', 'Black', '#000000');
 
 -- Currency
-INSERT INTO "currency" (code, name, symbol)
+INSERT INTO "currency" (code, name, symbol, is_default)
 VALUES
-    ('usd', 'United States dollar', '$'),
-    ('byn', 'Belarusian ruble', 'Br');
+    ('usd', 'United States dollar', '$', true),
+    ('byn', 'Belarusian ruble', 'Br', default);
