@@ -9,7 +9,7 @@ import { CurrencyEntity } from "../../currency/entities/currency.entity";
 
 @FilterableRelation("currency", () => CurrencyEntity)
 @ObjectType()
-@Index("INX_price_currency_id", ["currencyId"])
+@Index("INX_price_currency", ["currency"])
 @Entity()
 export class PriceEntity extends BaseEntity {
   @FilterableField()

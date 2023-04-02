@@ -10,6 +10,7 @@ import { ProductVariantModule } from "./product-variant/product-variant.module";
 import { ProductModule } from "./product/product.module";
 import { TranslationModule } from "./translation/translation.module";
 import { UserModule } from "./user/user.module";
+import { WarehouseItemModule } from "./warehouse-item/warehouse-item.module";
 import { WarehouseStatusModule } from "./warehouse-status/warehouse-status.module";
 import { WarehouseModule } from "./warehouse/warehouse.module";
 
@@ -28,6 +29,7 @@ import { WarehouseModule } from "./warehouse/warehouse.module";
     CurrencyModule,
     WarehouseModule,
     WarehouseStatusModule,
+    WarehouseItemModule,
   ],
 })
 export class ModelsModule {}

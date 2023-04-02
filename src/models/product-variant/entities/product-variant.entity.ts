@@ -1,19 +1,21 @@
 import { FilterableField, FilterableRelation } from "@nestjs-query/query-graphql";
-import { ID } from "@nestjs/graphql";
-import { Column, Index, JoinColumn, ManyToOne, OneToOne } from "typeorm";
+import { HideField, ID } from "@nestjs/graphql";
+import { Column, Index, JoinColumn, ManyToOne, OneToMany, OneToOne } from "typeorm";
 import { Entity, ObjectType } from "../../../common/decorators";
 import { Id } from "../../../common/types/id.type";
 import { BaseEntity } from "../../base.entity";
 import { ColorEntity } from "../../color/entities/color.entity";
 import { PriceEntity } from "../../price/entities/price.entity";
 import { ProductEntity } from "../../product/entities/product.entity";
+import { WarehouseItemEntity } from "../../warehouse-item/entities/warehouse-item.entity";
 
 @FilterableRelation("product", () => ProductEntity)
 @FilterableRelation("price", () => PriceEntity)
 @FilterableRelation("color", () => ColorEntity)
 @ObjectType()
-@Index("INX_product_variant_product_id", ["productId"])
-@Index("INX_product_variant_color_id", ["colorId"])
+@Index("INX_product_variant_product", ["product"])
+@Index("INX_product_variant_price", ["price"])
+@Index("INX_product_variant_color", ["color"])
 @Entity()
 export class ProductVariantEntity extends BaseEntity {
   @FilterableField(() => ID)
@@ -29,6 +31,7 @@ export class ProductVariantEntity extends BaseEntity {
   @OneToOne(() => PriceEntity, {
     eager: true,
     cascade: true,
+    nullable: true,
     onUpdate: "CASCADE",
     onDelete: "SET NULL",
   })
@@ -44,4 +47,8 @@ export class ProductVariantEntity extends BaseEntity {
     onDelete: "SET NULL",
   })
   color!: ColorEntity;
+
+  @HideField()
+  @OneToMany(() => WarehouseItemEntity, warehouseProductVariants => warehouseProductVariants.productVariant, { cascade: true })
+  warehouseItems!: WarehouseItemEntity[];
 }

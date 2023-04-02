@@ -37,6 +37,7 @@
     "redis:init": "yarn redis:drop && yarn redis:up"
   },
   "dependencies": {
+    "@apollo/server": "^4.5.0",
     "@liaoliaots/nestjs-redis": "^9.0.5",
     "@nestjs-modules/mailer": "^1.8.1",
     "@nestjs-query/query-graphql": "^0.30.0",
