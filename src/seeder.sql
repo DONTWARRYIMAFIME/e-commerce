@@ -10,6 +10,9 @@ DELETE FROM "currency" CASCADE;
 DELETE FROM "price" CASCADE;
 DELETE FROM "warehouse" CASCADE;
 DELETE FROM "warehouse_status" CASCADE;
+DELETE FROM "address" CASCADE;
+DELETE FROM "city" CASCADE;
+DELETE FROM "country" CASCADE;
 
 INSERT INTO "role" (name)
 VALUES
@@ -83,8 +86,8 @@ VALUES
 -- Currency
 INSERT INTO "currency" (code, name, symbol, is_default)
 VALUES
-    ('USD', 'United States dollar', '$', true),
-    ('BYN', 'Belarusian ruble', 'Br', default);
+    ('USD', 'United States dollar', '$', default),
+    ('BYN', 'Belarusian ruble', 'Br', true);
 
 -- Warehouse status
 INSERT INTO "warehouse_status" (code, name, is_default)
@@ -99,3 +102,25 @@ INSERT INTO "warehouse" (code, name, status_id)
 SELECT 'BY02', 'By | Warehouse | 2', ws.id FROM "warehouse_status" ws WHERE ws.code = 'ACTIVE';
 INSERT INTO "warehouse" (code, name, status_id)
 SELECT 'BY03', 'By | Warehouse | 3', ws.id FROM "warehouse_status" ws WHERE ws.code = 'INACTIVE';
+
+-- Country
+INSERT INTO "country" (code, name)
+VALUES
+    ('BY', 'Belarus'),
+    ('RU', 'Russia'),
+    ('UA', 'Ukraine'),
+    ('PL', 'Poland');
+
+-- City
+INSERT INTO "city" (name, country_id)
+SELECT 'Brest', c.id FROM "country" c WHERE c.code = 'BY';
+INSERT INTO "city" (name, country_id)
+SELECT 'Vitebsk', c.id FROM "country" c WHERE c.code = 'BY';
+INSERT INTO "city" (name, country_id)
+SELECT 'Gomel', c.id FROM "country" c WHERE c.code = 'BY';
+INSERT INTO "city" (name, country_id)
+SELECT 'Grodno', c.id FROM "country" c WHERE c.code = 'BY';
+INSERT INTO "city" (name, country_id)
+SELECT 'Minsk', c.id FROM "country" c WHERE c.code = 'BY';
+INSERT INTO "city" (name, country_id)
+SELECT 'Mogilev', c.id FROM "country" c WHERE c.code = 'BY';

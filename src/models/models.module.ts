@@ -1,5 +1,8 @@
 import { Module } from "@nestjs/common";
+import { AddressModule } from "./address/address.module";
+import { CityModule } from "./city/city.module";
 import { ColorModule } from "./color/color.module";
+import { CountryModule } from "./country/country.module";
 import { CurrencyModule } from "./currency/currency.module";
 import { EmailAddressConfirmationModule } from "./email-address-confirmation/email-address-confirmation.module";
 import { EmailAddressModule } from "./email-address/email-address.module";
@@ -30,6 +33,9 @@ import { WarehouseModule } from "./warehouse/warehouse.module";
     WarehouseModule,
     WarehouseStatusModule,
     WarehouseItemModule,
+    AddressModule,
+    CityModule,
+    CountryModule,
   ],
 })
 export class ModelsModule {}

@@ -1,14 +1,16 @@
 import { FilterableField, FilterableRelation, UnPagedRelation } from "@nestjs-query/query-graphql";
 import { ID } from "@nestjs/graphql";
-import { BeforeInsert, BeforeUpdate, Column, Index, ManyToOne, OneToMany, Unique } from "typeorm";
+import { BeforeInsert, BeforeUpdate, Column, Index, JoinColumn, ManyToOne, OneToMany, OneToOne, Unique } from "typeorm";
 import { Entity, ObjectType } from "../../../common/decorators";
 import { Id } from "../../../common/types/id.type";
+import { AddressEntity } from "../../address/entities/address.entity";
 import { BaseEntity } from "../../base.entity";
 import { WarehouseItemEntity } from "../../warehouse-item/entities/warehouse-item.entity";
 import { WarehouseStatusEntity } from "../../warehouse-status/entities/warehouse-status.entity";
 
 @FilterableRelation("status", () => WarehouseStatusEntity)
-@UnPagedRelation("warehouseItems", () => WarehouseItemEntity)
+@FilterableRelation("address", () => AddressEntity, { nullable: true })
+@UnPagedRelation("warehouseItems", () => WarehouseItemEntity, { disableUpdate: true, disableRemove: true })
 @ObjectType()
 @Unique("UNQ_warehouse_code", ["code"])
 @Index("INX_warehouse_status", ["status"])
@@ -28,6 +30,15 @@ export class WarehouseEntity extends BaseEntity {
 
   @ManyToOne(() => WarehouseStatusEntity, { eager: true })
   status!: WarehouseStatusEntity;
+
+  @OneToOne(() => AddressEntity, {
+    cascade: true,
+    nullable: true,
+    onUpdate: "CASCADE",
+    onDelete: "SET NULL",
+  })
+  @JoinColumn()
+  address?: AddressEntity;
 
   @OneToMany(() => WarehouseItemEntity, warehouseItem => warehouseItem.warehouse, { cascade: true })
   warehouseItems!: WarehouseItemEntity[];
