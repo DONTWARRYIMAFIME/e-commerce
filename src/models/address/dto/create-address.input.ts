@@ -1,4 +1,5 @@
-import { Field, InputType } from "@nestjs/graphql";
+import { CreateOneInputType, MutationArgsType } from "@nestjs-query/query-graphql";
+import { ArgsType, Field, InputType } from "@nestjs/graphql";
 import { IsOptional } from "class-validator";
 import { IsUUIDI18N, LengthI18N } from "../../../providers/i18n/i18n.decorators";
 import { AddressEntity } from "../entities/address.entity";
@@ -28,3 +29,9 @@ export class CreateAddressInput implements Partial<AddressEntity> {
   @Field()
   cityId: string;
 }
+
+@InputType()
+export class CreateOneAddressInputType extends CreateOneInputType("address", CreateAddressInput) {}
+
+@ArgsType()
+export class CreateOneAddressArgsType extends MutationArgsType(CreateOneAddressInputType) {}

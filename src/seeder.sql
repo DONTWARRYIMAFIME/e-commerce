@@ -1,7 +1,7 @@
 DELETE FROM "email_address" CASCADE;
 DELETE FROM "user" CASCADE;
 DELETE FROM "role" CASCADE;
-DELETE FROM "user_roles" CASCADE;
+DELETE FROM "user_role" CASCADE;
 DELETE FROM "language" CASCADE;
 DELETE FROM "product_variant" CASCADE;
 DELETE FROM "product" CASCADE;
@@ -35,7 +35,7 @@ WITH new_email_address AS (
 )
 INSERT INTO "user" (email_address_id, first_name, last_name, password)
 SELECT e.id, 'User', 'Customer', '$argon2id$v=19$m=65536,t=3,p=4$513t2PfDXwcVaWJy1ycC$gJhSyuk+EzHbQ3aoSv4KfTad0o1VrsCB+jg9tVeyyH0' FROM new_email_address e;
-INSERT INTO "user_roles" (user_id, role_id)
+INSERT INTO "user_role" (user_id, role_id)
 SELECT u.id, r.id FROM "user" u INNER JOIN "email_address" ea on ea.id = u.email_address_id CROSS JOIN "role" r WHERE ea.address = 'customer@gmail.com' AND r.name = 'CUSTOMER';
 
 -- Partner user
@@ -47,7 +47,7 @@ WITH new_email_address AS (
 )
 INSERT INTO "user" (email_address_id, first_name, last_name, password)
 SELECT e.id, 'User', 'Partner', '$argon2id$v=19$m=65536,t=3,p=4$513t2PfDXwcVaWJy1ycC$gJhSyuk+EzHbQ3aoSv4KfTad0o1VrsCB+jg9tVeyyH0' FROM new_email_address e;
-INSERT INTO "user_roles" (user_id, role_id)
+INSERT INTO "user_role" (user_id, role_id)
 SELECT u.id, r.id FROM "user" u INNER JOIN "email_address" ea on ea.id = u.email_address_id CROSS JOIN "role" r WHERE ea.address = 'partner@gmail.com' AND r.name = 'PARTNER';
 
 -- Customer support user
@@ -59,7 +59,7 @@ WITH new_email_address AS (
 )
 INSERT INTO "user" (email_address_id, first_name, last_name, password)
 SELECT e.id, 'User', 'Customer Support', '$argon2id$v=19$m=65536,t=3,p=4$513t2PfDXwcVaWJy1ycC$gJhSyuk+EzHbQ3aoSv4KfTad0o1VrsCB+jg9tVeyyH0' FROM new_email_address e;
-INSERT INTO "user_roles" (user_id, role_id)
+INSERT INTO "user_role" (user_id, role_id)
 SELECT u.id, r.id FROM "user" u INNER JOIN "email_address" ea on ea.id = u.email_address_id CROSS JOIN "role" r WHERE ea.address = 'customer_support@gmail.com' AND r.name = 'CUSTOMER_SUPPORT';
 
 -- Admin user
@@ -71,7 +71,7 @@ WITH new_email_address AS (
 )
 INSERT INTO "user" (email_address_id, first_name, last_name, password)
 SELECT e.id, 'User', 'Admin', '$argon2id$v=19$m=65536,t=3,p=4$513t2PfDXwcVaWJy1ycC$gJhSyuk+EzHbQ3aoSv4KfTad0o1VrsCB+jg9tVeyyH0' FROM new_email_address e;
-INSERT INTO "user_roles" (user_id, role_id)
+INSERT INTO "user_role" (user_id, role_id)
 SELECT u.id, r.id FROM "user" u INNER JOIN "email_address" ea on ea.id = u.email_address_id CROSS JOIN "role" r WHERE ea.address = 'admin@gmail.com' AND r.name = 'ADMIN';
 
 -- Color

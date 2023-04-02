@@ -33,6 +33,7 @@ export const permissions: Permissions<Roles, Subjects, Actions> = {
 
   [Roles.CUSTOMER_SUPPORT]({ can }) {
     // Customer support permission
+    can(Actions.MANAGE, RoleEntity);
     can(Actions.READ, RoleEntity);
   },
 

@@ -3,16 +3,16 @@ import { Field, HideField } from "@nestjs/graphql";
 import { hash } from "argon2";
 import { AfterLoad, BeforeInsert, BeforeUpdate, Column, JoinColumn, JoinTable, ManyToMany, OneToOne } from "typeorm";
 import { Entity, ObjectType } from "../../../common/decorators";
-import { UseAbility } from "../../../providers/security/authorization/decorators/use-ability.decorator";
-import { Actions } from "../../../providers/security/authorization/enums/actions.enum";
 import { RoleEntity } from "../../../providers/security/authorization/role/entities/role.entity";
+import { AddressEntity } from "../../address/entities/address.entity";
 import { BaseEntity } from "../../base.entity";
 import { EmailAddressEntity } from "../../email-address/entities/email-address.entity";
 import { MediaEntity } from "../../media/entities/media.entity";
 
 @FilterableRelation("avatar", () => MediaEntity, { nullable: true })
 @FilterableRelation("emailAddress", () => EmailAddressEntity)
-@UnPagedRelation("roles", () => RoleEntity, { decorators: [UseAbility(Actions.AGGREGATE)] })
+@UnPagedRelation("roles", () => RoleEntity, { disableUpdate: true, disableRemove: true })
+@UnPagedRelation("addresses", () => AddressEntity, { disableUpdate: true })
 @ObjectType()
 @Entity()
 export class UserEntity extends BaseEntity {
@@ -57,8 +57,15 @@ export class UserEntity extends BaseEntity {
   tempPassword: string;
 
   @ManyToMany(() => RoleEntity, { eager: true })
-  @JoinTable({ name: "user_roles" })
+  @JoinTable({ name: "user_role" })
   roles!: RoleEntity[];
+
+  @ManyToMany(() => AddressEntity, {
+    eager: true,
+    cascade: true,
+  })
+  @JoinTable({ name: "user_address" })
+  addresses!: AddressEntity[];
 
   @AfterLoad()
   afterLoad() {

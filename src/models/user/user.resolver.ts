@@ -1,6 +1,7 @@
 import { Args, Mutation, Resolver } from "@nestjs/graphql";
 import { FileUpload, GraphQLUpload } from "graphql-upload";
 import { CaslUser, UserProxy } from "nest-casl";
+import { CreateOneAddressArgsType } from "../address/dto/create-address.input";
 import { UserEntity } from "./entities/user.entity";
 import { UserService } from "./user.service";
 
@@ -12,5 +13,11 @@ export class UserResolver {
   public async updateAvatar(@Args("file", { nullable: true, type: () => GraphQLUpload }) file: FileUpload, @CaslUser() userProxy: UserProxy<UserEntity>) {
     const user = await userProxy.getFromHook();
     return this.userService.updateAvatar(user, file.createReadStream(), file.filename);
+  }
+
+  @Mutation(() => UserEntity)
+  public async addOneAddress(@Args() createOneAddressArgsType: CreateOneAddressArgsType, @CaslUser() userProxy: UserProxy<UserEntity>) {
+    const user = await userProxy.getFromHook();
+    return this.userService.addAddress(user, createOneAddressArgsType.input.input);
   }
 }
