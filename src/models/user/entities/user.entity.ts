@@ -8,9 +8,11 @@ import { AddressEntity } from "../../address/entities/address.entity";
 import { BaseEntity } from "../../base.entity";
 import { EmailAddressEntity } from "../../email-address/entities/email-address.entity";
 import { MediaEntity } from "../../media/entities/media.entity";
+import { WishlistEntity } from "../../wishlist/entities/wishlist.entity";
 
 @FilterableRelation("avatar", () => MediaEntity, { nullable: true })
 @FilterableRelation("emailAddress", () => EmailAddressEntity)
+@FilterableRelation("wishlist", () => WishlistEntity, { disableUpdate: true, disableRemove: true })
 @UnPagedRelation("roles", () => RoleEntity, { disableUpdate: true, disableRemove: true })
 @UnPagedRelation("addresses", () => AddressEntity, { disableUpdate: true })
 @ObjectType()
@@ -55,6 +57,9 @@ export class UserEntity extends BaseEntity {
 
   @HideField()
   tempPassword: string;
+
+  @OneToOne(() => WishlistEntity)
+  wishlist!: WishlistEntity;
 
   @ManyToMany(() => RoleEntity, { eager: true })
   @JoinTable({ name: "user_role" })

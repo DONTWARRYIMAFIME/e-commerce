@@ -16,6 +16,7 @@ import { UserModule } from "./user/user.module";
 import { WarehouseItemModule } from "./warehouse-item/warehouse-item.module";
 import { WarehouseStatusModule } from "./warehouse-status/warehouse-status.module";
 import { WarehouseModule } from "./warehouse/warehouse.module";
+import { WishlistModule } from "./wishlist/wishlist.module";
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { WarehouseModule } from "./warehouse/warehouse.module";
     AddressModule,
     CityModule,
     CountryModule,
+    WishlistModule,
   ],
 })
 export class ModelsModule {}
