@@ -1,16 +1,17 @@
 import { SortDirection } from "@nestjs-query/core/dist/src/interfaces/sort-field.interface";
-import { FilterableField, FilterableRelation, IDField, UnPagedRelation } from "@nestjs-query/query-graphql";
+import { FilterableField, IDField } from "@nestjs-query/query-graphql";
 import { ID } from "@nestjs/graphql";
 import { BeforeInsert, Column, Index, JoinColumn, OneToMany, OneToOne } from "typeorm";
 import { Entity, ObjectType } from "../../../common/decorators";
+import { FilterableRelation, UnPagedRelation } from "../../../common/decorators/graphql/relation.decorator";
 import { BaseEntity } from "../../base.entity";
 import { CartItemEntity } from "../../cart-item/entities/cart-item.entity";
 import { PriceEntity } from "../../price/entities/price.entity";
 import { UserEntity } from "../../user/entities/user.entity";
 
-@UnPagedRelation("cartItems", () => CartItemEntity, { defaultSort: [{ field: "createdAt", direction: SortDirection.ASC }], disableUpdate: true, disableRemove: true })
-@FilterableRelation("price", () => PriceEntity, { disableUpdate: true, disableRemove: true })
-@FilterableRelation("user", () => UserEntity, { disableUpdate: true, disableRemove: true })
+@UnPagedRelation("cartItems", () => CartItemEntity, { defaultSort: [{ field: "createdAt", direction: SortDirection.ASC }] })
+@FilterableRelation("price", () => PriceEntity)
+@FilterableRelation("user", () => UserEntity)
 @ObjectType()
 @Index("INX_cart_price", ["price"])
 @Entity()

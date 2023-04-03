@@ -1,6 +1,7 @@
-import { FilterableField, UnPagedRelation } from "@nestjs-query/query-graphql";
+import { FilterableField } from "@nestjs-query/query-graphql";
 import { Column, OneToMany, Unique } from "typeorm";
 import { Entity, ObjectType } from "../../../common/decorators";
+import { UnPagedRelation } from "../../../common/decorators/graphql/relation.decorator";
 import { BaseEntity } from "../../base.entity";
 import { CityEntity } from "../../city/entities/city.entity";
 import { Country } from "../enums/country.enum";

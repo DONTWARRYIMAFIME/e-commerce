@@ -1,11 +1,12 @@
-import { FilterableField, FilterableRelation, Relation } from "@nestjs-query/query-graphql";
+import { FilterableField } from "@nestjs-query/query-graphql";
 import { Column, JoinColumn, OneToOne, Unique } from "typeorm";
 import { Entity, ObjectType } from "../../../common/decorators";
+import { FilterableRelation } from "../../../common/decorators/graphql/relation.decorator";
 import { BaseEntity } from "../../base.entity";
 import { EmailAddressEntity } from "../../email-address/entities/email-address.entity";
 import { UserEntity } from "../../user/entities/user.entity";
 
-@Relation("user", () => UserEntity)
+@FilterableRelation("user", () => UserEntity)
 @FilterableRelation("emailAddress", () => EmailAddressEntity)
 @ObjectType()
 @Unique("UNQ_email_address_confirmation_token", ["token"])

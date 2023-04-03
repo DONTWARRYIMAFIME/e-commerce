@@ -1,8 +1,9 @@
-import { FilterableField, FilterableRelation, UnPagedRelation } from "@nestjs-query/query-graphql";
+import { FilterableField } from "@nestjs-query/query-graphql";
 import { Field, HideField } from "@nestjs/graphql";
 import { hash } from "argon2";
 import { AfterLoad, BeforeInsert, BeforeUpdate, Column, JoinColumn, JoinTable, ManyToMany, OneToOne } from "typeorm";
 import { Entity, ObjectType } from "../../../common/decorators";
+import { FilterableRelation, UnPagedRelation } from "../../../common/decorators/graphql/relation.decorator";
 import { RoleEntity } from "../../../providers/security/authorization/role/entities/role.entity";
 import { AddressEntity } from "../../address/entities/address.entity";
 import { BaseEntity } from "../../base.entity";
@@ -13,10 +14,10 @@ import { WishlistEntity } from "../../wishlist/entities/wishlist.entity";
 
 @FilterableRelation("avatar", () => MediaEntity, { nullable: true })
 @FilterableRelation("emailAddress", () => EmailAddressEntity)
-@FilterableRelation("cart", () => CartEntity, { disableUpdate: true, disableRemove: true })
-@FilterableRelation("wishlist", () => WishlistEntity, { disableUpdate: true, disableRemove: true })
-@UnPagedRelation("roles", () => RoleEntity, { disableUpdate: true, disableRemove: true })
-@UnPagedRelation("addresses", () => AddressEntity, { disableUpdate: true })
+@FilterableRelation("cart", () => CartEntity)
+@FilterableRelation("wishlist", () => WishlistEntity)
+@UnPagedRelation("roles", () => RoleEntity)
+@UnPagedRelation("addresses", () => AddressEntity)
 @ObjectType()
 @Entity()
 export class UserEntity extends BaseEntity {

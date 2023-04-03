@@ -1,7 +1,8 @@
-import { FilterableField, FilterableRelation, IDField, UnPagedRelation } from "@nestjs-query/query-graphql";
+import { FilterableField, IDField } from "@nestjs-query/query-graphql";
 import { ID } from "@nestjs/graphql";
 import { BeforeInsert, BeforeUpdate, Column, Index, JoinColumn, ManyToOne, OneToMany, OneToOne, Unique } from "typeorm";
 import { Entity, ObjectType } from "../../../common/decorators";
+import { FilterableRelation, UnPagedRelation } from "../../../common/decorators/graphql/relation.decorator";
 import { Id } from "../../../common/types/id.type";
 import { AddressEntity } from "../../address/entities/address.entity";
 import { BaseEntity } from "../../base.entity";
@@ -10,7 +11,7 @@ import { WarehouseStatusEntity } from "../../warehouse-status/entities/warehouse
 
 @FilterableRelation("status", () => WarehouseStatusEntity)
 @FilterableRelation("address", () => AddressEntity, { nullable: true })
-@UnPagedRelation("warehouseItems", () => WarehouseItemEntity, { disableUpdate: true, disableRemove: true })
+@UnPagedRelation("warehouseItems", () => WarehouseItemEntity)
 @ObjectType()
 @Unique("UNQ_warehouse_code", ["code"])
 @Index("INX_warehouse_status", ["status"])

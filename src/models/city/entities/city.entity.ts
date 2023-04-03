@@ -1,6 +1,7 @@
-import { FilterableField, FilterableRelation } from "@nestjs-query/query-graphql";
+import { FilterableField } from "@nestjs-query/query-graphql";
 import { Column, ManyToOne, Unique } from "typeorm";
 import { Entity, ObjectType } from "../../../common/decorators";
+import { FilterableRelation } from "../../../common/decorators/graphql/relation.decorator";
 import { BaseEntity } from "../../base.entity";
 import { CountryEntity } from "../../country/entities/country.entity";
 
