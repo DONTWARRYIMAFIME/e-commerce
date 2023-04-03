@@ -30,11 +30,13 @@ export class AddressEntity extends BaseEntity {
 
   @IDField(() => ID)
   @Column()
-  cityId: Id;
+  cityId!: Id;
 
   @ManyToOne(() => CityEntity, {
+    eager: true,
+    cascade: true,
     onUpdate: "CASCADE",
     onDelete: "CASCADE",
   })
-  city: CityEntity;
+  city!: CityEntity;
 }

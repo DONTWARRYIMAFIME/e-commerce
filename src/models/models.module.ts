@@ -6,10 +6,13 @@ import { CityModule } from "./city/city.module";
 import { ColorModule } from "./color/color.module";
 import { CountryModule } from "./country/country.module";
 import { CurrencyModule } from "./currency/currency.module";
+import { DeliveryMethodStatusModule } from "./delivery-method-status/delivery-method-status.module";
+import { DeliveryMethodModule } from "./delivery-method/delivery-method.module";
 import { EmailAddressConfirmationModule } from "./email-address-confirmation/email-address-confirmation.module";
 import { EmailAddressModule } from "./email-address/email-address.module";
 import { LanguageModule } from "./language/language.module";
 import { MediaModule } from "./media/media.module";
+import { PickupPointModule } from "./pickup-point/pickup-point.module";
 import { PriceModule } from "./price/price.module";
 import { ProductVariantModule } from "./product-variant/product-variant.module";
 import { ProductModule } from "./product/product.module";
@@ -42,6 +45,9 @@ import { WishlistModule } from "./wishlist/wishlist.module";
     WishlistModule,
     CartModule,
     CartItemModule,
+    DeliveryMethodModule,
+    DeliveryMethodStatusModule,
+    PickupPointModule,
   ],
 })
 export class ModelsModule {}

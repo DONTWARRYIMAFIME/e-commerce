@@ -1,14 +1,15 @@
 import { CreateOneInputType, MutationArgsType } from "@nestjs-query/query-graphql";
 import { ArgsType, Field, InputType } from "@nestjs/graphql";
 import { IsOptional } from "class-validator";
-import { IsUUIDI18N, LengthI18N } from "../../../providers/i18n/i18n.decorators";
+import { Id } from "../../../common/types/id.type";
+import { IsPostalCodeI18N, IsUUIDI18N, LengthI18N } from "../../../providers/i18n/i18n.decorators";
 import { AddressEntity } from "../entities/address.entity";
 
 @InputType()
 export class CreateAddressInput implements Partial<AddressEntity> {
-  @LengthI18N(2, 16)
+  @IsPostalCodeI18N()
   @Field()
-  postalCode: string;
+  postalCode!: string;
 
   @IsOptional()
   @LengthI18N(2, 64)
@@ -27,7 +28,7 @@ export class CreateAddressInput implements Partial<AddressEntity> {
 
   @IsUUIDI18N()
   @Field()
-  cityId: string;
+  cityId: Id;
 }
 
 @InputType()

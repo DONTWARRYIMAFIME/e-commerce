@@ -1,9 +1,10 @@
 import { FilterableField, IDField } from "@nestjs-query/query-graphql";
 import { ID, Int } from "@nestjs/graphql";
 import { max } from "lodash";
-import { BeforeInsert, BeforeUpdate, Column, ManyToOne, Unique } from "typeorm";
+import { BeforeInsert, BeforeUpdate, Column, Index, ManyToOne, Unique } from "typeorm";
 import { Entity, ObjectType } from "../../../common/decorators";
 import { FilterableRelation } from "../../../common/decorators/graphql/relation.decorator";
+import { Id } from "../../../common/types/id.type";
 import { BaseEntity } from "../../base.entity";
 import { ProductVariantEntity } from "../../product-variant/entities/product-variant.entity";
 import { WarehouseEntity } from "../../warehouse/entities/warehouse.entity";
@@ -11,11 +12,13 @@ import { WarehouseEntity } from "../../warehouse/entities/warehouse.entity";
 @FilterableRelation("productVariant", () => ProductVariantEntity)
 @ObjectType()
 @Unique("UNQ_warehouse_item_warehouse_and_product_variant", ["warehouse", "productVariant"])
+@Index("INX_warehouse_item_warehouse", ["warehouse"])
+@Index("INX_warehouse_item_productVariant", ["productVariant"])
 @Entity()
 export class WarehouseItemEntity extends BaseEntity {
   @IDField(() => ID)
   @Column()
-  warehouseId!: string;
+  warehouseId!: Id;
 
   @ManyToOne(() => WarehouseEntity, {
     onDelete: "CASCADE",
@@ -25,7 +28,7 @@ export class WarehouseItemEntity extends BaseEntity {
 
   @IDField(() => ID)
   @Column()
-  productVariantId!: string;
+  productVariantId!: Id;
 
   @ManyToOne(() => ProductVariantEntity, {
     onDelete: "CASCADE",

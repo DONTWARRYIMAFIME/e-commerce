@@ -1,6 +1,6 @@
-import { NestjsQueryGraphQLModule } from "@nestjs-query/query-graphql";
 import { NestjsQueryTypeOrmModule } from "@nestjs-query/query-typeorm";
 import { Module } from "@nestjs/common";
+import { CaslGraphQLModule } from "../../providers/security/authorization/casl-graphql.module";
 import { AddressService } from "./address.service";
 import { CreateAddressInput } from "./dto/create-address.input";
 import { UpdateAddressInput } from "./dto/update-address.input";
@@ -8,7 +8,7 @@ import { AddressEntity } from "./entities/address.entity";
 
 @Module({
   imports: [
-    NestjsQueryGraphQLModule.forFeature({
+    CaslGraphQLModule.forFeature({
       imports: [NestjsQueryTypeOrmModule.forFeature([AddressEntity])],
       services: [AddressService],
       resolvers: [

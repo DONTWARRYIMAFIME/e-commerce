@@ -11,5 +11,6 @@
   "IS_NOT_EMPTY": "Field: [{property}] cannot be empty",
   "IS_UUID": "Field: [{property}] must be a UUID v4 format",
   "IS_POSITIVE": "Field: [{property}] should have a positive number",
-  "IS_ENUM": "Field: [{property}] should be a enum value"
+  "IS_ENUM": "Field: [{property}] should be a enum value",
+  "IS_POSTAL_CODE": "Field: [{property}] should be a valid Postal Code"
 }

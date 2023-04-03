@@ -49,6 +49,7 @@ export type I18nTranslations = {
         "IS_UUID": string;
         "IS_POSITIVE": string;
         "IS_ENUM": string;
+        "IS_POSTAL_CODE": string;
         "INVALID_BOOLEAN": string;
     };
 };

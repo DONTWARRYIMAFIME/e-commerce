@@ -11,6 +11,6 @@ export class CreatePriceInput implements Partial<PriceEntity> {
   amount!: number;
 
   @IsOptional()
-  @Field()
-  currencyId!: Id;
+  @Field({ nullable: true })
+  currencyId?: Id;
 }

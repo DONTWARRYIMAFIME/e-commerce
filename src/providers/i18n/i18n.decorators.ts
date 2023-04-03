@@ -4,7 +4,7 @@ import {
   IsEmail, IsEnum,
   IsHexColor,
   IsNotEmpty,
-  IsPositive,
+  IsPositive, IsPostalCode,
   IsUppercase,
   IsUUID,
   Length,
@@ -47,3 +47,6 @@ export const IsPositiveI18N = (validationOptions?: ValidationOptions) =>
 
 export const IsEnumI18N = (entity: object, validationOptions?: ValidationOptions) =>
   IsEnum(entity, { ...validationOptions, message: i18nValidationMessage<I18nTranslations>("validation.IS_ENUM") });
+
+export const IsPostalCodeI18N = (locale?: ValidatorJS.PostalCodeLocale, validationOptions?: ValidationOptions) =>
+  IsPostalCode(locale, { ...validationOptions, message: i18nValidationMessage<I18nTranslations>("validation.IS_POSTAL_CODE") });

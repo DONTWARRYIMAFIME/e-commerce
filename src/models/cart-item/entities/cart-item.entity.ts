@@ -14,7 +14,7 @@ import { ProductVariantEntity } from "../../product-variant/entities/product-var
 @ObjectType()
 @Unique("UNQ_cart_product_variant", ["cart", "productVariant"])
 @Index("INX_cart_item_cart", ["cart"])
-@Index("INX_cart_item_price", ["price"])
+@Index("INX_cart_price", ["productVariant"])
 @Entity()
 export class CartItemEntity extends BaseEntity {
   @IDField(() => ID)

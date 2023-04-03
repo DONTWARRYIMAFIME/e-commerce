@@ -28,10 +28,13 @@ export class ProductVariantEntity extends BaseEntity {
   })
   product!: ProductEntity;
 
+  @IDField(() => ID)
+  @Column()
+  priceId!: Id;
+
   @OneToOne(() => PriceEntity, {
     eager: true,
     cascade: true,
-    nullable: true,
     onUpdate: "CASCADE",
     onDelete: "SET NULL",
   })

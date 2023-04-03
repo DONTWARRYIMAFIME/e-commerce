@@ -13,7 +13,7 @@ import { UserEntity } from "../../user/entities/user.entity";
 @FilterableRelation("price", () => PriceEntity)
 @FilterableRelation("user", () => UserEntity)
 @ObjectType()
-@Index("INX_cart_price", ["price"])
+@Index("INX_cart_price", ["user"])
 @Entity()
 export class CartEntity extends BaseEntity {
   @IDField(() => ID)

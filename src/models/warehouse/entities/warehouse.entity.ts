@@ -49,7 +49,7 @@ export class WarehouseEntity extends BaseEntity {
   private async beforeInsertOrUpdate() {
     // If currency isn't specified use default one
     if (!this.statusId) {
-      this.status = await WarehouseStatusEntity.findOneBy({ isDefault: true });
+      this.status = await WarehouseStatusEntity.findOneByOrFail({ isDefault: true });
     }
   }
 }
