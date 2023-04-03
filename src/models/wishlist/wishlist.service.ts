@@ -18,17 +18,14 @@ export class WishlistService extends TypeOrmQueryService<WishlistEntity> {
   }
 
   public addProductVariants(id: Id, productVariants: Pick<ProductVariantEntity, "id">[]): Promise<WishlistEntity> {
-    console.log(productVariants);
     return super.addRelations<ProductVariantEntity>("productVariants", id, map(productVariants, "id"));
   }
 
   public setProductVariants(id: Id, productVariants: Pick<ProductVariantEntity, "id">[]): Promise<WishlistEntity> {
-    console.log(productVariants);
     return super.setRelations<ProductVariantEntity>("productVariants", id, map(productVariants, "id"));
   }
 
   public removeProductVariants(id: Id, productVariants: Pick<ProductVariantEntity, "id">[]): Promise<WishlistEntity> {
-    console.log(productVariants);
     return super.removeRelations<ProductVariantEntity>("productVariants", id, map(productVariants, "id"));
   }
 }

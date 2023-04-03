@@ -32,7 +32,7 @@ export class CartItemService extends TypeOrmQueryService<CartItemEntity> {
   public async increaseQuantity(cartId: Id, productVariantId: Id, quantity: number): Promise<CartItemEntity> {
     const cartItem = await this.findOneByCartIdAndProductVariantId(cartId, productVariantId);
     const stock = await this.warehouseItemService.countAvailable(productVariantId);
-    console.log(stock);
+
     const targetQuantity = cartItem ? cartItem.quantity + quantity : quantity;
 
     if (targetQuantity > stock) {
@@ -45,7 +45,6 @@ export class CartItemService extends TypeOrmQueryService<CartItemEntity> {
 
   public async decreaseQuantity(cartId: Id, productVariantId: Id, quantity: number): Promise<CartItemEntity> {
     const cartItem = await this.findOneByCartIdAndProductVariantIdOrFail(cartId, productVariantId);
-    console.log(cartItem.quantity);
     const targetQuantity = cartItem.quantity - quantity;
 
     if (targetQuantity <= 0) {
@@ -62,7 +61,6 @@ export class CartItemService extends TypeOrmQueryService<CartItemEntity> {
   }
 
   private async updatePrice(record: DeepPartial<CartItemEntity>): Promise<DeepPartial<CartItemEntity>> {
-    console.log(record.quantity);
     const productVariant = record.productVariant || (await this.productVariantService.findOneById(record.productVariantId));
     const price = merge(record.price, { amount: productVariant.price.amount * record.quantity });
     record.price = await this.priceService.saveOne(price);

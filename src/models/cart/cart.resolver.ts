@@ -1,8 +1,9 @@
 import { Args, Mutation, Query, Resolver } from "@nestjs/graphql";
 import { CaslUser, UserProxy } from "nest-casl";
 import { Id } from "../../common/types/id.type";
-import { UpdateOneCartItemArgsType } from "../cart-item/dto/update-cart-item.input";
 import { CartService } from "./cart.service";
+import { DeleteOneCartArgsType } from "./dto/delete-cart.input";
+import { UpdateOneCartArgsType } from "./dto/update-cart.input";
 import { CartEntity } from "./entities/cart.entity";
 
 @Resolver(() => CartEntity)
@@ -16,14 +17,19 @@ export class CartResolver {
   }
 
   @Mutation(() => CartEntity)
-  public async addCartItemToCart(@Args() { input }: UpdateOneCartItemArgsType): Promise<CartEntity> {
-    const { id, update } = input;
-    return this.cartService.addCartItemToCart(id as Id, update);
+  public async addCartItemsToCart(@Args() input: UpdateOneCartArgsType): Promise<CartEntity> {
+    const { id, update } = input.input;
+    return this.cartService.addCartItemsToCart(id as Id, update.cartItems);
   }
 
   @Mutation(() => CartEntity)
-  public async removeCartItemFromCart(@Args() { input }: UpdateOneCartItemArgsType): Promise<CartEntity> {
-    const { id, update } = input;
-    return this.cartService.removeCartItemFromCart(id as Id, update);
+  public async removeCartItemsFromCart(@Args() input: UpdateOneCartArgsType): Promise<CartEntity> {
+    const { id, update } = input.input;
+    return this.cartService.removeCartItemsFromCart(id as Id, update.cartItems);
+  }
+
+  @Mutation(() => CartEntity)
+  public async emptyCart(@Args() input: DeleteOneCartArgsType): Promise<CartEntity> {
+    return this.cartService.emptyCart(input.input.id as Id);
   }
 }

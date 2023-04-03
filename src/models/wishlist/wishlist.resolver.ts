@@ -1,5 +1,6 @@
 import { Args, Mutation, Query, Resolver } from "@nestjs/graphql";
 import { CaslUser, UserProxy } from "nest-casl";
+import { Id } from "../../common/types/id.type";
 import { UpdateOneWishlistArgsType } from "./dto/update-wishlist.input";
 import { WishlistEntity } from "./entities/wishlist.entity";
 import { WishlistService } from "./wishlist.service";
@@ -17,18 +18,18 @@ export class WishlistResolver {
   @Mutation(() => WishlistEntity)
   public addProductVariantsToWishlist(@Args() input: UpdateOneWishlistArgsType): Promise<WishlistEntity> {
     const { id, update } = input.input;
-    return this.service.addProductVariants(id as string, update.productVariants);
+    return this.service.addProductVariants(id as Id, update.productVariants);
   }
 
   @Mutation(() => WishlistEntity)
   public setProductVariantsToWishlist(@Args() input: UpdateOneWishlistArgsType): Promise<WishlistEntity> {
     const { id, update } = input.input;
-    return this.service.setProductVariants(id as string, update.productVariants);
+    return this.service.setProductVariants(id as Id, update.productVariants);
   }
 
   @Mutation(() => WishlistEntity)
   public removeProductVariantsFromWishlist(@Args() input: UpdateOneWishlistArgsType): Promise<WishlistEntity> {
     const { id, update } = input.input;
-    return this.service.removeProductVariants(id as string, update.productVariants);
+    return this.service.removeProductVariants(id as Id, update.productVariants);
   }
 }
