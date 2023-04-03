@@ -5,7 +5,7 @@ import { DeepPartial, Repository } from "typeorm";
 import { ProductEntity } from "./entities/product.entity";
 
 @QueryService(ProductEntity)
-export class ProductVariantService extends TypeOrmQueryService<ProductEntity> {
+export class ProductService extends TypeOrmQueryService<ProductEntity> {
   constructor(@InjectRepository(ProductEntity) repo: Repository<ProductEntity>) {
     super(repo);
   }

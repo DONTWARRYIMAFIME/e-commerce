@@ -1,4 +1,4 @@
-import { FilterableField, FilterableRelation, UnPagedRelation } from "@nestjs-query/query-graphql";
+import { FilterableField, FilterableRelation, IDField, UnPagedRelation } from "@nestjs-query/query-graphql";
 import { ID } from "@nestjs/graphql";
 import { BeforeInsert, BeforeUpdate, Column, Index, JoinColumn, ManyToOne, OneToMany, OneToOne, Unique } from "typeorm";
 import { Entity, ObjectType } from "../../../common/decorators";
@@ -24,7 +24,7 @@ export class WarehouseEntity extends BaseEntity {
   @Column({ length: 32 })
   name!: string;
 
-  @FilterableField(() => ID)
+  @IDField(() => ID)
   @Column()
   statusId!: Id;
 

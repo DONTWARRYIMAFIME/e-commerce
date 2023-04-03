@@ -1,4 +1,4 @@
-import { FilterableField, FilterableRelation, UnPagedRelation } from "@nestjs-query/query-graphql";
+import { FilterableRelation, IDField, UnPagedRelation } from "@nestjs-query/query-graphql";
 import { ID } from "@nestjs/graphql";
 import { Column, Index, JoinColumn, JoinTable, ManyToMany, OneToOne } from "typeorm";
 import { Entity, ObjectType } from "../../../common/decorators";
@@ -7,12 +7,12 @@ import { ProductVariantEntity } from "../../product-variant/entities/product-var
 import { UserEntity } from "../../user/entities/user.entity";
 
 @FilterableRelation("user", () => UserEntity, { disableUpdate: true, disableRemove: true })
-@UnPagedRelation("wishlistItems", () => ProductVariantEntity)
+@UnPagedRelation("productVariants", () => ProductVariantEntity)
 @ObjectType()
 @Index("INX_wishlist_user", ["user"])
 @Entity()
 export class WishlistEntity extends BaseEntity {
-  @FilterableField(() => ID)
+  @IDField(() => ID)
   @Column()
   userId!: string;
 
@@ -28,5 +28,5 @@ export class WishlistEntity extends BaseEntity {
     cascade: true,
   })
   @JoinTable({ name: "wishlist_item" })
-  wishlistItems!: ProductVariantEntity[];
+  productVariants!: ProductVariantEntity[];
 }

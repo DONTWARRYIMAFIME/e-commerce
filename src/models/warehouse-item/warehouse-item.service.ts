@@ -21,12 +21,8 @@ export class WarehouseItemService extends TypeOrmQueryService<WarehouseItemEntit
     return this.repo.findOneByOrFail({ warehouseId, productVariantId });
   }
 
-  public findManyByProductVariantId(productVariantId: Id, opts?: FindOptionsWhere<WarehouseItemEntity>): Promise<WarehouseItemEntity[]> {
-    return this.repo.findBy({ productVariantId, warehouse: { status: { code: WarehouseStatus.ACTIVE } }, ...opts });
-  }
-
   /**
-   * Return an amount of available product's from all warehouses
+   * Return an amount of available products from all warehouses
    *
    * @param {Id} productVariantId - A product identifier
    * @param {FindOptionsWhere<WarehouseItemEntity>} opts - Where clause additional options.

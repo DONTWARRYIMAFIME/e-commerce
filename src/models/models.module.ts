@@ -1,5 +1,7 @@
 import { Module } from "@nestjs/common";
 import { AddressModule } from "./address/address.module";
+import { CartItemModule } from "./cart-item/cart-item.module";
+import { CartModule } from "./cart/cart.module";
 import { CityModule } from "./city/city.module";
 import { ColorModule } from "./color/color.module";
 import { CountryModule } from "./country/country.module";
@@ -38,6 +40,8 @@ import { WishlistModule } from "./wishlist/wishlist.module";
     CityModule,
     CountryModule,
     WishlistModule,
+    CartModule,
+    CartItemModule,
   ],
 })
 export class ModelsModule {}

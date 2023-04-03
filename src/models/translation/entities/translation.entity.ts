@@ -1,4 +1,4 @@
-import { FilterableField } from "@nestjs-query/query-graphql";
+import { FilterableField, IDField } from "@nestjs-query/query-graphql";
 import { ID } from "@nestjs/graphql";
 import { Column, ManyToOne, Unique } from "typeorm";
 import { Entity, ObjectType } from "../../../common/decorators";
@@ -17,7 +17,7 @@ export class TranslationEntity extends BaseEntity {
   @Column({ type: "text" })
   value!: string;
 
-  @FilterableField(() => ID)
+  @IDField(() => ID)
   @Column()
   localeId!: string;
 

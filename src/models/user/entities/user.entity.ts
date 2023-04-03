@@ -6,12 +6,14 @@ import { Entity, ObjectType } from "../../../common/decorators";
 import { RoleEntity } from "../../../providers/security/authorization/role/entities/role.entity";
 import { AddressEntity } from "../../address/entities/address.entity";
 import { BaseEntity } from "../../base.entity";
+import { CartEntity } from "../../cart/entities/cart.entity";
 import { EmailAddressEntity } from "../../email-address/entities/email-address.entity";
 import { MediaEntity } from "../../media/entities/media.entity";
 import { WishlistEntity } from "../../wishlist/entities/wishlist.entity";
 
 @FilterableRelation("avatar", () => MediaEntity, { nullable: true })
 @FilterableRelation("emailAddress", () => EmailAddressEntity)
+@FilterableRelation("cart", () => CartEntity, { disableUpdate: true, disableRemove: true })
 @FilterableRelation("wishlist", () => WishlistEntity, { disableUpdate: true, disableRemove: true })
 @UnPagedRelation("roles", () => RoleEntity, { disableUpdate: true, disableRemove: true })
 @UnPagedRelation("addresses", () => AddressEntity, { disableUpdate: true })
@@ -58,7 +60,10 @@ export class UserEntity extends BaseEntity {
   @HideField()
   tempPassword: string;
 
-  @OneToOne(() => WishlistEntity)
+  @OneToOne(() => CartEntity, cart => cart.user)
+  cart!: CartEntity;
+
+  @OneToOne(() => WishlistEntity, wishlist => wishlist.user)
   wishlist!: WishlistEntity;
 
   @ManyToMany(() => RoleEntity, { eager: true })

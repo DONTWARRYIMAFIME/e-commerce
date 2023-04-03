@@ -1,16 +1,18 @@
-import { FilterableField } from "@nestjs-query/query-graphql";
+import { FilterableField, FilterableRelation, IDField } from "@nestjs-query/query-graphql";
 import { ID, Int } from "@nestjs/graphql";
+import { max } from "lodash";
 import { BeforeInsert, BeforeUpdate, Column, ManyToOne, Unique } from "typeorm";
 import { Entity, ObjectType } from "../../../common/decorators";
 import { BaseEntity } from "../../base.entity";
 import { ProductVariantEntity } from "../../product-variant/entities/product-variant.entity";
 import { WarehouseEntity } from "../../warehouse/entities/warehouse.entity";
 
+@FilterableRelation("productVariant", () => ProductVariantEntity, { disableUpdate: true, disableRemove: true })
 @ObjectType()
 @Unique("UNQ_warehouse_item_warehouse_and_product_variant", ["warehouse", "productVariant"])
 @Entity()
 export class WarehouseItemEntity extends BaseEntity {
-  @FilterableField(() => ID)
+  @IDField(() => ID)
   @Column()
   warehouseId!: string;
 
@@ -20,7 +22,7 @@ export class WarehouseItemEntity extends BaseEntity {
   })
   warehouse!: WarehouseEntity;
 
-  @FilterableField(() => ID)
+  @IDField(() => ID)
   @Column()
   productVariantId!: string;
 
@@ -45,8 +47,6 @@ export class WarehouseItemEntity extends BaseEntity {
   @BeforeInsert()
   @BeforeUpdate()
   private beforeInsertOrUpdate() {
-    if (this.stock && this.reserved) {
-      this.available = this.stock - this.reserved;
-    }
+    this.available = this.stock - max([this.reserved, 0]);
   }
 }

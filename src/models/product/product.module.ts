@@ -4,24 +4,24 @@ import { CaslGraphQLModule } from "../../providers/security/authorization/casl-g
 import { CreateProductInput } from "./dto/create-product.input";
 import { UpdateProductInput } from "./dto/update-product.input";
 import { ProductEntity } from "./entities/product.entity";
-import { ProductVariantService } from "./product.service";
+import { ProductService } from "./product.service";
 
 @Module({
   imports: [
     CaslGraphQLModule.forFeature({
       imports: [NestjsQueryTypeOrmModule.forFeature([ProductEntity])],
-      services: [ProductVariantService],
+      services: [ProductService],
       resolvers: [
         {
           DTOClass: ProductEntity,
           EntityClass: ProductEntity,
           CreateDTOClass: CreateProductInput,
           UpdateDTOClass: UpdateProductInput,
-          ServiceClass: ProductVariantService,
+          ServiceClass: ProductService,
         },
       ],
     }),
   ],
-  providers: [ProductVariantService],
+  providers: [ProductService],
 })
 export class ProductModule {}

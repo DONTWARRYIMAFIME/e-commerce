@@ -1,6 +1,6 @@
-import { NestjsQueryGraphQLModule } from "@nestjs-query/query-graphql";
 import { NestjsQueryTypeOrmModule } from "@nestjs-query/query-typeorm";
 import { Module } from "@nestjs/common";
+import { CaslGraphQLModule } from "../../providers/security/authorization/casl-graphql.module";
 import { CreateWishlistInput } from "./dto/create-wishlist.input";
 import { UpdateWishlistInput } from "./dto/update-wishlist.input";
 import { WishlistEntity } from "./entities/wishlist.entity";
@@ -9,7 +9,7 @@ import { WishlistService } from "./wishlist.service";
 
 @Module({
   imports: [
-    NestjsQueryGraphQLModule.forFeature({
+    CaslGraphQLModule.forFeature({
       imports: [NestjsQueryTypeOrmModule.forFeature([WishlistEntity])],
       services: [WishlistService],
       resolvers: [

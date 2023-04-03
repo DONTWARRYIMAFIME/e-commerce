@@ -1,4 +1,4 @@
-import { FilterableField, FilterableRelation } from "@nestjs-query/query-graphql";
+import { FilterableRelation, IDField } from "@nestjs-query/query-graphql";
 import { HideField, ID } from "@nestjs/graphql";
 import { Column, Index, JoinColumn, ManyToOne, OneToMany, OneToOne } from "typeorm";
 import { Entity, ObjectType } from "../../../common/decorators";
@@ -18,7 +18,7 @@ import { WarehouseItemEntity } from "../../warehouse-item/entities/warehouse-ite
 @Index("INX_product_variant_color", ["color"])
 @Entity()
 export class ProductVariantEntity extends BaseEntity {
-  @FilterableField(() => ID)
+  @IDField(() => ID)
   @Column()
   productId!: Id;
 
@@ -38,7 +38,7 @@ export class ProductVariantEntity extends BaseEntity {
   @JoinColumn()
   price!: PriceEntity;
 
-  @FilterableField(() => ID)
+  @IDField(() => ID)
   @Column()
   colorId!: Id;
 

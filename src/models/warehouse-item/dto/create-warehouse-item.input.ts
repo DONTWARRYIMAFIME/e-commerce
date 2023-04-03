@@ -1,16 +1,16 @@
 import { Optional } from "@nestjs/common";
 import { Field, InputType } from "@nestjs/graphql";
 import { Id } from "../../../common/types/id.type";
-import { IsBigIntI18N, IsPositiveI18N } from "../../../providers/i18n/i18n.decorators";
+import { IsPositiveI18N, IsUUIDI18N } from "../../../providers/i18n/i18n.decorators";
 import { WarehouseItemEntity } from "../entities/warehouse-item.entity";
 
 @InputType()
 export class CreateWarehouseItemInput implements Partial<WarehouseItemEntity> {
-  @IsBigIntI18N()
+  @IsUUIDI18N()
   @Field()
   warehouseId!: Id;
 
-  @IsBigIntI18N()
+  @IsUUIDI18N()
   @Field()
   productVariantId!: Id;
 
