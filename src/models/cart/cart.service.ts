@@ -32,25 +32,13 @@ export class CartService extends TypeOrmQueryService<CartEntity> {
   }
 
   public async addCartItemsToCart(id: Id, cartItems: DeepPartial<CartItemEntity>[]): Promise<CartEntity> {
-    await Promise.all(cartItems.map(cartItem => this.addCartItemToCart(id, cartItem)));
+    await Promise.all(cartItems.map(cartItem => this.cartItemService.increaseQuantity(id, cartItem.productVariantId, cartItem.quantity)));
     const cart = await this.findOneByIdOrFail(id);
     return this.updateOne(id, cart);
   }
 
   public async removeCartItemsFromCart(id: Id, cartItems: DeepPartial<CartItemEntity>[]): Promise<CartEntity> {
-    await Promise.all(cartItems.map(cartItem => this.removeCartItemFromCart(id, cartItem)));
-    const cart = await this.findOneByIdOrFail(id);
-    return this.updateOne(id, cart);
-  }
-
-  public async addCartItemToCart(id: Id, cartItem: DeepPartial<CartItemEntity>): Promise<CartEntity> {
-    await this.cartItemService.increaseQuantity(id, cartItem.productVariantId, cartItem.quantity);
-    const cart = await this.findOneByIdOrFail(id);
-    return this.updateOne(id, cart);
-  }
-
-  public async removeCartItemFromCart(id: Id, cartItem: DeepPartial<CartItemEntity>): Promise<CartEntity> {
-    await this.cartItemService.decreaseQuantity(id, cartItem.productVariantId, cartItem.quantity);
+    await Promise.all(cartItems.map(cartItem => this.cartItemService.decreaseQuantity(id, cartItem.productVariantId, cartItem.quantity)));
     const cart = await this.findOneByIdOrFail(id);
     return this.updateOne(id, cart);
   }

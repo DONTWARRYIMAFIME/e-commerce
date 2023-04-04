@@ -1,10 +1,10 @@
 import { registerEnumType } from "@nestjs/graphql";
 
-export enum Currency {
+export enum Currencies {
   USD = "USD",
   BYN = "BYN",
 }
 
-registerEnumType(Currency, {
-  name: "Currency",
+registerEnumType(Currencies, {
+  name: "Currencies",
 });

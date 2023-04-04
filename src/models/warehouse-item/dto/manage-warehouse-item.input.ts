@@ -1,12 +1,13 @@
-import { MutationArgsType, UpdateOneInputType } from "@nestjs-query/query-graphql";
-import { ArgsType, Field, InputType } from "@nestjs/graphql";
+import { Field, InputType } from "@nestjs/graphql";
 import { IsOptional } from "class-validator";
 import { Id } from "../../../common/types/id.type";
 import { IsPositiveI18N, IsUUIDI18N } from "../../../providers/i18n/i18n.decorators";
-import { WarehouseEntity } from "../../warehouse/entities/warehouse.entity";
+import { WarehouseItemEntity } from "../entities/warehouse-item.entity";
+
+export type ManageWarehouseItem = Pick<WarehouseItemEntity, "productVariantId"> & { quantity: number };
 
 @InputType()
-export class WarehouseItemsInput {
+export class WarehouseItemsInput implements ManageWarehouseItem {
   @IsUUIDI18N()
   @Field()
   productVariantId!: Id;
@@ -16,9 +17,3 @@ export class WarehouseItemsInput {
   @Field({ defaultValue: 1 })
   quantity!: number;
 }
-
-@InputType()
-export class ManageWarehouseItemsInput extends UpdateOneInputType(WarehouseEntity, WarehouseItemsInput) {}
-
-@ArgsType()
-export class ManageWarehouseItemsArgsType extends MutationArgsType(ManageWarehouseItemsInput) {}

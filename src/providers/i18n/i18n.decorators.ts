@@ -1,5 +1,6 @@
 /* eslint-disable */
 import {
+  IsArray,
   IsBoolean,
   IsEmail, IsEnum,
   IsHexColor,
@@ -50,3 +51,6 @@ export const IsEnumI18N = (entity: object, validationOptions?: ValidationOptions
 
 export const IsPostalCodeI18N = (locale?: ValidatorJS.PostalCodeLocale, validationOptions?: ValidationOptions) =>
   IsPostalCode(locale, { ...validationOptions, message: i18nValidationMessage<I18nTranslations>("validation.IS_POSTAL_CODE") });
+
+export const IsArrayI18N = (validationOptions?: ValidationOptions) =>
+  IsArray({ ...validationOptions, message: i18nValidationMessage<I18nTranslations>("validation.IS_ARRAY") });

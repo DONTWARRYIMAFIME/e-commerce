@@ -10,18 +10,15 @@ DELETE FROM "translation" CASCADE;
 DELETE FROM "product_variant" CASCADE;
 DELETE FROM "product" CASCADE;
 DELETE FROM "color" CASCADE;
-DELETE FROM "currency" CASCADE;
-DELETE FROM "price" CASCADE;
 DELETE FROM "warehouse_item" CASCADE;
 DELETE FROM "warehouse" CASCADE;
+DELETE FROM "pickup_point" CASCADE;
 DELETE FROM "address" CASCADE;
 DELETE FROM "city" CASCADE;
 DELETE FROM "country" CASCADE;
 DELETE FROM "delivery_method" CASCADE;
-DELETE FROM "pickup_point" CASCADE;
-DELETE FROM "order_item" CASCADE;
-DELETE FROM "order" CASCADE;
-
+DELETE FROM "price" CASCADE;
+DELETE FROM "currency" CASCADE;
 
     INSERT INTO "role" (name)
 VALUES
@@ -182,17 +179,18 @@ WITH product_variant_price AS (
         SELECT 15, c.id FROM "currency" c WHERE c.is_default = true
         RETURNING id
 )
-INSERT INTO "product_variant" (product_id, color_id, price_id)
-    SELECT p.id, c.id, pvp.id FROM product_variant_price pvp CROSS JOIN "product" p CROSS JOIN "color" c WHERE p.title = 'test' AND c.code = 'RED';
+INSERT INTO "product_variant" (product_id, color_id, price_id, stock)
+    SELECT p.id, c.id, pvp.id, 17 FROM product_variant_price pvp CROSS JOIN "product" p CROSS JOIN "color" c WHERE p.title = 'test' AND c.code = 'RED';
 
 WITH product_variant_price AS (
     INSERT INTO "price" (amount, currency_id)
         SELECT 20, c.id FROM "currency" c WHERE c.is_default = true
         RETURNING id
 )
-INSERT INTO "product_variant" (product_id, color_id, price_id)
-SELECT p.id, c.id, pvp.id FROM product_variant_price pvp CROSS JOIN "product" p CROSS JOIN "color" c WHERE p.title = 'test' AND c.code = 'GREEN';
+INSERT INTO "product_variant" (product_id, color_id, price_id, stock)
+SELECT p.id, c.id, pvp.id, 17 FROM product_variant_price pvp CROSS JOIN "product" p CROSS JOIN "color" c WHERE p.title = 'test' AND c.code = 'GREEN';
 
+-- Warehouse items
 INSERT INTO "warehouse_item" AS pv (warehouse_id, product_variant_id, stock, reserved, available)
 SELECT DISTINCT w.id, pv.id, 15, 2, 13 FROM product_variant pv INNER JOIN "product" p ON p.id = pv.product_id CROSS JOIN "warehouse" w WHERE p.title = 'test' AND w.code = 'BY0001';
 

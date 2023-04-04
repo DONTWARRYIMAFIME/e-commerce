@@ -15,6 +15,7 @@ import { PickupPointModule } from "./pickup-point/pickup-point.module";
 import { PriceModule } from "./price/price.module";
 import { ProductVariantModule } from "./product-variant/product-variant.module";
 import { ProductModule } from "./product/product.module";
+import { SizeModule } from "./size/size.module";
 import { TranslationModule } from "./translation/translation.module";
 import { UserModule } from "./user/user.module";
 import { WarehouseItemModule } from "./warehouse-item/warehouse-item.module";
@@ -44,6 +45,7 @@ import { WishlistModule } from "./wishlist/wishlist.module";
     CartItemModule,
     DeliveryMethodModule,
     PickupPointModule,
+    SizeModule,
   ],
 })
 export class ModelsModule {}

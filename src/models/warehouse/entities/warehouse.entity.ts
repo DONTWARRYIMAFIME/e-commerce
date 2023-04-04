@@ -1,3 +1,4 @@
+import { SortDirection } from "@nestjs-query/core/dist/src/interfaces/sort-field.interface";
 import { FilterableField } from "@nestjs-query/query-graphql";
 import { Column, Index, JoinColumn, OneToMany, OneToOne, Unique } from "typeorm";
 import { Entity, ObjectType } from "../../../common/decorators";
@@ -8,7 +9,7 @@ import { WarehouseItemEntity } from "../../warehouse-item/entities/warehouse-ite
 import { WarehouseStatus } from "../enums/warehouse-status.enum";
 
 @FilterableRelation("address", () => AddressEntity, { nullable: true })
-@UnPagedRelation("warehouseItems", () => WarehouseItemEntity)
+@UnPagedRelation("warehouseItems", () => WarehouseItemEntity, { defaultSort: [{ field: "createdAt", direction: SortDirection.ASC }] })
 @ObjectType()
 @Unique("UNQ_warehouse_code", ["code"])
 @Index("INX_warehouse_status", ["status"])

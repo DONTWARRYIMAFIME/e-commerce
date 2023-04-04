@@ -50,6 +50,7 @@ export type I18nTranslations = {
         "IS_POSITIVE": string;
         "IS_ENUM": string;
         "IS_POSTAL_CODE": string;
+        "IS_ARRAY": string;
         "INVALID_BOOLEAN": string;
     };
 };
