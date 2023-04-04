@@ -6,7 +6,6 @@ import { CityModule } from "./city/city.module";
 import { ColorModule } from "./color/color.module";
 import { CountryModule } from "./country/country.module";
 import { CurrencyModule } from "./currency/currency.module";
-import { DeliveryMethodStatusModule } from "./delivery-method-status/delivery-method-status.module";
 import { DeliveryMethodModule } from "./delivery-method/delivery-method.module";
 import { EmailAddressConfirmationModule } from "./email-address-confirmation/email-address-confirmation.module";
 import { EmailAddressModule } from "./email-address/email-address.module";
@@ -19,7 +18,6 @@ import { ProductModule } from "./product/product.module";
 import { TranslationModule } from "./translation/translation.module";
 import { UserModule } from "./user/user.module";
 import { WarehouseItemModule } from "./warehouse-item/warehouse-item.module";
-import { WarehouseStatusModule } from "./warehouse-status/warehouse-status.module";
 import { WarehouseModule } from "./warehouse/warehouse.module";
 import { WishlistModule } from "./wishlist/wishlist.module";
 
@@ -37,7 +35,6 @@ import { WishlistModule } from "./wishlist/wishlist.module";
     PriceModule,
     CurrencyModule,
     WarehouseModule,
-    WarehouseStatusModule,
     WarehouseItemModule,
     AddressModule,
     CityModule,
@@ -46,7 +43,6 @@ import { WishlistModule } from "./wishlist/wishlist.module";
     CartModule,
     CartItemModule,
     DeliveryMethodModule,
-    DeliveryMethodStatusModule,
     PickupPointModule,
   ],
 })

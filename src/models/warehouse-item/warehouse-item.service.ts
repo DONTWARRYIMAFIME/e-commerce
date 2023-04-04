@@ -4,7 +4,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { UserInputError } from "apollo-server-core";
 import { FindOptionsWhere, Repository } from "typeorm";
 import { Id } from "../../common/types/id.type";
-import { WarehouseStatus } from "../warehouse-status/enum/warehouse-status.enum";
+import { WarehouseStatus } from "../warehouse/enums/warehouse-status.enum";
 import { WarehouseItemEntity } from "./entities/warehouse-item.entity";
 
 @QueryService(WarehouseItemEntity)
@@ -29,7 +29,7 @@ export class WarehouseItemService extends TypeOrmQueryService<WarehouseItemEntit
    * @returns {WarehouseItemEntity} An warehouse item entity
    */
   public countAvailable(productVariantId: Id, opts?: FindOptionsWhere<WarehouseItemEntity>): Promise<number> {
-    return this.repo.sum("available", { productVariantId, warehouse: { status: { code: WarehouseStatus.ACTIVE } }, ...opts });
+    return this.repo.sum("available", { productVariantId, warehouse: { status: WarehouseStatus.ACTIVE }, ...opts });
   }
 
   /**

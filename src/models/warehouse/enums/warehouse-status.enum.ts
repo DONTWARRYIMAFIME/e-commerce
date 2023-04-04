@@ -1,8 +1,8 @@
 import { registerEnumType } from "@nestjs/graphql";
 
 export enum WarehouseStatus {
-  ACTIVE = "ACTIVE",
-  INACTIVE = "INACTIVE",
+  ACTIVE = "active",
+  INACTIVE = "inactive",
 }
 
 registerEnumType(WarehouseStatus, {
