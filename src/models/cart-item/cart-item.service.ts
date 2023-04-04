@@ -60,10 +60,9 @@ export class CartItemService extends TypeOrmQueryService<CartItemEntity> {
     return record.id ? super.updateOne(record.id, omit(record, "id")) : super.createOne(record);
   }
 
-  private async updatePrice(record: DeepPartial<CartItemEntity>): Promise<DeepPartial<CartItemEntity>> {
+  private async updatePrice(record: DeepPartial<CartItemEntity>): Promise<void> {
     const productVariant = record.productVariant || (await this.productVariantService.findOneById(record.productVariantId));
     const price = merge(record.price, { amount: productVariant.price.amount * record.quantity });
     record.price = await this.priceService.saveOne(price);
-    return record;
   }
 }
