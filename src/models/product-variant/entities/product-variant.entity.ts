@@ -1,8 +1,8 @@
-import { FilterableField, IDField } from "@nestjs-query/query-graphql";
+import { FilterableField } from "@nestjs-query/query-graphql";
 import { ID, Int } from "@nestjs/graphql";
 import { Column, Index, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToOne } from "typeorm";
 import { Entity, ObjectType } from "../../../common/decorators";
-import { FilterableRelation, UnPagedRelation } from "../../../common/decorators/graphql/relation.decorator";
+import { FilterableRelation, FilterableUnPagedRelation, UnPagedRelation } from "../../../common/decorators/graphql/relation.decorator";
 import { Id } from "../../../common/types/id.type";
 import { BaseEntity } from "../../base.entity";
 import { ColorEntity } from "../../color/entities/color.entity";
@@ -14,14 +14,15 @@ import { SizeEntity } from "../../size/entities/size.entity";
 @FilterableRelation("product", () => ProductEntity)
 @FilterableRelation("price", () => PriceEntity)
 @FilterableRelation("color", () => ColorEntity)
-@UnPagedRelation("sizes", () => SizeEntity)
+@FilterableUnPagedRelation("sizes", () => SizeEntity)
 @UnPagedRelation("media", () => MediaEntity)
 @ObjectType()
 @Index("INX_product_variant_product", ["product"])
 @Index("INX_product_variant_color", ["color"])
+@Index("INX_product_variant_size", ["size"])
 @Entity()
 export class ProductVariantEntity extends BaseEntity {
-  @IDField(() => ID)
+  @FilterableField(() => ID)
   @Column()
   productId!: Id;
 
@@ -31,7 +32,7 @@ export class ProductVariantEntity extends BaseEntity {
   })
   product!: ProductEntity;
 
-  @IDField(() => ID)
+  @FilterableField(() => ID)
   @Column()
   priceId!: Id;
 
@@ -42,22 +43,19 @@ export class ProductVariantEntity extends BaseEntity {
   @JoinColumn()
   price!: PriceEntity;
 
-  @IDField(() => ID)
+  @FilterableField(() => ID)
   @Column()
   colorId!: Id;
 
-  @ManyToOne(() => ColorEntity, {
-    eager: true,
-    cascade: true,
-  })
+  @ManyToOne(() => ColorEntity, { eager: true })
   color!: ColorEntity;
 
-  @ManyToMany(() => SizeEntity, {
-    eager: true,
-    cascade: true,
-  })
-  @JoinTable({ name: "product_variant_size" })
-  sizes!: SizeEntity[];
+  @FilterableField(() => ID)
+  @Column()
+  sizeId!: Id;
+
+  @ManyToOne(() => SizeEntity, { eager: true })
+  size!: SizeEntity;
 
   @ManyToMany(() => MediaEntity, {
     eager: true,

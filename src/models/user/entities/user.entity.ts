@@ -1,9 +1,9 @@
-import { FilterableField, IDField } from "@nestjs-query/query-graphql";
+import { FilterableField } from "@nestjs-query/query-graphql";
 import { Field, HideField, ID } from "@nestjs/graphql";
 import { hash } from "argon2";
 import { AfterLoad, BeforeInsert, BeforeUpdate, Column, Index, JoinColumn, JoinTable, ManyToMany, OneToOne } from "typeorm";
 import { Entity, ObjectType } from "../../../common/decorators";
-import { FilterableRelation, UnPagedRelation } from "../../../common/decorators/graphql/relation.decorator";
+import { FilterableRelation, FilterableUnPagedRelation } from "../../../common/decorators/graphql/relation.decorator";
 import { Id } from "../../../common/types/id.type";
 import { RoleEntity } from "../../../providers/security/authorization/role/entities/role.entity";
 import { AddressEntity } from "../../address/entities/address.entity";
@@ -17,13 +17,13 @@ import { WishlistEntity } from "../../wishlist/entities/wishlist.entity";
 @FilterableRelation("emailAddress", () => EmailAddressEntity)
 @FilterableRelation("cart", () => CartEntity)
 @FilterableRelation("wishlist", () => WishlistEntity)
-@UnPagedRelation("roles", () => RoleEntity)
-@UnPagedRelation("addresses", () => AddressEntity)
+@FilterableUnPagedRelation("roles", () => RoleEntity)
+@FilterableUnPagedRelation("addresses", () => AddressEntity)
 @ObjectType()
 @Index("INX_user_email_address", ["emailAddress"])
 @Entity()
 export class UserEntity extends BaseEntity {
-  @IDField(() => ID)
+  @FilterableField(() => ID)
   @Column()
   emailAddressId!: Id;
 

@@ -1,4 +1,4 @@
-import { FilterableField, IDField } from "@nestjs-query/query-graphql";
+import { FilterableField } from "@nestjs-query/query-graphql";
 import { ID } from "@nestjs/graphql";
 import { Column, Index, JoinColumn, OneToOne, Unique } from "typeorm";
 import { Entity, ObjectType } from "../../../common/decorators";
@@ -16,7 +16,7 @@ import { UserEntity } from "../../user/entities/user.entity";
 @Index("INX_email_address_confirmation_email_address", ["emailAddress"])
 @Entity()
 export class EmailAddressConfirmationEntity extends BaseEntity {
-  @IDField(() => ID)
+  @FilterableField(() => ID)
   @Column()
   userId!: Id;
 
@@ -28,7 +28,7 @@ export class EmailAddressConfirmationEntity extends BaseEntity {
   @JoinColumn()
   user!: UserEntity;
 
-  @IDField(() => ID)
+  @FilterableField(() => ID)
   @Column()
   emailAddressId!: Id;
 

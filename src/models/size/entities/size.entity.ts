@@ -16,6 +16,6 @@ export class SizeEntity extends BaseEntity {
   code!: Sizes;
 
   @FilterableField()
-  @Column({ length: 8 })
+  @Column({ length: 3 })
   name!: string;
 }

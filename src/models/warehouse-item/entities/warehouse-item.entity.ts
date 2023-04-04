@@ -1,4 +1,4 @@
-import { FilterableField, IDField } from "@nestjs-query/query-graphql";
+import { FilterableField } from "@nestjs-query/query-graphql";
 import { ID, Int } from "@nestjs/graphql";
 import { max } from "lodash";
 import { BeforeInsert, BeforeUpdate, Column, Index, ManyToOne, Unique } from "typeorm";
@@ -16,7 +16,7 @@ import { WarehouseEntity } from "../../warehouse/entities/warehouse.entity";
 @Index("INX_warehouse_item_productVariant", ["productVariant"])
 @Entity()
 export class WarehouseItemEntity extends BaseEntity {
-  @IDField(() => ID)
+  @FilterableField(() => ID)
   @Column()
   warehouseId!: Id;
 
@@ -26,7 +26,7 @@ export class WarehouseItemEntity extends BaseEntity {
   })
   warehouse!: WarehouseEntity;
 
-  @IDField(() => ID)
+  @FilterableField(() => ID)
   @Column()
   productVariantId!: Id;
 

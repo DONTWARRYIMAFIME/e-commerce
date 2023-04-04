@@ -1,11 +1,11 @@
 import { FilterableField } from "@nestjs-query/query-graphql";
 import { Column, OneToMany } from "typeorm";
 import { Entity, ObjectType } from "../../../common/decorators";
-import { UnPagedRelation } from "../../../common/decorators/graphql/relation.decorator";
+import { FilterableUnPagedRelation } from "../../../common/decorators/graphql/relation.decorator";
 import { BaseEntity } from "../../base.entity";
 import { ProductVariantEntity } from "../../product-variant/entities/product-variant.entity";
 
-@UnPagedRelation("productVariants", () => ProductVariantEntity)
+@FilterableUnPagedRelation("productVariants", () => ProductVariantEntity)
 @ObjectType()
 @Entity()
 export class ProductEntity extends BaseEntity {

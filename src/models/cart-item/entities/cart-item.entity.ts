@@ -1,4 +1,4 @@
-import { FilterableField, IDField } from "@nestjs-query/query-graphql";
+import { FilterableField } from "@nestjs-query/query-graphql";
 import { ID, Int } from "@nestjs/graphql";
 import { Column, Index, JoinColumn, ManyToOne, OneToOne, Unique } from "typeorm";
 import { Entity, ObjectType } from "../../../common/decorators";
@@ -17,7 +17,7 @@ import { ProductVariantEntity } from "../../product-variant/entities/product-var
 @Index("INX_cart_item_product_variant", ["productVariant"])
 @Entity()
 export class CartItemEntity extends BaseEntity {
-  @IDField(() => ID)
+  @FilterableField(() => ID)
   @Column()
   cartId!: Id;
 
@@ -27,7 +27,7 @@ export class CartItemEntity extends BaseEntity {
   })
   cart!: CartEntity;
 
-  @IDField(() => ID)
+  @FilterableField(() => ID)
   @Column()
   productVariantId!: Id;
 

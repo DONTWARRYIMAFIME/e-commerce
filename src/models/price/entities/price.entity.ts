@@ -1,4 +1,4 @@
-import { FilterableField, IDField } from "@nestjs-query/query-graphql";
+import { FilterableField } from "@nestjs-query/query-graphql";
 import { ID } from "@nestjs/graphql";
 import { BeforeInsert, BeforeUpdate, Column, Index, ManyToOne } from "typeorm";
 import { Entity, ObjectType } from "../../../common/decorators";
@@ -24,7 +24,7 @@ export class PriceEntity extends BaseEntity {
   })
   amount!: number;
 
-  @IDField(() => ID)
+  @FilterableField(() => ID)
   @Column()
   currencyId!: Id;
 

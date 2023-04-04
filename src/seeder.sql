@@ -10,6 +10,7 @@ DELETE FROM "translation" CASCADE;
 DELETE FROM "product_variant" CASCADE;
 DELETE FROM "product" CASCADE;
 DELETE FROM "color" CASCADE;
+DELETE FROM "size" CASCADE;
 DELETE FROM "warehouse_item" CASCADE;
 DELETE FROM "warehouse" CASCADE;
 DELETE FROM "pickup_point" CASCADE;
@@ -163,32 +164,44 @@ SELECT 'Mogilev', c.id FROM "country" c WHERE c.code = 'BY';
 -- Color
 INSERT INTO "color" (code, name, hex)
 VALUES
-    ('RED', 'Red', '#FF0000'),
-    ('GREEN', 'Green', '#00FF00'),
-    ('BLUE', 'Blue', '#0000FF'),
-    ('WHITE', 'White', '#FFFFFF'),
-    ('BLACK', 'Black', '#000000');
+    ('red', 'Red', '#FF0000'),
+    ('green', 'Green', '#00FF00'),
+    ('blue', 'Blue', '#0000FF'),
+    ('white', 'White', '#FFFFFF'),
+    ('black', 'Black', '#000000');
+
+-- Size
+INSERT INTO "size" (code, name)
+VALUES
+    ('2xs', '2XS'),
+    ('xs', 'XS'),
+    ('s', 'S'),
+    ('m', 'M'),
+    ('l', 'L'),
+    ('xl', 'XL'),
+    ('2xl', '2XL'),
+    ('3xl', '3XL');
 
 -- Products
 INSERT INTO "product" (title, description)
 VALUES
     ('test', 'Test product description');
 
-WITH product_variant_price AS (
-    INSERT INTO "price" (amount, currency_id)
-        SELECT 15, c.id FROM "currency" c WHERE c.is_default = true
-        RETURNING id
-)
-INSERT INTO "product_variant" (product_id, color_id, price_id, stock)
-    SELECT p.id, c.id, pvp.id, 17 FROM product_variant_price pvp CROSS JOIN "product" p CROSS JOIN "color" c WHERE p.title = 'test' AND c.code = 'RED';
+-- WITH product_variant_price AS (
+--     INSERT INTO "price" (amount, currency_id)
+--         SELECT 15, c.id FROM "currency" c WHERE c.is_default = true
+--         RETURNING id
+-- )
+-- INSERT INTO "product_variant" (product_id, color_id, price_id, stock)
+--     SELECT p.id, c.id, pvp.id, 17 FROM product_variant_price pvp CROSS JOIN "product" p CROSS JOIN "color" c WHERE p.title = 'test' AND c.code = 'red';
 
-WITH product_variant_price AS (
-    INSERT INTO "price" (amount, currency_id)
-        SELECT 20, c.id FROM "currency" c WHERE c.is_default = true
-        RETURNING id
-)
-INSERT INTO "product_variant" (product_id, color_id, price_id, stock)
-SELECT p.id, c.id, pvp.id, 17 FROM product_variant_price pvp CROSS JOIN "product" p CROSS JOIN "color" c WHERE p.title = 'test' AND c.code = 'GREEN';
+-- WITH product_variant_price AS (
+--     INSERT INTO "price" (amount, currency_id)
+--         SELECT 20, c.id FROM "currency" c WHERE c.is_default = true
+--         RETURNING id
+-- )
+-- INSERT INTO "product_variant" (product_id, color_id, size_id, price_id, stock)
+-- SELECT p.id, c.id, s.id, pvp.id, 17 FROM product_variant_price pvp CROSS JOIN "product" p CROSS JOIN "color" c CROSS JOIN "size" s WHERE p.title = 'test';
 
 -- Warehouse items
 INSERT INTO "warehouse_item" AS pv (warehouse_id, product_variant_id, stock, reserved, available)

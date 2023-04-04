@@ -1,5 +1,5 @@
 import { SortDirection } from "@nestjs-query/core/dist/src/interfaces/sort-field.interface";
-import { FilterableField, IDField } from "@nestjs-query/query-graphql";
+import { FilterableField } from "@nestjs-query/query-graphql";
 import { ID } from "@nestjs/graphql";
 import { BeforeInsert, Column, Index, JoinColumn, OneToMany, OneToOne } from "typeorm";
 import { Entity, ObjectType } from "../../../common/decorators";
@@ -16,7 +16,7 @@ import { UserEntity } from "../../user/entities/user.entity";
 @Index("INX_cart_user", ["user"])
 @Entity()
 export class CartEntity extends BaseEntity {
-  @IDField(() => ID)
+  @FilterableField(() => ID)
   @Column()
   userId!: string;
 

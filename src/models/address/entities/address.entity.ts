@@ -1,4 +1,4 @@
-import { FilterableField, IDField } from "@nestjs-query/query-graphql";
+import { FilterableField } from "@nestjs-query/query-graphql";
 import { ID } from "@nestjs/graphql";
 import { Column, Index, ManyToOne } from "typeorm";
 import { Entity, ObjectType } from "../../../common/decorators";
@@ -28,7 +28,7 @@ export class AddressEntity extends BaseEntity {
   @Column({ length: 12, nullable: true })
   building?: string;
 
-  @IDField(() => ID)
+  @FilterableField(() => ID)
   @Column()
   cityId!: Id;
 

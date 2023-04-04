@@ -11,7 +11,7 @@ export class CreateSizeInput implements Partial<SizeEntity> {
   @FilterableField(() => Sizes)
   code!: Sizes;
 
-  @Length(1, 8)
+  @Length(1, 3)
   @IsUppercase()
   @Field()
   name!: string;
