@@ -8,9 +8,6 @@ import { CreateProductInput } from "./create-product.input";
 export class UpdateProductInput extends PartialType(CreateProductInput) {}
 
 @InputType()
-export class UpdateMediaProductInput {}
-
-@InputType()
 export class RemoveMediaInputType extends RelationsInputType(ProductEntity, MediaEntity) {}
 
 @ArgsType()
