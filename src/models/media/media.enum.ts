@@ -1,9 +1,9 @@
 import { registerEnumType } from "@nestjs/graphql";
 
 export enum MediaType {
-  image = "image",
-  video = "video",
-  raw = "raw",
+  IMAGE = "IMAGE",
+  VIDEO = "VIDEO",
+  RAW = "RAW",
 }
 
 registerEnumType(MediaType, {

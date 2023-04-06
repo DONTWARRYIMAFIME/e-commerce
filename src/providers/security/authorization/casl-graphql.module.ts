@@ -1,7 +1,8 @@
 import { NestjsQueryGraphQLModule } from "@nestjs-query/query-graphql";
 import { NestjsQueryGraphqlModuleOpts } from "@nestjs-query/query-graphql/dist/src/module";
 import { DynamicModule, Module } from "@nestjs/common";
-import { Actions, UseAbility } from "nest-casl";
+import { UseAbility } from "nest-casl";
+import { Actions } from "./enums/actions.enum";
 
 @Module({})
 export class CaslGraphQLModule extends NestjsQueryGraphQLModule {
@@ -10,21 +11,21 @@ export class CaslGraphQLModule extends NestjsQueryGraphQLModule {
       return {
         ...resolver,
         read: {
-          decorators: [UseAbility(Actions.read, resolver.DTOClass)],
+          decorators: [UseAbility(Actions.READ, resolver.DTOClass)],
           ...resolver.read,
         },
         create: {
-          decorators: [UseAbility(Actions.create, resolver.DTOClass)],
+          decorators: [UseAbility(Actions.CREATE, resolver.DTOClass)],
           many: { disabled: true },
           ...resolver.create,
         },
         update: {
-          decorators: [UseAbility(Actions.update, resolver.DTOClass)],
+          decorators: [UseAbility(Actions.UPDATE, resolver.DTOClass)],
           many: { disabled: true },
           ...resolver.update,
         },
         delete: {
-          decorators: [UseAbility(Actions.delete, resolver.DTOClass)],
+          decorators: [UseAbility(Actions.DELETE, resolver.DTOClass)],
           many: { disabled: true },
           ...resolver.delete,
         },
