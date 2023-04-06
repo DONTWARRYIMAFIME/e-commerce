@@ -1,5 +1,5 @@
 import { FilterableField, IDField } from "@nestjs-query/query-graphql";
-import { ID, ObjectType } from "@nestjs/graphql";
+import { GraphQLISODateTime, ID, ObjectType } from "@nestjs/graphql";
 import { BaseEntity as TBaseEntity, CreateDateColumn, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { Id } from "../common/types/id.type";
 
@@ -9,11 +9,11 @@ export class BaseEntity extends TBaseEntity {
   @PrimaryGeneratedColumn("uuid")
   id!: Id;
 
-  @FilterableField()
+  @FilterableField(() => GraphQLISODateTime, { filterOnly: true })
   @CreateDateColumn()
   createdAt!: Date;
 
-  @FilterableField()
+  @FilterableField(() => GraphQLISODateTime, { filterOnly: true })
   @UpdateDateColumn()
   updatedAt!: Date;
 }

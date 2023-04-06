@@ -1,14 +1,22 @@
 import { FilterableField } from "@nestjs-query/query-graphql";
-import { Column, JoinTable, ManyToMany, OneToMany } from "typeorm";
+import { Field, ID } from "@nestjs/graphql";
+import { Column, Index, JoinTable, ManyToMany, ManyToOne, OneToMany } from "typeorm";
 import { Entity, ObjectType } from "../../../common/decorators";
-import { FilterableUnPagedRelation, UnPagedRelation } from "../../../common/decorators/graphql/relation.decorator";
+import { FilterableRelation, FilterableUnPagedRelation, UnPagedRelation } from "../../../common/decorators/graphql/relation.decorator";
+import { Id } from "../../../common/types/id.type";
 import { BaseEntity } from "../../base.entity";
+import { BrandEntity } from "../../brand/entities/brand.entity";
+import { CategoryEntity } from "../../category/entities/category.entity";
 import { MediaEntity } from "../../media/entities/media.entity";
 import { ProductVariantEntity } from "../../product-variant/entities/product-variant.entity";
 
+@FilterableRelation("category", () => CategoryEntity)
+@FilterableRelation("brand", () => BrandEntity)
 @FilterableUnPagedRelation("productVariants", () => ProductVariantEntity)
 @UnPagedRelation("media", () => MediaEntity)
 @ObjectType()
+@Index("INX_product_category", ["category"])
+@Index("INX_product_brand", ["brand"])
 @Entity()
 export class ProductEntity extends BaseEntity {
   @FilterableField()
@@ -18,6 +26,20 @@ export class ProductEntity extends BaseEntity {
   @FilterableField()
   @Column({ type: "text" })
   description!: string;
+
+  @FilterableField(() => ID)
+  @Field()
+  categoryId!: Id;
+
+  @ManyToOne(() => CategoryEntity)
+  category!: CategoryEntity;
+
+  @FilterableField(() => ID)
+  @Field()
+  brandId!: Id;
+
+  @ManyToOne(() => BrandEntity)
+  brand!: BrandEntity;
 
   @OneToMany(() => ProductVariantEntity, productVariant => productVariant.product, {
     eager: true,

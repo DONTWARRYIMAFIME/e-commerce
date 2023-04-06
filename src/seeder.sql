@@ -20,6 +20,9 @@ DELETE FROM "country" CASCADE;
 DELETE FROM "delivery_method" CASCADE;
 DELETE FROM "price" CASCADE;
 DELETE FROM "currency" CASCADE;
+DELETE FROM "media" CASCADE;
+DELETE FROM "brand" CASCADE;
+DELETE FROM "category" CASCADE;
 
     INSERT INTO "role" (name)
 VALUES
@@ -182,34 +185,6 @@ VALUES
     ('2xl', '2XL'),
     ('3xl', '3XL');
 
--- Products
-INSERT INTO "product" (title, description)
-VALUES
-    ('test', 'Test product description');
-
--- WITH product_variant_price AS (
---     INSERT INTO "price" (amount, currency_id)
---         SELECT 15, c.id FROM "currency" c WHERE c.is_default = true
---         RETURNING id
--- )
--- INSERT INTO "product_variant" (product_id, color_id, price_id, stock)
---     SELECT p.id, c.id, pvp.id, 17 FROM product_variant_price pvp CROSS JOIN "product" p CROSS JOIN "color" c WHERE p.title = 'test' AND c.code = 'red';
-
--- WITH product_variant_price AS (
---     INSERT INTO "price" (amount, currency_id)
---         SELECT 20, c.id FROM "currency" c WHERE c.is_default = true
---         RETURNING id
--- )
--- INSERT INTO "product_variant" (product_id, color_id, size_id, price_id, stock)
--- SELECT p.id, c.id, s.id, pvp.id, 17 FROM product_variant_price pvp CROSS JOIN "product" p CROSS JOIN "color" c CROSS JOIN "size" s WHERE p.title = 'test';
-
--- Warehouse items
-INSERT INTO "warehouse_item" AS pv (warehouse_id, product_variant_id, stock, reserved, available)
-SELECT DISTINCT w.id, pv.id, 15, 2, 13 FROM product_variant pv INNER JOIN "product" p ON p.id = pv.product_id CROSS JOIN "warehouse" w WHERE p.title = 'test' AND w.code = 'BY0001';
-
-INSERT INTO "warehouse_item" AS pv (warehouse_id, product_variant_id, stock, reserved, available)
-SELECT DISTINCT w.id, pv.id, 4, 0, 4 FROM product_variant pv INNER JOIN "product" p ON p.id = pv.product_id CROSS JOIN "warehouse" w WHERE p.title = 'test' AND w.code = 'BY0002';
-
 -- Delivery methods
 WITH delivery_method_price AS (
     INSERT INTO "price" (amount, currency_id)
@@ -267,3 +242,56 @@ WITH pickup_point_address AS (
 )
 INSERT INTO "pickup_point" (code, name, address_id, status)
 SELECT 'BY0003', 'Test pickup point 3', ppa.id, 'inactive' FROM pickup_point_address ppa;
+
+-- Brand
+INSERT INTO "brand" (code, name, user_id)
+SELECT 'bershka', 'Bershka', u.id FROM "user" u INNER JOIN email_address ea ON u.email_address_id = ea.id WHERE ea.address = 'admin@gmail.com';
+
+-- Category
+INSERT INTO "category" (code, name, description, parent_id)
+SELECT 'root', 'Root', 'Root category', null;
+
+-- Category women
+INSERT INTO "category" (code, name, description, parent_id)
+SELECT 'women', 'Women', 'Women category', c.id FROM "category" c WHERE c.code = 'root';
+
+INSERT INTO "category" (code, name, description, parent_id)
+SELECT 'skirts', 'Skirts', 'Skirts', c.id FROM "category" c WHERE c.code = 'women';
+
+INSERT INTO "category" (code, name, description, parent_id)
+SELECT 'blazer', 'Blazer', 'Blazer', c.id FROM "category" c WHERE c.code = 'women';
+
+-- Category men
+INSERT INTO "category" (code, name, description, parent_id)
+SELECT 'men', 'Men', 'Men category', c.id FROM "category" c WHERE c.code = 'root';
+
+INSERT INTO "category" (code, name, description, parent_id)
+SELECT 'hoodies', 'Hoodies', 'Hoodies category', c.id FROM "category" c WHERE c.code = 'men';
+
+-- Products
+INSERT INTO "product" (title, description)
+VALUES
+    ('test', 'Test product description');
+
+-- WITH product_variant_price AS (
+--     INSERT INTO "price" (amount, currency_id)
+--         SELECT 15, c.id FROM "currency" c WHERE c.is_default = true
+--         RETURNING id
+-- )
+-- INSERT INTO "product_variant" (product_id, color_id, price_id, stock)
+--     SELECT p.id, c.id, pvp.id, 17 FROM product_variant_price pvp CROSS JOIN "product" p CROSS JOIN "color" c WHERE p.title = 'test' AND c.code = 'red';
+
+-- WITH product_variant_price AS (
+--     INSERT INTO "price" (amount, currency_id)
+--         SELECT 20, c.id FROM "currency" c WHERE c.is_default = true
+--         RETURNING id
+-- )
+-- INSERT INTO "product_variant" (product_id, color_id, size_id, price_id, stock)
+-- SELECT p.id, c.id, s.id, pvp.id, 17 FROM product_variant_price pvp CROSS JOIN "product" p CROSS JOIN "color" c CROSS JOIN "size" s WHERE p.title = 'test';
+
+-- Warehouse items
+INSERT INTO "warehouse_item" AS pv (warehouse_id, product_variant_id, stock, reserved, available)
+SELECT DISTINCT w.id, pv.id, 15, 2, 13 FROM product_variant pv INNER JOIN "product" p ON p.id = pv.product_id CROSS JOIN "warehouse" w WHERE p.title = 'test' AND w.code = 'BY0001';
+
+INSERT INTO "warehouse_item" AS pv (warehouse_id, product_variant_id, stock, reserved, available)
+SELECT DISTINCT w.id, pv.id, 4, 0, 4 FROM product_variant pv INNER JOIN "product" p ON p.id = pv.product_id CROSS JOIN "warehouse" w WHERE p.title = 'test' AND w.code = 'BY0002';
