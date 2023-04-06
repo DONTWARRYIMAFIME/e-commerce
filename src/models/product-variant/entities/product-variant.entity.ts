@@ -11,9 +11,9 @@ import { ProductEntity } from "../../product/entities/product.entity";
 import { SizeEntity } from "../../size/entities/size.entity";
 
 @FilterableRelation("product", () => ProductEntity)
-@FilterableRelation("price", () => PriceEntity)
 @FilterableRelation("color", () => ColorEntity)
 @FilterableRelation("size", () => SizeEntity)
+@FilterableRelation("price", () => PriceEntity)
 @ObjectType()
 @Index("INX_product_variant_product", ["product"])
 @Index("INX_product_variant_color", ["color"])
@@ -25,6 +25,7 @@ export class ProductVariantEntity extends BaseEntity {
   productId!: Id;
 
   @ManyToOne(() => ProductEntity, product => product.productVariants, {
+    nullable: false,
     onUpdate: "CASCADE",
     onDelete: "CASCADE",
   })
@@ -32,28 +33,35 @@ export class ProductVariantEntity extends BaseEntity {
 
   @FilterableField(() => ID)
   @Column()
-  priceId!: Id;
-
-  @OneToOne(() => PriceEntity, {
-    eager: true,
-    cascade: true,
-  })
-  @JoinColumn()
-  price!: PriceEntity;
-
-  @FilterableField(() => ID)
-  @Column()
   colorId!: Id;
 
-  @ManyToOne(() => ColorEntity, { eager: true })
+  @ManyToOne(() => ColorEntity, {
+    nullable: false,
+    eager: true,
+  })
   color!: ColorEntity;
 
   @FilterableField(() => ID)
   @Column()
   sizeId!: Id;
 
-  @ManyToOne(() => SizeEntity, { eager: true })
+  @ManyToOne(() => SizeEntity, {
+    nullable: false,
+    eager: true,
+  })
   size!: SizeEntity;
+
+  @FilterableField(() => ID)
+  @Column()
+  priceId!: Id;
+
+  @OneToOne(() => PriceEntity, {
+    nullable: false,
+    eager: true,
+    cascade: true,
+  })
+  @JoinColumn()
+  price!: PriceEntity;
 
   @FilterableField(() => Int)
   @Column({ default: 0 })

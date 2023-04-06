@@ -7,7 +7,6 @@ import { CategoryModule } from "./category/category.module";
 import { CityModule } from "./city/city.module";
 import { ColorModule } from "./color/color.module";
 import { CountryModule } from "./country/country.module";
-import { CurrencyModule } from "./currency/currency.module";
 import { DeliveryMethodModule } from "./delivery-method/delivery-method.module";
 import { EmailAddressConfirmationModule } from "./email-address-confirmation/email-address-confirmation.module";
 import { EmailAddressModule } from "./email-address/email-address.module";
@@ -36,7 +35,6 @@ import { WishlistModule } from "./wishlist/wishlist.module";
     ProductVariantModule,
     ColorModule,
     PriceModule,
-    CurrencyModule,
     WarehouseModule,
     WarehouseItemModule,
     AddressModule,

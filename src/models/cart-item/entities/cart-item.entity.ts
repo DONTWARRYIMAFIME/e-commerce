@@ -22,6 +22,7 @@ export class CartItemEntity extends BaseEntity {
   cartId!: Id;
 
   @ManyToOne(() => CartEntity, cart => cart.cartItems, {
+    nullable: false,
     onDelete: "CASCADE",
     onUpdate: "CASCADE",
   })
@@ -32,6 +33,7 @@ export class CartItemEntity extends BaseEntity {
   productVariantId!: Id;
 
   @ManyToOne(() => ProductVariantEntity, {
+    nullable: false,
     eager: true,
     cascade: true,
     onDelete: "CASCADE",

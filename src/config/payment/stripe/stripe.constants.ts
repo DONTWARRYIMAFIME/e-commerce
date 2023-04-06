@@ -1,0 +1,2 @@
+export const STRIPE_API_KEY = "STRIPE_API_KEY";
+export const STRIPE_API_VERSION = "STRIPE_API_VERSION";

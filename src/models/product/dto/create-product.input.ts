@@ -1,7 +1,8 @@
 import { CreateOneInputType, MutationArgsType } from "@nestjs-query/query-graphql";
 import { ArgsType, Field, InputType } from "@nestjs/graphql";
 import { IsOptional } from "class-validator";
-import { LengthI18N } from "../../../providers/i18n/i18n.decorators";
+import { Id } from "../../../common/types/id.type";
+import { IsUUIDI18N, LengthI18N } from "../../../providers/i18n/i18n.decorators";
 import { UpdateProductVariantInput } from "../../product-variant/dto/update-product-variant.input";
 import { ProductVariantEntity } from "../../product-variant/entities/product-variant.entity";
 import { ProductEntity } from "../entities/product.entity";
@@ -15,6 +16,14 @@ export class CreateProductInput implements Partial<ProductEntity> {
   @LengthI18N(3, 4096)
   @Field()
   description!: string;
+
+  @IsUUIDI18N()
+  @Field()
+  categoryId!: Id;
+
+  @IsUUIDI18N()
+  @Field()
+  brandId!: Id;
 
   @IsOptional()
   @Field(() => [UpdateProductVariantInput], { nullable: true, defaultValue: [] })

@@ -31,14 +31,14 @@ export class ProductEntity extends BaseEntity {
   @Field()
   categoryId!: Id;
 
-  @ManyToOne(() => CategoryEntity)
+  @ManyToOne(() => CategoryEntity, { nullable: false })
   category!: CategoryEntity;
 
   @FilterableField(() => ID)
   @Field()
   brandId!: Id;
 
-  @ManyToOne(() => BrandEntity)
+  @ManyToOne(() => BrandEntity, { nullable: false })
   brand!: BrandEntity;
 
   @OneToMany(() => ProductVariantEntity, productVariant => productVariant.product, {

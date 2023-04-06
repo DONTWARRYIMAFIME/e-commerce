@@ -21,6 +21,6 @@ export class TranslationEntity extends BaseEntity {
   @Column()
   localeId!: string;
 
-  @ManyToOne(() => LanguageEntity)
+  @ManyToOne(() => LanguageEntity, { nullable: false })
   locale!: LanguageEntity;
 }
