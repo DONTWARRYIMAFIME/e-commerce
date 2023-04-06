@@ -8,7 +8,7 @@ import { ProductVariantEntity } from "../../product-variant/entities/product-var
 import { UserEntity } from "../../user/entities/user.entity";
 
 @FilterableRelation("user", () => UserEntity)
-@FilterableUnPagedRelation("productVariants", () => ProductVariantEntity)
+@FilterableUnPagedRelation("productVariants", () => ProductVariantEntity, { disableUpdate: false, disableRemove: false })
 @ObjectType()
 @Index("INX_wishlist_user", ["user"])
 @Entity()

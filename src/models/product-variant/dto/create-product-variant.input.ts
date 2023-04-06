@@ -16,6 +16,10 @@ export class CreateProductVariantInput implements Partial<ProductVariantEntity> 
   @Field()
   colorId!: Id;
 
+  @IsUUIDI18N()
+  @Field()
+  sizeId!: Id;
+
   @Allow()
   @Field(() => UpdatePriceInput)
   price!: PriceEntity;

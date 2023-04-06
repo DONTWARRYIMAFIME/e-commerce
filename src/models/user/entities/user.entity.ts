@@ -36,6 +36,10 @@ export class UserEntity extends BaseEntity {
   @JoinColumn()
   emailAddress!: EmailAddressEntity;
 
+  @FilterableField(() => ID, { nullable: true })
+  @Column({ nullable: true })
+  avatarId?: Id;
+
   @OneToOne(() => MediaEntity, {
     nullable: true,
     eager: true,

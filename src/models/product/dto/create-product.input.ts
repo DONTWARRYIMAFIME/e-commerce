@@ -1,4 +1,5 @@
-import { Field, InputType } from "@nestjs/graphql";
+import { CreateOneInputType, MutationArgsType } from "@nestjs-query/query-graphql";
+import { ArgsType, Field, InputType } from "@nestjs/graphql";
 import { IsOptional } from "class-validator";
 import { LengthI18N } from "../../../providers/i18n/i18n.decorators";
 import { UpdateProductVariantInput } from "../../product-variant/dto/update-product-variant.input";
@@ -19,3 +20,9 @@ export class CreateProductInput implements Partial<ProductEntity> {
   @Field(() => [UpdateProductVariantInput], { nullable: true, defaultValue: [] })
   productVariants?: ProductVariantEntity[];
 }
+
+@InputType()
+export class CreateOneProductInputType extends CreateOneInputType("product", CreateProductInput) {}
+
+@ArgsType()
+export class CreateOneProductArgsType extends MutationArgsType(CreateOneProductInputType) {}

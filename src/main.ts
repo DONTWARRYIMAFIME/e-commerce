@@ -17,12 +17,18 @@ import { AppConfigService } from "./config/app/app.service";
   app.use(cookieParser());
 
   // For file upload
-  app.use(
-    graphqlUploadExpress({
-      maxFileSize: 10_000_000, // 10 MB
-      maxFiles: 10,
-    }),
-  );
+  // only using graphql
+  app.use((req: any, res: any, next: any) => {
+    if (req.url.includes("/graphql")) {
+      // only graphql request
+      graphqlUploadExpress({
+        maxFileSize: 10_000_000,
+        maxFiles: 10,
+      })(req, res, next);
+    } else {
+      next();
+    }
+  });
 
   await app.listen(port, () => {
     console.log("[WEB]", baseUrl + ":" + port);
