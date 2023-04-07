@@ -1,8 +1,8 @@
-import { ParseUUIDPipe } from "@nestjs/common";
 import { Args, Mutation, Resolver } from "@nestjs/graphql";
 import { FileUpload, GraphQLUpload } from "graphql-upload";
 import { Id } from "../../common/types/id.type";
 import { CreateOneProductArgsType } from "./dto/create-product.input";
+import { SelectProductArgsType } from "./dto/select-product.input";
 import { RemoveMediaArgsType } from "./dto/update-product.input";
 import { ProductEntity } from "./entities/product.entity";
 import { ProductService } from "./product.service";
@@ -23,9 +23,10 @@ export class ProductResolver {
 
   @Mutation(() => ProductEntity)
   public async addMediaToProduct(
-    @Args("id", ParseUUIDPipe) id: Id,
+    @Args() args: SelectProductArgsType,
     @Args("files", { type: () => [GraphQLUpload], defaultValue: [] }) fileUploads: Promise<FileUpload>[],
   ): Promise<ProductEntity> {
+    const { id } = args.input;
     const files = await Promise.all(fileUploads);
     return this.productService.addMediaToProduct(id, files);
   }
