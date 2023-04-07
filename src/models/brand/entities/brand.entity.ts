@@ -25,8 +25,6 @@ export class BrandEntity extends BaseEntity {
   userId!: Id;
 
   // TODO: refactor to m2m
-  @ManyToOne(() => UserEntity, {
-    nullable: false,
-  })
+  @ManyToOne(() => UserEntity)
   user!: UserEntity;
 }

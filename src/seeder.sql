@@ -262,17 +262,16 @@ INSERT INTO "category" (code, name, description, parent_id)
 SELECT 'hoodies', 'Hoodies', 'Hoodies category', c.id FROM "category" c WHERE c.code = 'men';
 
 -- Products
-INSERT INTO "product" (title, description)
-VALUES
-    ('test', 'Test product description');
+INSERT INTO "product" (title, description, category_id, brand_id)
+SELECT 'test', 'Test product description', c.id, b.id FROM "category" c CROSS JOIN "brand" b WHERE c.code = 'skirts' AND b.code = 'bershka';
 
 WITH product_variant_price AS (
     INSERT INTO "price" (amount)
         SELECT random() * 30 + 1
         RETURNING id
 )
-INSERT INTO "product_variant" (product_id, color_id, size_id, price_id)
-SELECT p.id, c.id, s.id, pvp.id FROM product_variant_price pvp
+INSERT INTO "product_variant" (sku, product_id, color_id, size_id, price_id)
+SELECT 'SK-B0001RS', p.id, c.id, s.id, pvp.id FROM product_variant_price pvp
     CROSS JOIN "product" p
     CROSS JOIN "color" c
     CROSS JOIN "size" s WHERE p.title = 'test' AND c.code = 'red' AND s.code = 's';
@@ -282,8 +281,8 @@ WITH product_variant_price AS (
         SELECT random() * 30 + 1
         RETURNING id
 )
-INSERT INTO "product_variant" (product_id, color_id, size_id, price_id)
-SELECT p.id, c.id, s.id, pvp.id FROM product_variant_price pvp
+INSERT INTO "product_variant" (sku, product_id, color_id, size_id, price_id)
+SELECT 'SK-B0002RM', p.id, c.id, s.id, pvp.id FROM product_variant_price pvp
                                          CROSS JOIN "product" p
                                          CROSS JOIN "color" c
                                          CROSS JOIN "size" s WHERE p.title = 'test' AND c.code = 'red' AND s.code = 'm';
@@ -293,8 +292,8 @@ WITH product_variant_price AS (
         SELECT random() * 30 + 1
         RETURNING id
 )
-INSERT INTO "product_variant" (product_id, color_id, size_id, price_id)
-SELECT p.id, c.id, s.id, pvp.id FROM product_variant_price pvp
+INSERT INTO "product_variant" (sku, product_id, color_id, size_id, price_id)
+SELECT 'SK-B0003RL', p.id, c.id, s.id, pvp.id FROM product_variant_price pvp
                                          CROSS JOIN "product" p
                                          CROSS JOIN "color" c
                                          CROSS JOIN "size" s WHERE p.title = 'test' AND c.code = 'red' AND s.code = 'l';
@@ -304,8 +303,8 @@ WITH product_variant_price AS (
         SELECT random() * 30 + 1
         RETURNING id
 )
-INSERT INTO "product_variant" (product_id, color_id, size_id, price_id)
-SELECT p.id, c.id, s.id, pvp.id FROM product_variant_price pvp
+INSERT INTO "product_variant" (sku, product_id, color_id, size_id, price_id)
+SELECT 'SK-B0004GL', p.id, c.id, s.id, pvp.id FROM product_variant_price pvp
                                          CROSS JOIN "product" p
                                          CROSS JOIN "color" c
                                          CROSS JOIN "size" s WHERE p.title = 'test' AND c.code = 'green' AND s.code = 'l';

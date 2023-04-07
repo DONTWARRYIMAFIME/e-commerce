@@ -33,7 +33,6 @@ export class AddressEntity extends BaseEntity {
   cityId!: Id;
 
   @ManyToOne(() => CityEntity, {
-    nullable: false,
     eager: true,
     cascade: true,
     onUpdate: "CASCADE",

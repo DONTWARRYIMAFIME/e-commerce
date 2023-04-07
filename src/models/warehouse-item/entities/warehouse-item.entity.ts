@@ -21,7 +21,6 @@ export class WarehouseItemEntity extends BaseEntity {
   warehouseId!: Id;
 
   @ManyToOne(() => WarehouseEntity, {
-    nullable: false,
     onDelete: "CASCADE",
     onUpdate: "CASCADE",
   })
@@ -32,7 +31,6 @@ export class WarehouseItemEntity extends BaseEntity {
   productVariantId!: Id;
 
   @ManyToOne(() => ProductVariantEntity, {
-    nullable: false,
     onDelete: "CASCADE",
     onUpdate: "CASCADE",
   })

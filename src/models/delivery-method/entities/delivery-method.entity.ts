@@ -38,10 +38,7 @@ export class DeliveryMethodEntity extends BaseEntity {
   @Column()
   priceId: Id;
 
-  @ManyToOne(() => PriceEntity, {
-    nullable: false,
-    cascade: true,
-  })
+  @ManyToOne(() => PriceEntity, { cascade: true })
   price!: PriceEntity;
 
   // TODO: implement logic that gonna listen orderComplete event and calculate delivery time

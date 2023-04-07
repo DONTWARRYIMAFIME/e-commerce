@@ -21,7 +21,6 @@ export class CityEntity extends BaseEntity {
   countryId!: Id;
 
   @ManyToOne(() => CountryEntity, country => country.cities, {
-    nullable: false,
     onUpdate: "CASCADE",
     onDelete: "CASCADE",
   })
