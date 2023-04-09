@@ -14,7 +14,7 @@ import { UserEntity } from "./entities/user.entity";
 @QueryService(UserEntity)
 export class UserService extends TypeOrmQueryService<UserEntity> {
   constructor(@InjectRepository(UserEntity) repo: Repository<UserEntity>, private readonly mediaService: MediaService, private readonly addressService: AddressService) {
-    super(repo);
+    super(repo, { useSoftDelete: true });
   }
 
   public findOneById(id: Id, opts?: FindOptionsWhere<UserEntity>): Promise<UserEntity> {

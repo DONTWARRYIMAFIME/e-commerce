@@ -22,6 +22,9 @@ DELETE FROM "country" CASCADE;
 DELETE FROM "delivery_method" CASCADE;
 DELETE FROM "price" CASCADE;
 DELETE FROM "media" CASCADE;
+DELETE FROM "order" CASCADE;
+DELETE FROM "order_item" CASCADE;
+DELETE FROM "payment_method" CASCADE;
 
     INSERT INTO "role" (name)
 VALUES
@@ -261,6 +264,12 @@ SELECT 'men', 'Men', 'Men category', c.id FROM "category" c WHERE c.code = 'root
 INSERT INTO "category" (code, name, description, parent_id)
 SELECT 'hoodies', 'Hoodies', 'Hoodies category', c.id FROM "category" c WHERE c.code = 'men';
 
+-- Payment methods
+INSERT INTO "payment_method" (code, name)
+VALUES
+    ('cash_on_delivery', 'Cash on delivery'),
+    ('card', 'Card');
+
 -- Products
 INSERT INTO "product" (title, description, category_id, brand_id)
 SELECT 'test', 'Test product description', c.id, b.id FROM "category" c CROSS JOIN "brand" b WHERE c.code = 'skirts' AND b.code = 'bershka';
@@ -311,4 +320,4 @@ SELECT 'SK-B0004GL', p.id, c.id, s.id, pvp.id FROM product_variant_price pvp
 
 -- Warehouse items
 INSERT INTO "warehouse_item" AS pv (warehouse_id, product_variant_id, stock, reserved, available)
-SELECT DISTINCT w.id, pv.id, floor(random() * 30 + 1)::int AS stock, 0, stock FROM product_variant pv INNER JOIN "product" p ON p.id = pv.product_id CROSS JOIN "warehouse" w;
+SELECT w.id, pv.id, 30, 0, 30 FROM product_variant pv INNER JOIN "product" p ON p.id = pv.product_id CROSS JOIN "warehouse" w;

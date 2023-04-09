@@ -1,3 +1,4 @@
+import { UpdateOneOptions } from "@nestjs-query/core";
 import { TypeOrmQueryService } from "@nestjs-query/query-typeorm";
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
@@ -5,7 +6,6 @@ import { UserInputError } from "apollo-server-core";
 import { merge, omit } from "lodash";
 import { DeepPartial, FindOptionsWhere, Repository } from "typeorm";
 import { Id } from "../../common/types/id.type";
-import { PriceService } from "../price/price.service";
 import { ProductVariantService } from "../product-variant/product-variant.service";
 import { WarehouseItemService } from "../warehouse-item/warehouse-item.service";
 import { CartItemEntity } from "./entities/cart-item.entity";
@@ -16,7 +16,6 @@ export class CartItemService extends TypeOrmQueryService<CartItemEntity> {
     @InjectRepository(CartItemEntity) repo: Repository<CartItemEntity>,
     private readonly warehouseItemService: WarehouseItemService,
     private readonly productVariantService: ProductVariantService,
-    private readonly priceService: PriceService,
   ) {
     super(repo);
   }
@@ -29,6 +28,16 @@ export class CartItemService extends TypeOrmQueryService<CartItemEntity> {
     return this.repo.findOneByOrFail({ cartId, productVariantId, ...opts });
   }
 
+  public async createOne(record: DeepPartial<CartItemEntity>): Promise<CartItemEntity> {
+    const entity = await this.updatePrice(record);
+    return super.createOne(entity);
+  }
+
+  public async updateOne(id: Id, update: DeepPartial<CartItemEntity>, opts?: UpdateOneOptions<CartItemEntity>): Promise<CartItemEntity> {
+    const entity = await this.updatePrice(update);
+    return super.updateOne(id, entity, opts);
+  }
+
   public async increaseQuantity(cartId: Id, productVariantId: Id, quantity: number): Promise<CartItemEntity> {
     const cartItem = await this.findOneByCartIdAndProductVariantId(cartId, productVariantId);
     const stock = await this.warehouseItemService.countAvailable(productVariantId);
@@ -39,8 +48,13 @@ export class CartItemService extends TypeOrmQueryService<CartItemEntity> {
       throw new UserInputError("Target quantity can not be greater than stock");
     }
 
-    const entity = merge(cartItem, { cartId, productVariantId, quantity: targetQuantity });
-    return this.saveOne(entity);
+    const entity = merge<DeepPartial<CartItemEntity>, DeepPartial<CartItemEntity>>(cartItem, {
+      cartId,
+      productVariantId,
+      quantity: targetQuantity,
+    });
+
+    return cartItem ? this.updateOne(cartItem.id, omit(entity, "id")) : this.createOne(entity);
   }
 
   public async decreaseQuantity(cartId: Id, productVariantId: Id, quantity: number): Promise<CartItemEntity> {
@@ -51,18 +65,18 @@ export class CartItemService extends TypeOrmQueryService<CartItemEntity> {
       return super.deleteOne(cartItem.id);
     }
 
-    const entity = merge(cartItem, { cartId, productVariantId, quantity: targetQuantity });
-    return this.saveOne(entity);
+    const entity = merge<DeepPartial<CartItemEntity>, DeepPartial<CartItemEntity>>(cartItem, {
+      cartId,
+      productVariantId,
+      quantity: targetQuantity,
+    });
+
+    return this.updateOne(cartItem.id, omit(entity, "id"));
   }
 
-  public async saveOne(record: DeepPartial<CartItemEntity>): Promise<CartItemEntity> {
-    await this.updatePrice(record);
-    return record.id ? super.updateOne(record.id, omit(record, "id")) : super.createOne(record);
-  }
-
-  private async updatePrice(record: DeepPartial<CartItemEntity>): Promise<void> {
-    const productVariant = record.productVariant || (await this.productVariantService.findOneById(record.productVariantId));
-    const price = merge(record.price, { amount: productVariant.price.amount * record.quantity });
-    record.price = await this.priceService.saveOne(price);
+  private async updatePrice(entity: DeepPartial<CartItemEntity>): Promise<DeepPartial<CartItemEntity>> {
+    const productVariant = await this.productVariantService.findOneById(entity.productVariantId);
+    const priceAmount = productVariant.price.amount * entity.quantity;
+    return merge<DeepPartial<CartItemEntity>, DeepPartial<CartItemEntity>>(entity, { price: { amount: priceAmount } });
   }
 }

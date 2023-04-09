@@ -1,5 +1,5 @@
 import { FilterableField } from "@nestjs-query/query-graphql";
-import { ID, Int } from "@nestjs/graphql";
+import { ID } from "@nestjs/graphql";
 import { Column, Index, JoinColumn, ManyToOne, OneToOne, Unique } from "typeorm";
 import { Entity, ObjectType } from "../../../common/decorators";
 import { FilterableRelation } from "../../../common/decorators/graphql/relation.decorator";
@@ -59,8 +59,4 @@ export class ProductVariantEntity extends BaseEntity {
   })
   @JoinColumn()
   price!: PriceEntity;
-
-  @FilterableField(() => Int)
-  @Column({ default: 0 })
-  stock!: number;
 }

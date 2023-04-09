@@ -1,7 +1,7 @@
 import { FilterableField } from "@nestjs-query/query-graphql";
-import { Field, HideField, ID } from "@nestjs/graphql";
+import { Field, GraphQLISODateTime, HideField, ID } from "@nestjs/graphql";
 import { hash } from "argon2";
-import { AfterLoad, BeforeInsert, BeforeUpdate, Column, Index, JoinColumn, JoinTable, ManyToMany, OneToOne } from "typeorm";
+import { AfterLoad, BeforeInsert, BeforeUpdate, Column, DeleteDateColumn, Index, JoinColumn, JoinTable, ManyToMany, OneToOne } from "typeorm";
 import { Entity, ObjectType } from "../../../common/decorators";
 import { FilterableRelation, FilterableUnPagedRelation } from "../../../common/decorators/graphql/relation.decorator";
 import { Id } from "../../../common/types/id.type";
@@ -87,6 +87,10 @@ export class UserEntity extends BaseEntity {
   })
   @JoinTable({ name: "user_address" })
   addresses!: AddressEntity[];
+
+  @FilterableField(() => GraphQLISODateTime, { filterOnly: true })
+  @DeleteDateColumn()
+  deletedAt?: Date;
 
   @AfterLoad()
   afterLoad() {

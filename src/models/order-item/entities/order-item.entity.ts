@@ -5,43 +5,51 @@ import { Entity, ObjectType } from "../../../common/decorators";
 import { FilterableRelation } from "../../../common/decorators/graphql/relation.decorator";
 import { Id } from "../../../common/types/id.type";
 import { BaseEntity } from "../../base.entity";
-import { CartEntity } from "../../cart/entities/cart.entity";
+import { OrderEntity } from "../../order/entities/order.entity";
 import { PriceEntity } from "../../price/entities/price.entity";
 import { ProductVariantEntity } from "../../product-variant/entities/product-variant.entity";
+import { WarehouseEntity } from "../../warehouse/entities/warehouse.entity";
 
+@FilterableRelation("order", () => OrderEntity)
 @FilterableRelation("productVariant", () => ProductVariantEntity)
+@FilterableRelation("warehouse", () => WarehouseEntity)
 @FilterableRelation("price", () => PriceEntity)
 @ObjectType()
-@Unique("UNQ_cart_product_variant", ["cart", "productVariant"])
-@Index("INX_cart_item_cart", ["cart"])
-@Index("INX_cart_item_product_variant", ["productVariant"])
+@Unique("UNQ_order_item_order_product_variant_warehouse", ["order", "productVariant", "warehouse"])
+@Index("INX_order_item_order", ["order"])
+@Index("INX_order_item_product_variant", ["productVariant"])
+@Index("INX_order_item_warehouse", ["warehouse"])
 @Entity()
-export class CartItemEntity extends BaseEntity {
+export class OrderItemEntity extends BaseEntity {
   @FilterableField(() => ID)
   @Column()
-  cartId!: Id;
+  orderId!: Id;
 
-  @ManyToOne(() => CartEntity, cart => cart.cartItems, {
+  @ManyToOne(() => OrderEntity, order => order.orderItems, {
     onDelete: "CASCADE",
     onUpdate: "CASCADE",
   })
-  cart!: CartEntity;
+  order!: OrderEntity;
 
   @FilterableField(() => ID)
   @Column()
   productVariantId!: Id;
 
   @ManyToOne(() => ProductVariantEntity, {
-    eager: true,
-    cascade: true,
     onDelete: "CASCADE",
     onUpdate: "CASCADE",
   })
   productVariant!: ProductVariantEntity;
 
-  @FilterableField(() => Int)
-  @Column({ type: "int", unsigned: true })
-  quantity!: number;
+  @FilterableField(() => ID)
+  @Column()
+  warehouseId!: Id;
+
+  @ManyToOne(() => WarehouseEntity, {
+    onDelete: "CASCADE",
+    onUpdate: "CASCADE",
+  })
+  warehouse!: WarehouseEntity;
 
   @FilterableField(() => ID)
   @Column()
@@ -50,9 +58,11 @@ export class CartItemEntity extends BaseEntity {
   @OneToOne(() => PriceEntity, {
     eager: true,
     cascade: true,
-    onUpdate: "CASCADE",
-    onDelete: "CASCADE",
   })
   @JoinColumn()
   price!: PriceEntity;
+
+  @FilterableField(() => Int)
+  @Column({ type: "int", unsigned: true })
+  quantity!: number;
 }

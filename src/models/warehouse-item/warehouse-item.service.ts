@@ -1,16 +1,15 @@
-import { QueryService, UpdateOneOptions } from "@nestjs-query/core";
+import { QueryService } from "@nestjs-query/core";
 import { TypeOrmQueryService } from "@nestjs-query/query-typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
 import { UserInputError } from "apollo-server-core";
-import { DeepPartial, FindOptionsWhere, Repository } from "typeorm";
+import { FindOptionsWhere, Repository } from "typeorm";
 import { Id } from "../../common/types/id.type";
-import { ProductVariantService } from "../product-variant/product-variant.service";
 import { WarehouseStatus } from "../warehouse/enums/warehouse-status.enum";
 import { WarehouseItemEntity } from "./entities/warehouse-item.entity";
 
 @QueryService(WarehouseItemEntity)
 export class WarehouseItemService extends TypeOrmQueryService<WarehouseItemEntity> {
-  constructor(@InjectRepository(WarehouseItemEntity) repo: Repository<WarehouseItemEntity>, private readonly productVariantService: ProductVariantService) {
+  constructor(@InjectRepository(WarehouseItemEntity) repo: Repository<WarehouseItemEntity>) {
     super(repo);
   }
 
@@ -22,14 +21,8 @@ export class WarehouseItemService extends TypeOrmQueryService<WarehouseItemEntit
     return this.repo.findOneByOrFail({ warehouseId, productVariantId });
   }
 
-  public async createOne(record: DeepPartial<WarehouseItemEntity>): Promise<WarehouseItemEntity> {
-    const warehouseItem = await super.createOne(record);
-    return this.updateProductVariantStock(warehouseItem);
-  }
-
-  public async updateOne(id: Id, update: DeepPartial<WarehouseItemEntity>, opts?: UpdateOneOptions<WarehouseItemEntity>): Promise<WarehouseItemEntity> {
-    const warehouseItem = await super.updateOne(id, update, opts);
-    return this.updateProductVariantStock(warehouseItem);
+  public findManyByProductVariantId(productVariantId, opts?: FindOptionsWhere<WarehouseItemEntity>) {
+    return this.repo.findBy({ productVariantId, warehouse: { status: WarehouseStatus.ACTIVE }, ...opts });
   }
 
   /**
@@ -57,7 +50,7 @@ export class WarehouseItemService extends TypeOrmQueryService<WarehouseItemEntit
       const { id: warehouseItemId, stock, ...rest } = warehouseItem;
       return this.updateOne(warehouseItemId, { ...rest, stock: stock + quantity });
     }
-    return this.createOne({ warehouseId, productVariantId, stock: quantity });
+    return super.createOne({ warehouseId, productVariantId, stock: quantity });
   }
 
   /**
@@ -75,7 +68,7 @@ export class WarehouseItemService extends TypeOrmQueryService<WarehouseItemEntit
       throw new UserInputError("Can not decrease stock quantity by " + quantity + " products.");
     }
 
-    return this.updateOne(warehouseItemId, { ...rest, stock: stock - quantity });
+    return super.updateOne(warehouseItemId, { ...rest, stock: stock - quantity });
   }
 
   /**
@@ -93,7 +86,7 @@ export class WarehouseItemService extends TypeOrmQueryService<WarehouseItemEntit
       throw new UserInputError("Can not reserve " + quantity + " products. Available value is " + available);
     }
 
-    return this.updateOne(warehouseItemId, { ...rest, reserved: reserved + quantity });
+    return super.updateOne(warehouseItemId, { ...rest, reserved: reserved + quantity });
   }
 
   /**
@@ -111,7 +104,7 @@ export class WarehouseItemService extends TypeOrmQueryService<WarehouseItemEntit
       throw new UserInputError("Can not release " + quantity + " products. Reserved value is " + reserved);
     }
 
-    return this.updateOne(warehouseItemId, { ...rest, reserved: reserved - quantity });
+    return super.updateOne(warehouseItemId, { ...rest, reserved: reserved - quantity });
   }
 
   /**
@@ -129,12 +122,6 @@ export class WarehouseItemService extends TypeOrmQueryService<WarehouseItemEntit
       throw new UserInputError("Can not complete reservation for " + quantity + " products. Incorrect value received: " + reserved);
     }
 
-    return this.updateOne(warehouseItemId, { ...rest, stock: stock - quantity, reserved: reserved - quantity });
-  }
-
-  private async updateProductVariantStock(warehouseItem: WarehouseItemEntity): Promise<WarehouseItemEntity> {
-    const totalStock = await this.countAvailable(warehouseItem.productVariantId);
-    warehouseItem.productVariant = await this.productVariantService.updateOne(warehouseItem.productVariantId, { stock: totalStock });
-    return warehouseItem;
+    return super.updateOne(warehouseItemId, { ...rest, stock: stock - quantity, reserved: reserved - quantity });
   }
 }
