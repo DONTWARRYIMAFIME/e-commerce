@@ -1,7 +1,7 @@
+import { NestjsQueryGraphQLModule } from "@nestjs-query/query-graphql";
 import { NestjsQueryTypeOrmModule } from "@nestjs-query/query-typeorm";
 import { Module } from "@nestjs/common";
 import { AppConfigModule } from "../../config/app/app.module";
-import { CaslGraphQLModule } from "../../providers/security/authorization/casl-graphql.module";
 import { EmailAddressModule } from "../email-address/email-address.module";
 import { EmailAddressConfirmationController } from "./email-address-confirmation.controller";
 import { EmailAddressConfirmationResolver } from "./email-address-confirmation.resolver";
@@ -11,7 +11,7 @@ import { UserCreatedListener } from "./listeners/user-create.listener";
 
 @Module({
   imports: [
-    CaslGraphQLModule.forFeature({
+    NestjsQueryGraphQLModule.forFeature({
       imports: [AppConfigModule, EmailAddressModule, NestjsQueryTypeOrmModule.forFeature([EmailAddressConfirmationEntity])],
       services: [EmailAddressConfirmationService],
       resolvers: [

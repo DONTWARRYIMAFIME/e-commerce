@@ -1,6 +1,6 @@
+import { NestjsQueryGraphQLModule } from "@nestjs-query/query-graphql";
 import { NestjsQueryTypeOrmModule } from "@nestjs-query/query-typeorm";
 import { Module } from "@nestjs/common";
-import { CaslGraphQLModule } from "../../providers/security/authorization/casl-graphql.module";
 import { DeliveryMethodService } from "./delivery-method.service";
 import { CreateDeliveryMethodInput } from "./dto/create-delivery-method.input";
 import { UpdateDeliveryMethodInput } from "./dto/update-delivery-method.input";
@@ -8,7 +8,7 @@ import { DeliveryMethodEntity } from "./entities/delivery-method.entity";
 
 @Module({
   imports: [
-    CaslGraphQLModule.forFeature({
+    NestjsQueryGraphQLModule.forFeature({
       imports: [NestjsQueryTypeOrmModule.forFeature([DeliveryMethodEntity])],
       services: [DeliveryMethodService],
       resolvers: [

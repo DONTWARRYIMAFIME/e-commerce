@@ -1,7 +1,7 @@
 import { Controller, Get, Query, Res } from "@nestjs/common";
 import { Response } from "express";
 import { AppConfigService } from "../../config/app/app.service";
-import { IsPublic } from "../../providers/security/authentication/decorators/isPublic.decorator";
+import { IsPublic } from "../../providers/security/auth/decorators/is-public.decorator";
 import { EmailAddressConfirmationService } from "./email-address-confirmation.service";
 
 @Controller("confirm/email")

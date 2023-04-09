@@ -3,6 +3,7 @@ DELETE FROM "brand" CASCADE;
 DELETE FROM "category" CASCADE;
 DELETE FROM "user" CASCADE;
 DELETE FROM "role" CASCADE;
+DELETE FROM "permission" CASCADE;
 DELETE FROM "user_role" CASCADE;
 DELETE FROM "cart_item" CASCADE;
 DELETE FROM "cart" CASCADE;
@@ -26,12 +27,37 @@ DELETE FROM "order" CASCADE;
 DELETE FROM "order_item" CASCADE;
 DELETE FROM "payment_method" CASCADE;
 
-    INSERT INTO "role" (name)
+-- Role
+INSERT INTO "role" (code, name)
 VALUES
-    ('CUSTOMER'),
-    ('PARTNER'),
-    ('CUSTOMER_SUPPORT'),
-    ('ADMIN');
+    ('customer', 'Customer'),
+    ('partner', 'Partner'),
+    ('customer_support', 'Customer support'),
+    ('admin', 'Admin');
+
+-- Permission
+INSERT INTO "permission" (action, subject, conditions)
+VALUES
+    ('read', 'BrandEntity', null),
+    ('create', 'BrandEntity', null),
+    ('update', 'BrandEntity', null),
+    ('update', 'BrandEntity', '{"userId": "{{id}}"}'),
+    ('delete', 'BrandEntity', null),
+    ('delete', 'BrandEntity', '{"userId": "{{id}}"}'),
+    ('manage', 'BrandEntity', null);
+
+-- Role permission
+INSERT INTO "role_permission" (role_id, permission_id)
+SELECT r.id, p.id FROM "role" r CROSS JOIN "permission" p WHERE r.code = 'partner' AND p.action = 'read' AND p.subject = 'BrandEntity';
+INSERT INTO "role_permission" (role_id, permission_id)
+SELECT r.id, p.id FROM "role" r CROSS JOIN "permission" p WHERE r.code = 'partner' AND p.action = 'create' AND p.subject = 'BrandEntity';
+INSERT INTO "role_permission" (role_id, permission_id)
+SELECT r.id, p.id FROM "role" r CROSS JOIN "permission" p WHERE r.code = 'partner' AND p.action = 'update' AND p.subject = 'BrandEntity' AND p.conditions IS NOT NULL;
+INSERT INTO "role_permission" (role_id, permission_id)
+SELECT r.id, p.id FROM "role" r CROSS JOIN "permission" p WHERE r.code = 'partner' AND p.action = 'delete' AND p.subject = 'BrandEntity' AND p.conditions IS NOT NULL;
+
+INSERT INTO "role_permission" (role_id, permission_id)
+SELECT r.id, p.id FROM "role" r CROSS JOIN "permission" p WHERE r.code = 'admin' AND p.conditions IS NULL;
 
 INSERT INTO "language" (code, name)
 VALUES
@@ -48,7 +74,7 @@ WITH new_email_address AS (
 INSERT INTO "user" (email_address_id, first_name, last_name, password)
 SELECT e.id, 'User', 'Customer', '$argon2id$v=19$m=65536,t=3,p=4$513t2PfDXwcVaWJy1ycC$gJhSyuk+EzHbQ3aoSv4KfTad0o1VrsCB+jg9tVeyyH0' FROM new_email_address e;
 INSERT INTO "user_role" (user_id, role_id)
-SELECT u.id, r.id FROM "user" u INNER JOIN "email_address" ea on ea.id = u.email_address_id CROSS JOIN "role" r WHERE ea.address = 'customer@gmail.com' AND r.name = 'CUSTOMER';
+SELECT u.id, r.id FROM "user" u INNER JOIN "email_address" ea on ea.id = u.email_address_id CROSS JOIN "role" r WHERE ea.address = 'customer@gmail.com' AND r.code = 'customer';
 
 -- Partner user
 WITH new_email_address AS (
@@ -60,7 +86,7 @@ WITH new_email_address AS (
 INSERT INTO "user" (email_address_id, first_name, last_name, password)
 SELECT e.id, 'User', 'Partner', '$argon2id$v=19$m=65536,t=3,p=4$513t2PfDXwcVaWJy1ycC$gJhSyuk+EzHbQ3aoSv4KfTad0o1VrsCB+jg9tVeyyH0' FROM new_email_address e;
 INSERT INTO "user_role" (user_id, role_id)
-SELECT u.id, r.id FROM "user" u INNER JOIN "email_address" ea on ea.id = u.email_address_id CROSS JOIN "role" r WHERE ea.address = 'partner@gmail.com' AND r.name = 'PARTNER';
+SELECT u.id, r.id FROM "user" u INNER JOIN "email_address" ea on ea.id = u.email_address_id CROSS JOIN "role" r WHERE ea.address = 'partner@gmail.com' AND r.code = 'partner';
 
 -- Customer support user
 WITH new_email_address AS (
@@ -72,7 +98,7 @@ WITH new_email_address AS (
 INSERT INTO "user" (email_address_id, first_name, last_name, password)
 SELECT e.id, 'User', 'Customer Support', '$argon2id$v=19$m=65536,t=3,p=4$513t2PfDXwcVaWJy1ycC$gJhSyuk+EzHbQ3aoSv4KfTad0o1VrsCB+jg9tVeyyH0' FROM new_email_address e;
 INSERT INTO "user_role" (user_id, role_id)
-SELECT u.id, r.id FROM "user" u INNER JOIN "email_address" ea on ea.id = u.email_address_id CROSS JOIN "role" r WHERE ea.address = 'customer_support@gmail.com' AND r.name = 'CUSTOMER_SUPPORT';
+SELECT u.id, r.id FROM "user" u INNER JOIN "email_address" ea on ea.id = u.email_address_id CROSS JOIN "role" r WHERE ea.address = 'customer_support@gmail.com' AND r.code = 'customer_support';
 
 -- Admin user
 WITH new_email_address AS (
@@ -84,9 +110,9 @@ WITH new_email_address AS (
 INSERT INTO "user" (email_address_id, first_name, last_name, password)
 SELECT e.id, 'User', 'Admin', '$argon2id$v=19$m=65536,t=3,p=4$513t2PfDXwcVaWJy1ycC$gJhSyuk+EzHbQ3aoSv4KfTad0o1VrsCB+jg9tVeyyH0' FROM new_email_address e;
 
--- User roles
+-- User role
 INSERT INTO "user_role" (user_id, role_id)
-SELECT u.id, r.id FROM "user" u INNER JOIN "email_address" ea on ea.id = u.email_address_id CROSS JOIN "role" r WHERE ea.address = 'admin@gmail.com' AND r.name = 'ADMIN';
+SELECT u.id, r.id FROM "user" u INNER JOIN "email_address" ea on ea.id = u.email_address_id CROSS JOIN "role" r WHERE ea.address = 'admin@gmail.com' AND r.code = 'admin';
 
 -- Cart
 WITH cart_price AS (
@@ -242,6 +268,9 @@ SELECT 'BY0003', 'Test pickup point 3', ppa.id, 'inactive' FROM pickup_point_add
 -- Brand
 INSERT INTO "brand" (code, name, user_id)
 SELECT 'bershka', 'Bershka', u.id FROM "user" u INNER JOIN email_address ea ON u.email_address_id = ea.id WHERE ea.address = 'admin@gmail.com';
+
+INSERT INTO "brand" (code, name, user_id)
+SELECT 'h_and_m', 'H&M', u.id FROM "user" u INNER JOIN email_address ea ON u.email_address_id = ea.id WHERE ea.address = 'partner@gmail.com';
 
 -- Category
 INSERT INTO "category" (code, name, description, parent_id)

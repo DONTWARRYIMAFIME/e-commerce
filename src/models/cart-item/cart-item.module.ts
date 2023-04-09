@@ -1,6 +1,7 @@
+import { NestjsQueryGraphQLModule } from "@nestjs-query/query-graphql";
 import { NestjsQueryTypeOrmModule } from "@nestjs-query/query-typeorm";
 import { Module } from "@nestjs/common";
-import { CaslGraphQLModule } from "../../providers/security/authorization/casl-graphql.module";
+import { PriceModule } from "../price/price.module";
 import { ProductVariantModule } from "../product-variant/product-variant.module";
 import { WarehouseItemModule } from "../warehouse-item/warehouse-item.module";
 import { CartItemService } from "./cart-item.service";
@@ -10,8 +11,8 @@ import { CartItemEntity } from "./entities/cart-item.entity";
 
 @Module({
   imports: [
-    CaslGraphQLModule.forFeature({
-      imports: [WarehouseItemModule, ProductVariantModule, NestjsQueryTypeOrmModule.forFeature([CartItemEntity])],
+    NestjsQueryGraphQLModule.forFeature({
+      imports: [WarehouseItemModule, ProductVariantModule, PriceModule, NestjsQueryTypeOrmModule.forFeature([CartItemEntity])],
       services: [CartItemService],
       resolvers: [
         {

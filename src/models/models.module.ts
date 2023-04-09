@@ -15,10 +15,12 @@ import { MediaModule } from "./media/media.module";
 import { OrderItemModule } from "./order-item/order-item.module";
 import { OrderModule } from "./order/order.module";
 import { PaymentMethodModule } from "./payment-method/payment-method.module";
+import { PermissionModule } from "./permission/permission.module";
 import { PickupPointModule } from "./pickup-point/pickup-point.module";
 import { PriceModule } from "./price/price.module";
 import { ProductVariantModule } from "./product-variant/product-variant.module";
 import { ProductModule } from "./product/product.module";
+import { RoleModule } from "./role/role.module";
 import { SizeModule } from "./size/size.module";
 import { TranslationModule } from "./translation/translation.module";
 import { UserModule } from "./user/user.module";
@@ -54,6 +56,8 @@ import { WishlistModule } from "./wishlist/wishlist.module";
     OrderModule,
     OrderItemModule,
     PaymentMethodModule,
+    RoleModule,
+    PermissionModule,
   ],
 })
 export class ModelsModule {}

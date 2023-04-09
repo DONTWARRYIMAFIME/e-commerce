@@ -5,12 +5,12 @@ import { AfterLoad, BeforeInsert, BeforeUpdate, Column, DeleteDateColumn, Index,
 import { Entity, ObjectType } from "../../../common/decorators";
 import { FilterableRelation, FilterableUnPagedRelation } from "../../../common/decorators/graphql/relation.decorator";
 import { Id } from "../../../common/types/id.type";
-import { RoleEntity } from "../../../providers/security/authorization/role/entities/role.entity";
 import { AddressEntity } from "../../address/entities/address.entity";
 import { BaseEntity } from "../../base.entity";
 import { CartEntity } from "../../cart/entities/cart.entity";
 import { EmailAddressEntity } from "../../email-address/entities/email-address.entity";
 import { MediaEntity } from "../../media/entities/media.entity";
+import { RoleEntity } from "../../role/entities/role.entity";
 import { WishlistEntity } from "../../wishlist/entities/wishlist.entity";
 
 @FilterableRelation("avatar", () => MediaEntity, { nullable: true })

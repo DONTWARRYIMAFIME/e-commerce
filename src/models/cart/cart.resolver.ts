@@ -1,6 +1,7 @@
 import { Args, Mutation, Query, Resolver } from "@nestjs/graphql";
-import { CaslUser, UserProxy } from "nest-casl";
 import { Id } from "../../common/types/id.type";
+import { CaslUser } from "../../providers/security/casl/decorators/casl-user";
+import { UserProxy } from "../../providers/security/casl/proxies/user.proxy";
 import { CartService } from "./cart.service";
 import { DeleteOneCartArgsType } from "./dto/delete-cart.input";
 import { UpdateOneCartArgsType } from "./dto/update-cart.input";

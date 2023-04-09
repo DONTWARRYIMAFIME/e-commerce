@@ -1,6 +1,6 @@
+import { NestjsQueryGraphQLModule } from "@nestjs-query/query-graphql";
 import { NestjsQueryTypeOrmModule } from "@nestjs-query/query-typeorm";
 import { Module } from "@nestjs/common";
-import { CaslGraphQLModule } from "../../providers/security/authorization/casl-graphql.module";
 import { ColorService } from "./color.service";
 import { CreateColorInput } from "./dto/create-color.input";
 import { UpdateColorInput } from "./dto/update-color.input";
@@ -8,7 +8,7 @@ import { ColorEntity } from "./entities/color.entity";
 
 @Module({
   imports: [
-    CaslGraphQLModule.forFeature({
+    NestjsQueryGraphQLModule.forFeature({
       imports: [NestjsQueryTypeOrmModule.forFeature([ColorEntity])],
       services: [ColorService],
       resolvers: [

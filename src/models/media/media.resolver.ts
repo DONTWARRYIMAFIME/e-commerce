@@ -1,7 +1,7 @@
 import { Args, Mutation, Resolver } from "@nestjs/graphql";
 import { FileUpload, GraphQLUpload } from "graphql-upload";
-import { IsPublic } from "../../providers/security/authentication/decorators/isPublic.decorator";
 import { SelectMediaArgsType } from "./dto/select-media.input";
+import { IsPublic } from "../../providers/security/auth/decorators/is-public.decorator";
 import { MediaEntity } from "./entities/media.entity";
 import { MediaService } from "./media.service";
 

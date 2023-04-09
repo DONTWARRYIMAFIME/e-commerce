@@ -1,6 +1,6 @@
+import { NestjsQueryGraphQLModule } from "@nestjs-query/query-graphql";
 import { NestjsQueryTypeOrmModule } from "@nestjs-query/query-typeorm";
 import { Module } from "@nestjs/common";
-import { CaslGraphQLModule } from "../../providers/security/authorization/casl-graphql.module";
 import { CreatePickupPointInput } from "./dto/create-pickup-point.input";
 import { UpdatePickupPointInput } from "./dto/update-pickup-point.input";
 import { PickupPointEntity } from "./entities/pickup-point.entity";
@@ -8,7 +8,7 @@ import { PickupPointService } from "./pickup-point.service";
 
 @Module({
   imports: [
-    CaslGraphQLModule.forFeature({
+    NestjsQueryGraphQLModule.forFeature({
       imports: [NestjsQueryTypeOrmModule.forFeature([PickupPointEntity])],
       services: [PickupPointService],
       resolvers: [

@@ -1,5 +1,6 @@
 import { Query, Resolver } from "@nestjs/graphql";
-import { CaslUser, UserProxy } from "nest-casl";
+import { CaslUser } from "../../providers/security/casl/decorators/casl-user";
+import { UserProxy } from "../../providers/security/casl/proxies/user.proxy";
 import { WishlistEntity } from "./entities/wishlist.entity";
 import { WishlistService } from "./wishlist.service";
 

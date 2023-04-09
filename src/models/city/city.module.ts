@@ -1,6 +1,6 @@
+import { NestjsQueryGraphQLModule } from "@nestjs-query/query-graphql";
 import { NestjsQueryTypeOrmModule } from "@nestjs-query/query-typeorm";
 import { Module } from "@nestjs/common";
-import { CaslGraphQLModule } from "../../providers/security/authorization/casl-graphql.module";
 import { CountryModule } from "../country/country.module";
 import { CityService } from "./city.service";
 import { CreateCityInput } from "./dto/create-city.input";
@@ -9,7 +9,7 @@ import { CityEntity } from "./entities/city.entity";
 
 @Module({
   imports: [
-    CaslGraphQLModule.forFeature({
+    NestjsQueryGraphQLModule.forFeature({
       imports: [CountryModule, NestjsQueryTypeOrmModule.forFeature([CityEntity])],
       services: [CityService],
       resolvers: [

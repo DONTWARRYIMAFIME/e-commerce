@@ -17,12 +17,4 @@ export class CreateBrandInput implements Partial<BrandEntity> {
   @IsUUIDI18N()
   @Field()
   userId!: Id;
-
-  @IsUUIDI18N()
-  @Field()
-  categoryId!: Id;
-
-  @IsUUIDI18N()
-  @Field()
-  brandId!: Id;
 }
