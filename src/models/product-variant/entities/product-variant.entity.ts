@@ -1,6 +1,6 @@
 import { FilterableField } from "@nestjs-query/query-graphql";
-import { ID, Int } from "@nestjs/graphql";
-import { Column, Index, JoinColumn, ManyToOne, OneToOne } from "typeorm";
+import { ID } from "@nestjs/graphql";
+import { Column, Index, JoinColumn, ManyToOne, OneToOne, Unique } from "typeorm";
 import { Entity, ObjectType } from "../../../common/decorators";
 import { FilterableRelation } from "../../../common/decorators/graphql/relation.decorator";
 import { Id } from "../../../common/types/id.type";
@@ -11,15 +11,20 @@ import { ProductEntity } from "../../product/entities/product.entity";
 import { SizeEntity } from "../../size/entities/size.entity";
 
 @FilterableRelation("product", () => ProductEntity)
-@FilterableRelation("price", () => PriceEntity)
 @FilterableRelation("color", () => ColorEntity)
 @FilterableRelation("size", () => SizeEntity)
+@FilterableRelation("price", () => PriceEntity)
 @ObjectType()
+@Unique("UNQ_product_variant_sku", ["sku"])
 @Index("INX_product_variant_product", ["product"])
 @Index("INX_product_variant_color", ["color"])
 @Index("INX_product_variant_size", ["size"])
 @Entity()
 export class ProductVariantEntity extends BaseEntity {
+  @FilterableField(() => ID)
+  @Column()
+  sku!: string;
+
   @FilterableField(() => ID)
   @Column()
   productId!: Id;
@@ -29,17 +34,6 @@ export class ProductVariantEntity extends BaseEntity {
     onDelete: "CASCADE",
   })
   product!: ProductEntity;
-
-  @FilterableField(() => ID)
-  @Column()
-  priceId!: Id;
-
-  @OneToOne(() => PriceEntity, {
-    eager: true,
-    cascade: true,
-  })
-  @JoinColumn()
-  price!: PriceEntity;
 
   @FilterableField(() => ID)
   @Column()
@@ -55,7 +49,14 @@ export class ProductVariantEntity extends BaseEntity {
   @ManyToOne(() => SizeEntity, { eager: true })
   size!: SizeEntity;
 
-  @FilterableField(() => Int)
-  @Column({ default: 0 })
-  stock!: number;
+  @FilterableField(() => ID)
+  @Column()
+  priceId!: Id;
+
+  @OneToOne(() => PriceEntity, {
+    eager: true,
+    cascade: true,
+  })
+  @JoinColumn()
+  price!: PriceEntity;
 }

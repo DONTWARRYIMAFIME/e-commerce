@@ -7,12 +7,14 @@ import { CategoryModule } from "./category/category.module";
 import { CityModule } from "./city/city.module";
 import { ColorModule } from "./color/color.module";
 import { CountryModule } from "./country/country.module";
-import { CurrencyModule } from "./currency/currency.module";
 import { DeliveryMethodModule } from "./delivery-method/delivery-method.module";
 import { EmailAddressConfirmationModule } from "./email-address-confirmation/email-address-confirmation.module";
 import { EmailAddressModule } from "./email-address/email-address.module";
 import { LanguageModule } from "./language/language.module";
 import { MediaModule } from "./media/media.module";
+import { OrderItemModule } from "./order-item/order-item.module";
+import { OrderModule } from "./order/order.module";
+import { PaymentMethodModule } from "./payment-method/payment-method.module";
 import { PickupPointModule } from "./pickup-point/pickup-point.module";
 import { PriceModule } from "./price/price.module";
 import { ProductVariantModule } from "./product-variant/product-variant.module";
@@ -36,7 +38,6 @@ import { WishlistModule } from "./wishlist/wishlist.module";
     ProductVariantModule,
     ColorModule,
     PriceModule,
-    CurrencyModule,
     WarehouseModule,
     WarehouseItemModule,
     AddressModule,
@@ -50,6 +51,9 @@ import { WishlistModule } from "./wishlist/wishlist.module";
     SizeModule,
     CategoryModule,
     BrandModule,
+    OrderModule,
+    OrderItemModule,
+    PaymentMethodModule,
   ],
 })
 export class ModelsModule {}

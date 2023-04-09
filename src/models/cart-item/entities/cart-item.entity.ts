@@ -49,6 +49,7 @@ export class CartItemEntity extends BaseEntity {
 
   @OneToOne(() => PriceEntity, {
     eager: true,
+    cascade: true,
     onUpdate: "CASCADE",
     onDelete: "CASCADE",
   })

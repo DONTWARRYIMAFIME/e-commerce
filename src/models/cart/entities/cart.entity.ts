@@ -1,7 +1,7 @@
 import { SortDirection } from "@nestjs-query/core/dist/src/interfaces/sort-field.interface";
 import { FilterableField } from "@nestjs-query/query-graphql";
 import { ID } from "@nestjs/graphql";
-import { BeforeInsert, Column, Index, JoinColumn, OneToMany, OneToOne } from "typeorm";
+import { AfterUpdate, BeforeInsert, Column, Index, JoinColumn, OneToMany, OneToOne } from "typeorm";
 import { Entity, ObjectType } from "../../../common/decorators";
 import { FilterableRelation, UnPagedRelation } from "../../../common/decorators/graphql/relation.decorator";
 import { BaseEntity } from "../../base.entity";
@@ -48,7 +48,12 @@ export class CartEntity extends BaseEntity {
 
   @BeforeInsert()
   async beforeInsert() {
-    const price = await PriceEntity.create({ amount: 0 });
-    this.price = await PriceEntity.save(price);
+    this.price = await PriceEntity.create({ amount: 0 });
+  }
+
+  @AfterUpdate()
+  async s() {
+    const count = await PriceEntity.count();
+    console.log(count);
   }
 }

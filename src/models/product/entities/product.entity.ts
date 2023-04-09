@@ -1,14 +1,17 @@
 import { FilterableField } from "@nestjs-query/query-graphql";
-import { Field, ID } from "@nestjs/graphql";
-import { Column, Index, JoinTable, ManyToMany, ManyToOne, OneToMany } from "typeorm";
+import { ID } from "@nestjs/graphql";
+import { BeforeInsert, Column, Index, JoinTable, ManyToMany, ManyToOne, OneToMany } from "typeorm";
 import { Entity, ObjectType } from "../../../common/decorators";
 import { FilterableRelation, FilterableUnPagedRelation, UnPagedRelation } from "../../../common/decorators/graphql/relation.decorator";
+import { generateSku } from "../../../common/helpers/sku-generator.helper";
 import { Id } from "../../../common/types/id.type";
 import { BaseEntity } from "../../base.entity";
 import { BrandEntity } from "../../brand/entities/brand.entity";
 import { CategoryEntity } from "../../category/entities/category.entity";
+import { ColorEntity } from "../../color/entities/color.entity";
 import { MediaEntity } from "../../media/entities/media.entity";
 import { ProductVariantEntity } from "../../product-variant/entities/product-variant.entity";
+import { SizeEntity } from "../../size/entities/size.entity";
 
 @FilterableRelation("category", () => CategoryEntity)
 @FilterableRelation("brand", () => BrandEntity)
@@ -28,14 +31,14 @@ export class ProductEntity extends BaseEntity {
   description!: string;
 
   @FilterableField(() => ID)
-  @Field()
+  @Column()
   categoryId!: Id;
 
   @ManyToOne(() => CategoryEntity)
   category!: CategoryEntity;
 
   @FilterableField(() => ID)
-  @Field()
+  @Column()
   brandId!: Id;
 
   @ManyToOne(() => BrandEntity)
@@ -53,4 +56,19 @@ export class ProductEntity extends BaseEntity {
   })
   @JoinTable({ name: "product_media" })
   media!: MediaEntity[];
+
+  @BeforeInsert()
+  private async generateSKU() {
+    for (const variant of this.productVariants) {
+      if (!variant.sku) {
+        const [category, brand, color, size] = await Promise.all([
+          CategoryEntity.findOneBy({ id: this.categoryId }),
+          BrandEntity.findOneBy({ id: this.brandId }),
+          ColorEntity.findOneBy({ id: variant.colorId }),
+          SizeEntity.findOneBy({ id: variant.sizeId }),
+        ]);
+        variant.sku = generateSku(category.code, brand.code, color.code, size.code);
+      }
+    }
+  }
 }

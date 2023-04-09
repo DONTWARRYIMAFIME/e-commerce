@@ -1,8 +1,8 @@
 import { Field, InputType } from "@nestjs/graphql";
 import { IsOptional } from "class-validator";
-import { Id } from "../../../common/types/id.type";
-import { IsPositiveI18N } from "../../../providers/i18n/i18n.decorators";
+import { IsEnumI18N, IsPositiveI18N } from "../../../providers/i18n/i18n.decorators";
 import { PriceEntity } from "../entities/price.entity";
+import { Currencies } from "../enums/currencies.enum";
 
 @InputType()
 export class CreatePriceInput implements Partial<PriceEntity> {
@@ -11,6 +11,7 @@ export class CreatePriceInput implements Partial<PriceEntity> {
   amount!: number;
 
   @IsOptional()
+  @IsEnumI18N(Currencies)
   @Field({ nullable: true })
-  currencyId?: Id;
+  currency?: Currencies;
 }
