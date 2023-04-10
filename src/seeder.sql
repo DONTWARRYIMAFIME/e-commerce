@@ -39,6 +39,7 @@ VALUES
 INSERT INTO "permission" (action, subject, conditions)
 VALUES
     ('read', 'BrandEntity', null),
+    ('read', 'BrandEntity', '{"userId": "{{id}}"}'),
     ('create', 'BrandEntity', null),
     ('update', 'BrandEntity', null),
     ('update', 'BrandEntity', '{"userId": "{{id}}"}'),
@@ -48,7 +49,7 @@ VALUES
 
 -- Role permission
 INSERT INTO "role_permission" (role_id, permission_id)
-SELECT r.id, p.id FROM "role" r CROSS JOIN "permission" p WHERE r.code = 'partner' AND p.action = 'read' AND p.subject = 'BrandEntity';
+SELECT r.id, p.id FROM "role" r CROSS JOIN "permission" p WHERE r.code = 'partner' AND p.action = 'read' AND p.subject = 'BrandEntity'AND p.conditions IS NOT NULL;
 INSERT INTO "role_permission" (role_id, permission_id)
 SELECT r.id, p.id FROM "role" r CROSS JOIN "permission" p WHERE r.code = 'partner' AND p.action = 'create' AND p.subject = 'BrandEntity';
 INSERT INTO "role_permission" (role_id, permission_id)
@@ -57,7 +58,7 @@ INSERT INTO "role_permission" (role_id, permission_id)
 SELECT r.id, p.id FROM "role" r CROSS JOIN "permission" p WHERE r.code = 'partner' AND p.action = 'delete' AND p.subject = 'BrandEntity' AND p.conditions IS NOT NULL;
 
 INSERT INTO "role_permission" (role_id, permission_id)
-SELECT r.id, p.id FROM "role" r CROSS JOIN "permission" p WHERE r.code = 'admin' AND p.conditions IS NULL;
+SELECT r.id, p.id FROM "role" r CROSS JOIN "permission" p WHERE r.code = 'admin' AND p.action = 'manage';
 
 INSERT INTO "language" (code, name)
 VALUES

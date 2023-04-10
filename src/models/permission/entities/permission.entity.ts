@@ -1,6 +1,7 @@
 import { FilterableField } from "@nestjs-query/query-graphql";
-import { Field, HideField } from "@nestjs/graphql";
-import { Column, Unique } from "typeorm";
+import { Field } from "@nestjs/graphql";
+import GraphQLJSON from "graphql-type-json";
+import { AfterLoad, Column, Unique } from "typeorm";
 import { Entity, ObjectType } from "../../../common/decorators";
 import { Actions } from "../../../providers/security/casl/actions.enum";
 import { PermissionCondition } from "../../../providers/security/casl/interfaces/authorizable-user.interface";
@@ -21,7 +22,12 @@ export class PermissionEntity extends BaseEntity {
   @Column({ length: 128 })
   subject!: string;
 
-  @HideField()
+  @FilterableField(() => GraphQLJSON, { nullable: true })
   @Column({ type: "jsonb", nullable: true })
   conditions!: PermissionCondition;
+
+  @AfterLoad()
+  async afterLoad() {
+    console.log(this);
+  }
 }

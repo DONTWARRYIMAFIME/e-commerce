@@ -9,6 +9,7 @@
   "IS_UPPER_CASE": "Поле: [{property}] должно быть описано заглавными буквами",
   "IS_BIG_INT": "Поле: [{property}] должно иметь тип 'BigInt'",
   "IS_NOT_EMPTY": "Поле: [{property}] не должно быть пустым",
+  "IS_NOT_EMPTY_OBJECT": "Поле: [{property}] не должно быть пустым объектом",
   "IS_UUID": "Поле: [{property}] должно быть в формате UUID v4",
   "IS_POSITIVE": "Поле: [{property}] должно быть положительным числом",
   "IS_ENUM": "Поле: [{property}] должно быть одним из предустановленных",

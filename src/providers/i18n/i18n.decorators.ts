@@ -4,7 +4,7 @@ import {
   IsBoolean,
   IsEmail, IsEnum,
   IsHexColor,
-  IsNotEmpty,
+  IsNotEmpty, IsNotEmptyObject,
   IsPositive, IsPostalCode,
   IsUppercase,
   IsUUID,
@@ -54,3 +54,6 @@ export const IsPostalCodeI18N = (locale?: ValidatorJS.PostalCodeLocale, validati
 
 export const IsArrayI18N = (validationOptions?: ValidationOptions) =>
   IsArray({ ...validationOptions, message: i18nValidationMessage<I18nTranslations>("validation.IS_ARRAY") });
+
+export const IsNotEmptyObjectI18N = (options?: { nullable?: boolean; }, validationOptions?: ValidationOptions) =>
+  IsNotEmptyObject(options, { ...validationOptions, message: i18nValidationMessage<I18nTranslations>("validation.IS_NOT_EMPTY_OBJECT") });

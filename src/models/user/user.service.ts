@@ -2,9 +2,8 @@ import { QueryService } from "@nestjs-query/core";
 import { TypeOrmQueryService } from "@nestjs-query/query-typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
 import { FileUpload } from "graphql-upload";
-import { map } from "lodash";
 import { join } from "path";
-import { DeepPartial, FindOptionsWhere, Repository } from "typeorm";
+import { FindOptionsWhere, Repository } from "typeorm";
 import { Id } from "../../common/types/id.type";
 import { AddressService } from "../address/address.service";
 import { USERS_FOLDER } from "../media/media.constants";
@@ -17,8 +16,8 @@ export class UserService extends TypeOrmQueryService<UserEntity> {
     super(repo, { useSoftDelete: true });
   }
 
-  public findOneById(id: Id, opts?: FindOptionsWhere<UserEntity>): Promise<UserEntity> {
-    return this.repo.findOneBy({ id, ...opts });
+  public async findById(id: Id): Promise<UserEntity> {
+    return this.repo.findOneBy({ id });
   }
 
   public findOneByIdOrFail(id: Id, opts?: FindOptionsWhere<UserEntity>): Promise<UserEntity> {
@@ -35,14 +34,14 @@ export class UserService extends TypeOrmQueryService<UserEntity> {
     return super.updateOne(id, { avatar: media });
   }
 
-  public async addAddressesToUser(id: Id, update: DeepPartial<UserEntity>): Promise<UserEntity> {
-    const addresses = await this.addressService.createMany(update.addresses);
-    return super.addRelations("addresses", id, map(addresses, "id"));
-  }
-
-  public async removeAddressesFromUser(id: Id, update: DeepPartial<UserEntity>): Promise<UserEntity> {
-    const ids = map(update.addresses, "id");
-    await this.addressService.deleteMany({ id: { in: ids } });
-    return this.findOneByIdOrFail(id);
-  }
+  // public async addAddressesToUser(id: Id, update: DeepPartial<UserEntity>): Promise<UserEntity> {
+  //   const addresses = await this.addressService.createMany(update.addresses);
+  //   return super.addRelations("addresses", id, map(addresses, "id"));
+  // }
+  //
+  // public async removeAddressesFromUser(id: Id, update: DeepPartial<UserEntity>): Promise<UserEntity> {
+  //   const ids = map(update.addresses, "id");
+  //   await this.addressService.deleteMany({ id: { in: ids } });
+  //   return this.findOneByIdOrFail(id);
+  // }
 }

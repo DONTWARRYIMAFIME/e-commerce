@@ -49,7 +49,7 @@ export class AuthResolver {
   @Query(() => UserEntity, { name: "me", nullable: true })
   public async getLoggedInUser(@CaslUser() userProxy: UserProxy): Promise<UserEntity> {
     const user = userProxy.getFromRequest();
-    return this.userService.findOneById(user.id);
+    return this.userService.findById(user.id);
   }
 
   @IsPublic()

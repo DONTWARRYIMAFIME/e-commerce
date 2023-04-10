@@ -67,6 +67,7 @@
     "dataloader": "^2.2.2",
     "graphql": "^16.6.0",
     "graphql-subscriptions": "^2.0.0",
+    "graphql-type-json": "^0.3.2",
     "graphql-upload": "^13.0.0",
     "handlebars": "^4.7.7",
     "ioredis": "^5.3.1",

@@ -9,6 +9,6 @@ export class UserHook implements UserBeforeFilterHook<CachedUser> {
   constructor(readonly userService: UserService) {}
 
   public async run(user: UserEntity) {
-    return this.userService.findOneById(user.id);
+    return this.userService.findById(user.id);
   }
 }

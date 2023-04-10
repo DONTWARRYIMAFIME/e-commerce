@@ -46,6 +46,7 @@ export type I18nTranslations = {
         "IS_UPPER_CASE": string;
         "IS_BIG_INT": string;
         "IS_NOT_EMPTY": string;
+        "IS_NOT_EMPTY_OBJECT": string;
         "IS_UUID": string;
         "IS_POSITIVE": string;
         "IS_ENUM": string;

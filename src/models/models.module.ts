@@ -23,6 +23,7 @@ import { ProductModule } from "./product/product.module";
 import { RoleModule } from "./role/role.module";
 import { SizeModule } from "./size/size.module";
 import { TranslationModule } from "./translation/translation.module";
+import { UserAddressModule } from "./user-address/user-address.module";
 import { UserModule } from "./user/user.module";
 import { WarehouseItemModule } from "./warehouse-item/warehouse-item.module";
 import { WarehouseModule } from "./warehouse/warehouse.module";
@@ -58,6 +59,7 @@ import { WishlistModule } from "./wishlist/wishlist.module";
     PaymentMethodModule,
     RoleModule,
     PermissionModule,
+    UserAddressModule,
   ],
 })
 export class ModelsModule {}

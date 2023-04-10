@@ -1,16 +1,16 @@
 import { FilterableField } from "@nestjs-query/query-graphql";
 import { Field, GraphQLISODateTime, HideField, ID } from "@nestjs/graphql";
 import { hash } from "argon2";
-import { AfterLoad, BeforeInsert, BeforeUpdate, Column, DeleteDateColumn, Index, JoinColumn, JoinTable, ManyToMany, OneToOne } from "typeorm";
+import { AfterLoad, BeforeInsert, BeforeUpdate, Column, DeleteDateColumn, Index, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToOne } from "typeorm";
 import { Entity, ObjectType } from "../../../common/decorators";
 import { FilterableRelation, FilterableUnPagedRelation } from "../../../common/decorators/graphql/relation.decorator";
 import { Id } from "../../../common/types/id.type";
-import { AddressEntity } from "../../address/entities/address.entity";
 import { BaseEntity } from "../../base.entity";
 import { CartEntity } from "../../cart/entities/cart.entity";
 import { EmailAddressEntity } from "../../email-address/entities/email-address.entity";
 import { MediaEntity } from "../../media/entities/media.entity";
 import { RoleEntity } from "../../role/entities/role.entity";
+import { UserAddressEntity } from "../../user-address/entities/user-address.entity";
 import { WishlistEntity } from "../../wishlist/entities/wishlist.entity";
 
 @FilterableRelation("avatar", () => MediaEntity, { nullable: true })
@@ -18,7 +18,7 @@ import { WishlistEntity } from "../../wishlist/entities/wishlist.entity";
 @FilterableRelation("cart", () => CartEntity)
 @FilterableRelation("wishlist", () => WishlistEntity)
 @FilterableUnPagedRelation("roles", () => RoleEntity)
-@FilterableUnPagedRelation("addresses", () => AddressEntity)
+@FilterableUnPagedRelation("userAddresses", () => UserAddressEntity)
 @ObjectType()
 @Index("INX_user_email_address", ["emailAddress"])
 @Entity()
@@ -81,26 +81,25 @@ export class UserEntity extends BaseEntity {
   @JoinTable({ name: "user_role" })
   roles!: RoleEntity[];
 
-  @ManyToMany(() => AddressEntity, {
+  @ManyToOne(() => UserAddressEntity, {
     eager: true,
     cascade: true,
   })
-  @JoinTable({ name: "user_address" })
-  addresses!: AddressEntity[];
+  userAddresses!: UserAddressEntity[];
 
   @FilterableField(() => GraphQLISODateTime, { filterOnly: true })
   @DeleteDateColumn()
   deletedAt?: Date;
 
   @AfterLoad()
-  afterLoad() {
+  private afterLoad() {
     this.tempPassword = this.password;
     this.fullName = `${this.firstName} ${this.lastName}`;
   }
 
   @BeforeInsert()
   @BeforeUpdate()
-  async beforeInsertOrUpdate() {
+  private async beforeInsertOrUpdate() {
     this.fullName = `${this.firstName} ${this.lastName}`;
     if (this.password !== this.tempPassword) {
       this.password = await hash(this.password, { saltLength: 15 });
