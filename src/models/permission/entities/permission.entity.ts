@@ -1,7 +1,7 @@
 import { FilterableField } from "@nestjs-query/query-graphql";
-import { Field } from "@nestjs/graphql";
+import { Context, Field } from "@nestjs/graphql";
 import GraphQLJSON from "graphql-type-json";
-import { Column, Unique } from "typeorm";
+import { AfterLoad, Column, Unique } from "typeorm";
 import { Entity, ObjectType } from "../../../common/decorators";
 import { Authorize } from "../../../common/decorators/graphql/authorize.decorator";
 import { Actions } from "../../../providers/security/casl/actions.enum";
@@ -28,8 +28,13 @@ export class PermissionEntity extends BaseEntity {
   @Column({ type: "jsonb", nullable: true })
   conditions!: PermissionCondition;
 
+  @AfterLoad()
+  async afterLoad(@Context() context) {
+    console.log(context);
+  }
+
   /**
-   * @param condition: {"departmentId": "${id}"}
+   * @param condition: {"departmentId": "{{id}}"}
    * @param variables: {"id: 1"}
    * @return condition after parse: {"departmentId": 1}
    */
@@ -48,13 +53,12 @@ export class PermissionEntity extends BaseEntity {
       // find placeholder "{{...}}"
       const matches = /{{([a-zA-Z0-9]+)}}/.exec(rawValue);
       if (!matches) {
-        console.log("not matched");
         parsedCondition[key] = rawValue;
         continue;
       }
       const value = variables[matches[1]];
       if (typeof value === "undefined") {
-        throw new ReferenceError(`Variable ${name} is not defined`);
+        throw new ReferenceError(`Variable ${key} is not defined`);
       }
       parsedCondition[key] = value;
     }

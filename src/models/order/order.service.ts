@@ -45,13 +45,11 @@ export class OrderService extends TypeOrmQueryService<OrderEntity> {
   public async createOne(record: DeepPartial<OrderEntity>): Promise<OrderEntity> {
     const { userId, deliveryMethodId, deliveryAddressId, paymentMethodId } = record;
     const cart = await this.cartService.findOneByUserId(userId);
-    console.log(cart);
 
     if (cart.quantity <= 0) {
       throw new UserInputError("Cannot create an empty order");
     }
 
-    console.log("here");
     const orderItems = await this.splitOrder(cart.id, cart.cartItems);
 
     // Subtotal price

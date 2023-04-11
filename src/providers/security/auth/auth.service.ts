@@ -55,9 +55,7 @@ export class AuthService {
       id: user.id,
       permissions: user.roles.flatMap(role => {
         return role.permissions.map(permission => {
-          //console.log(map(user.brands, "id"));
-          //console.log(JSON.parse(render(JSON.stringify(permission.conditions), { userId: user.id, brandIds: JSON.stringify(map(user.brands, "id")) })));
-          console.log(PermissionEntity.parseCondition(permission.conditions, { userId: user.id, brandIds: map(user.brands, "id") }));
+          //console.log(PermissionEntity.parseCondition(permission.conditions, { userId: user.id, brandIds: map(user.brands, "id") }));
           return {
             action: permission.action,
             subject: permission.subject,
