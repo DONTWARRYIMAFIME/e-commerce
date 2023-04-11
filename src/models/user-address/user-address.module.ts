@@ -8,7 +8,6 @@ import { CreateUserAddressInput } from "./dto/create-user-address.input";
 import { UpdateUserAddressInput } from "./dto/update-user-address.input";
 import { UserAddressEntity } from "./entities/user-address.entity";
 import { UserAddressHook } from "./hooks/user-address.hook";
-import { UserAddressResolver } from "./user-address.resolver";
 import { UserAddressService } from "./user-address.service";
 
 @Module({
@@ -25,7 +24,7 @@ import { UserAddressService } from "./user-address.service";
           ServiceClass: UserAddressService,
           guards: [AccessGuard],
           read: {
-            decorators: [CheckAbility(Actions.READ, UserAddressEntity, UserAddressHook)],
+            decorators: [CheckAbility(Actions.READ, UserAddressEntity)],
           },
           create: {
             decorators: [CheckAbility(Actions.CREATE, UserAddressEntity)],
@@ -43,7 +42,7 @@ import { UserAddressService } from "./user-address.service";
       ],
     }),
   ],
-  providers: [UserAddressResolver, UserAddressService],
+  providers: [UserAddressService],
   exports: [UserAddressService],
 })
 export class UserAddressModule {}

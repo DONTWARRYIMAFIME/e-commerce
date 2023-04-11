@@ -5,6 +5,7 @@ import { ProductVariantModule } from "../product-variant/product-variant.module"
 import { CreateWarehouseItemInput } from "./dto/create-warehouse-item.input";
 import { UpdateWarehouseItemInput } from "./dto/update-warehouse-item.input";
 import { WarehouseItemEntity } from "./entities/warehouse-item.entity";
+import { WarehouseItemHook } from "./hooks/warehouse-item.hook";
 import { WarehouseItemService } from "./warehouse-item.service";
 
 @Module({
@@ -27,7 +28,7 @@ import { WarehouseItemService } from "./warehouse-item.service";
       ],
     }),
   ],
-  providers: [WarehouseItemService],
-  exports: [WarehouseItemService],
+  providers: [WarehouseItemService, WarehouseItemHook],
+  exports: [WarehouseItemService, WarehouseItemHook],
 })
 export class WarehouseItemModule {}

@@ -1,10 +1,12 @@
 import { FilterableField } from "@nestjs-query/query-graphql";
 import { Column, Index } from "typeorm";
 import { Entity, ObjectType } from "../../../common/decorators";
+import { Authorize } from "../../../common/decorators/graphql/authorize.decorator";
 import { ColumnNumericTransformer } from "../../../common/helpers/typeorm/numeric.transformer";
 import { BaseEntity } from "../../base.entity";
 import { Currencies } from "../enums/currencies.enum";
 
+@Authorize()
 @ObjectType()
 @Index("INX_price_currency", ["currency"])
 @Entity()

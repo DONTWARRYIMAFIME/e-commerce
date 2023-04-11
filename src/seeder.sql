@@ -1,23 +1,28 @@
 DELETE FROM "email_address" CASCADE;
-DELETE FROM "brand" CASCADE;
-DELETE FROM "category" CASCADE;
+DELETE FROM "email_address_confirmation" CASCADE;
 DELETE FROM "user" CASCADE;
 DELETE FROM "role" CASCADE;
 DELETE FROM "permission" CASCADE;
+DELETE FROM "role_permission" CASCADE;
 DELETE FROM "user_role" CASCADE;
+DELETE FROM "category" CASCADE;
+DELETE FROM "brand" CASCADE;
 DELETE FROM "cart_item" CASCADE;
 DELETE FROM "cart" CASCADE;
+DELETE FROM "wishlist_item" CASCADE;
 DELETE FROM "wishlist" CASCADE;
-DELETE FROM "language" CASCADE;
-DELETE FROM "translation" CASCADE;
 DELETE FROM "product_variant" CASCADE;
 DELETE FROM "product" CASCADE;
+DELETE FROM "product_media" CASCADE;
 DELETE FROM "color" CASCADE;
 DELETE FROM "size" CASCADE;
+DELETE FROM "comment" CASCADE;
+DELETE FROM "comment_media" CASCADE;
 DELETE FROM "warehouse_item" CASCADE;
 DELETE FROM "warehouse" CASCADE;
 DELETE FROM "pickup_point" CASCADE;
 DELETE FROM "address" CASCADE;
+DELETE FROM "user_address" CASCADE;
 DELETE FROM "city" CASCADE;
 DELETE FROM "country" CASCADE;
 DELETE FROM "delivery_method" CASCADE;
@@ -38,32 +43,319 @@ VALUES
 -- Permission
 INSERT INTO "permission" (action, subject, conditions)
 VALUES
-    ('read', 'BrandEntity', null),
-    ('read', 'BrandEntity', '{"userId": "{{id}}"}'),
+    ('manage', 'all', null),
+
+    ('read', 'AddressEntity', null),
     ('create', 'BrandEntity', null),
     ('update', 'BrandEntity', null),
-    ('update', 'BrandEntity', '{"userId": "{{id}}"}'),
     ('delete', 'BrandEntity', null),
-    ('delete', 'BrandEntity', '{"userId": "{{id}}"}'),
-    ('manage', 'BrandEntity', null);
+    ('manage', 'BrandEntity', null),
+
+    ('read', 'BrandEntity', null),
+    ('read', 'BrandEntity', '{"userId": { "$eq": "{{userId}}" }}'),
+    ('create', 'BrandEntity', null),
+    ('update', 'BrandEntity', null),
+    ('update', 'BrandEntity', '{"userId": { "$eq": "{{userId}}" }}'),
+    ('delete', 'BrandEntity', null),
+    ('delete', 'BrandEntity', '{"userId": { "$eq": "{{userId}}" }}'),
+    ('manage', 'BrandEntity', null),
+
+    ('read', 'CartEntity', null),
+    ('read', 'CartEntity', '{"userId": { "$eq": "{{userId}}" }}'),
+    ('create', 'CartEntity', null),
+    ('update', 'CartEntity', null),
+    ('update', 'CartEntity', '{"userId": { "$eq": "{{userId}}" }}'),
+    ('delete', 'CartEntity', null),
+    ('delete', 'CartEntity', '{"userId": { "$eq": "{{userId}}" }}'),
+    ('manage', 'CartEntity', null),
+
+    ('read', 'CartItemEntity', null),
+    ('read', 'CartItemEntity', '{"cart.userId": { "$eq": "{{userId}}" }}'),
+    ('create', 'CartItemEntity', null),
+    ('update', 'CartItemEntity', null),
+    ('delete', 'CartItemEntity', null),
+    ('manage', 'CartItemEntity', null),
+
+    ('read', 'CategoryEntity', null),
+    ('create', 'CategoryEntity', null),
+    ('update', 'CategoryEntity', null),
+    ('delete', 'CategoryEntity', null),
+    ('manage', 'CategoryEntity', null),
+
+    ('read', 'CityEntity', null),
+    ('create', 'CityEntity', null),
+    ('update', 'CityEntity', null),
+    ('delete', 'CityEntity', null),
+    ('manage', 'CityEntity', null),
+
+    ('read', 'ColorEntity', null),
+    ('create', 'ColorEntity', null),
+    ('update', 'ColorEntity', null),
+    ('delete', 'ColorEntity', null),
+    ('manage', 'ColorEntity', null),
+
+    ('read', 'CommentEntity', null),
+    ('create', 'CommentEntity', null),
+    ('update', 'CommentEntity', null),
+    ('update', 'CommentEntity', '{"userId": { "$eq": "{{userId}}" }}'),
+    ('delete', 'CommentEntity', null),
+    ('delete', 'CommentEntity', '{"userId": { "$eq": "{{userId}}" }}'),
+    ('manage', 'CommentEntity', null),
+
+    ('read', 'CountryEntity', null),
+    ('create', 'CountryEntity', null),
+    ('update', 'CountryEntity', null),
+    ('delete', 'CountryEntity', null),
+    ('manage', 'CountryEntity', null),
+
+    ('read', 'DeliveryMethodEntity', null),
+    ('read', 'DeliveryMethodEntity', '{"status": { "$eq": "active" }}'),
+    ('create', 'DeliveryMethodEntity', null),
+    ('update', 'DeliveryMethodEntity', null),
+    ('delete', 'DeliveryMethodEntity', null),
+    ('manage', 'DeliveryMethodEntity', null),
+
+    ('read', 'EmailAddressEntity', null),
+    ('create', 'EmailAddressEntity', null),
+    ('update', 'EmailAddressEntity', null),
+    ('delete', 'EmailAddressEntity', null),
+    ('manage', 'EmailAddressEntity', null),
+
+    ('read', 'EmailAddressConfirmationEntity', null),
+    ('read', 'EmailAddressConfirmationEntity', '{"userId": { "$eq": "{{userId}}" }}'),
+    ('create', 'EmailAddressConfirmationEntity', null),
+    ('update', 'EmailAddressConfirmationEntity', null),
+    ('update', 'EmailAddressConfirmationEntity', '{"userId": { "$eq": "{{userId}}" }}'),
+    ('delete', 'EmailAddressConfirmationEntity', null),
+    ('delete', 'EmailAddressConfirmationEntity', '{"userId": { "$eq": "{{userId}}" }}'),
+    ('manage', 'EmailAddressConfirmationEntity', null),
+
+    ('read', 'MediaEntity', null),
+    ('create', 'MediaEntity', null),
+    ('update', 'MediaEntity', null),
+    ('delete', 'MediaEntity', null),
+    ('manage', 'MediaEntity', null),
+
+    ('read', 'OrderEntity', null),
+    ('read', 'OrderEntity', '{"userId": { "$eq": "{{userId}}" }}'),
+    ('create', 'OrderEntity', null),
+    ('update', 'OrderEntity', null),
+    ('update', 'OrderEntity', '{"userId": { "$eq": "{{userId}}" }}'),
+    ('delete', 'OrderEntity', null),
+    ('delete', 'OrderEntity', '{"userId": { "$eq": "{{userId}}" }}'),
+    ('manage', 'OrderEntity', null),
+
+    ('read', 'PaymentMethodEntity', null),
+    ('read', 'PaymentMethodEntity', '{"status": { "$eq": "active" }}'),
+    ('create', 'PaymentMethodEntity', null),
+    ('update', 'PaymentMethodEntity', null),
+    ('delete', 'PaymentMethodEntity', null),
+    ('manage', 'PaymentMethodEntity', null),
+
+    ('read', 'PermissionEntity', null),
+    ('create', 'PermissionEntity', null),
+    ('update', 'PermissionEntity', null),
+    ('delete', 'PermissionEntity', null),
+    ('manage', 'PermissionEntity', null),
+
+    ('read', 'PickupPointEntity', null),
+    ('read', 'PickupPointEntity', '{"status": { "$eq": "active" }}'),
+    ('create', 'PickupPointEntity', null),
+    ('update', 'PickupPointEntity', null),
+    ('delete', 'PickupPointEntity', null),
+    ('manage', 'PickupPointEntity', null),
+
+    ('read', 'PriceEntity', null),
+    ('create', 'PriceEntity', null),
+    ('update', 'PriceEntity', null),
+    ('delete', 'PriceEntity', null),
+    ('manage', 'PriceEntity', null),
+
+    ('read', 'ProductEntity', null),
+    ('read', 'ProductEntity', '{"brandId": { "$in": "{{brandIds}}" }}'),
+    ('create', 'ProductEntity', null),
+    ('update', 'ProductEntity', null),
+    ('update', 'ProductEntity', '{"brandId": { "$in": "{{brandIds}}" }}'),
+    ('delete', 'ProductEntity', null),
+    ('delete', 'ProductEntity', '{"brandId": { "$in": "{{brandIds}}" }}'),
+    ('manage', 'ProductEntity', null),
+
+    ('read', 'ProductVariantEntity', null),
+    ('read', 'ProductVariantEntity', '{"product": {"brandId": { "$in": "{{brandIds}}" }}}'),
+    ('create', 'ProductVariantEntity', null),
+    ('update', 'ProductVariantEntity', null),
+    ('update', 'ProductVariantEntity', '{"product.brandId": { "$in": "{{brandIds}}" }}'),
+    ('delete', 'ProductVariantEntity', null),
+    ('delete', 'ProductVariantEntity', '{"product.brandId": { "$in": "{{brandIds}}" }}'),
+    ('manage', 'ProductVariantEntity', null),
+
+    ('read', 'RoleEntity', null),
+    ('create', 'RoleEntity', null),
+    ('update', 'RoleEntity', null),
+    ('delete', 'RoleEntity', null),
+    ('manage', 'RoleEntity', null),
+
+    ('read', 'SizeEntity', null),
+    ('create', 'SizeEntity', null),
+    ('update', 'SizeEntity', null),
+    ('delete', 'SizeEntity', null),
+    ('manage', 'SizeEntity', null),
+
+    ('read', 'UserEntity', null),
+    ('read', 'UserEntity', '{"id": { "$eq": "{{userId}}" }}'),
+    ('create', 'UserEntity', null),
+    ('update', 'UserEntity', null),
+    ('update', 'UserEntity', '{"id": { "$eq": "{{userId}}" }}'),
+    ('delete', 'UserEntity', null),
+    ('delete', 'UserEntity', '{"id": { "$eq": "{{userId}}" }}'),
+    ('manage', 'UserEntity', null),
+
+    ('read', 'UserAddressEntity', null),
+    ('read', 'UserAddressEntity', '{"userId": { "$eq": "{{userId}}" }}'),
+    ('create', 'UserAddressEntity', null),
+    ('update', 'UserAddressEntity', null),
+    ('update', 'UserAddressEntity', '{"userId": { "$eq": "{{userId}}" }}'),
+    ('delete', 'UserAddressEntity', null),
+    ('delete', 'UserAddressEntity', '{"userId": { "$eq": "{{userId}}" }}'),
+    ('manage', 'UserAddressEntity', null),
+
+    ('read', 'WarehouseEntity', null),
+    ('read', 'WarehouseEntity', '{"status": { "$eq": "active" }}'),
+    ('create', 'WarehouseEntity', null),
+    ('update', 'WarehouseEntity', null),
+    ('delete', 'WarehouseEntity', null),
+    ('manage', 'WarehouseEntity', null),
+
+    ('read', 'WarehouseItemEntity', null),
+    ('create', 'WarehouseItemEntity', null),
+    ('update', 'WarehouseItemEntity', '{"warehouseItem.productVariant.product.brandId": {"$in": "{{brandIds}}"}}'),
+    ('delete', 'WarehouseItemEntity', null),
+    ('manage', 'WarehouseItemEntity', null),
+
+    ('read', 'WishlistEntity', null),
+    ('read', 'WishlistEntity', '{"userId": { "$eq": "{{userId}}" }}'),
+    ('create', 'WishlistEntity', null),
+    ('update', 'WishlistEntity', null),
+    ('update', 'WishlistEntity', '{"userId": { "$eq": "{{userId}}" }}'),
+    ('delete', 'WishlistEntity', null),
+    ('delete', 'WishlistEntity', '{"userId": { "$eq": "{{userId}}" }}'),
+    ('manage', 'WishlistEntity', null);
 
 -- Role permission
+-- Customer
 INSERT INTO "role_permission" (role_id, permission_id)
-SELECT r.id, p.id FROM "role" r CROSS JOIN "permission" p WHERE r.code = 'partner' AND p.action = 'read' AND p.subject = 'BrandEntity'AND p.conditions IS NOT NULL;
+SELECT r.id, p.id FROM "role" r CROSS JOIN "permission" p WHERE r.code = 'customer' AND p.action = 'read' AND p.subject = 'BrandEntity';
+
+INSERT INTO "role_permission" (role_id, permission_id)
+SELECT r.id, p.id FROM "role" r CROSS JOIN "permission" p WHERE r.code = 'customer' AND p.action = 'read' AND p.subject = 'CartEntity' AND p.conditions = '{"userId": { "$eq": "{{userId}}" }}';
+INSERT INTO "role_permission" (role_id, permission_id)
+SELECT r.id, p.id FROM "role" r CROSS JOIN "permission" p WHERE r.code = 'customer' AND p.action = 'update' AND p.subject = 'CartEntity' AND p.conditions = '{"userId": { "$eq": "{{userId}}" }}';
+
+INSERT INTO "role_permission" (role_id, permission_id)
+SELECT r.id, p.id FROM "role" r CROSS JOIN "permission" p WHERE r.code = 'customer' AND p.action = 'read' AND p.subject = 'CategoryEntity';
+
+INSERT INTO "role_permission" (role_id, permission_id)
+SELECT r.id, p.id FROM "role" r CROSS JOIN "permission" p WHERE r.code = 'customer' AND p.action = 'read' AND p.subject = 'CityEntity';
+
+INSERT INTO "role_permission" (role_id, permission_id)
+SELECT r.id, p.id FROM "role" r CROSS JOIN "permission" p WHERE r.code = 'customer' AND p.action = 'read' AND p.subject = 'ColorEntity';
+
+INSERT INTO "role_permission" (role_id, permission_id)
+SELECT r.id, p.id FROM "role" r CROSS JOIN "permission" p WHERE r.code = 'customer' AND p.action = 'read' AND p.subject = 'CommentEntity';
+INSERT INTO "role_permission" (role_id, permission_id)
+SELECT r.id, p.id FROM "role" r CROSS JOIN "permission" p WHERE r.code = 'customer' AND p.action = 'create' AND p.subject = 'CommentEntity';
+INSERT INTO "role_permission" (role_id, permission_id)
+SELECT r.id, p.id FROM "role" r CROSS JOIN "permission" p WHERE r.code = 'customer' AND p.action = 'update' AND p.subject = 'CommentEntity' AND p.conditions = '{"userId": { "$eq": "{{userId}}" }}';
+INSERT INTO "role_permission" (role_id, permission_id)
+SELECT r.id, p.id FROM "role" r CROSS JOIN "permission" p WHERE r.code = 'customer' AND p.action = 'delete' AND p.subject = 'CommentEntity' AND p.conditions = '{"userId": { "$eq": "{{userId}}" }}';
+
+INSERT INTO "role_permission" (role_id, permission_id)
+SELECT r.id, p.id FROM "role" r CROSS JOIN "permission" p WHERE r.code = 'customer' AND p.action = 'read' AND p.subject = 'CountryEntity';
+
+INSERT INTO "role_permission" (role_id, permission_id)
+SELECT r.id, p.id FROM "role" r CROSS JOIN "permission" p WHERE r.code = 'customer' AND p.action = 'read' AND p.subject = 'DeliveryMethodEntity';
+
+INSERT INTO "role_permission" (role_id, permission_id)
+SELECT r.id, p.id FROM "role" r CROSS JOIN "permission" p WHERE r.code = 'customer' AND p.action = 'read' AND p.subject = 'EmailAddressEntity';
+
+INSERT INTO "role_permission" (role_id, permission_id)
+SELECT r.id, p.id FROM "role" r CROSS JOIN "permission" p WHERE r.code = 'customer' AND p.action = 'create' AND p.subject = 'EmailAddressConfirmationEntity';
+
+INSERT INTO "role_permission" (role_id, permission_id)
+SELECT r.id, p.id FROM "role" r CROSS JOIN "permission" p WHERE r.code = 'customer' AND p.action = 'read' AND p.subject = 'OrderEntity' AND p.conditions = '{"userId": { "$eq": "{{userId}}" }}';
+INSERT INTO "role_permission" (role_id, permission_id)
+SELECT r.id, p.id FROM "role" r CROSS JOIN "permission" p WHERE r.code = 'customer' AND p.action = 'create' AND p.subject = 'OrderEntity';
+INSERT INTO "role_permission" (role_id, permission_id)
+SELECT r.id, p.id FROM "role" r CROSS JOIN "permission" p WHERE r.code = 'customer' AND p.action = 'update' AND p.subject = 'OrderEntity' AND p.conditions = '{"userId": { "$eq": "{{userId}}" }}';
+
+INSERT INTO "role_permission" (role_id, permission_id)
+SELECT r.id, p.id FROM "role" r CROSS JOIN "permission" p WHERE r.code = 'customer' AND p.action = 'read' AND p.subject = 'PaymentMethodEntity' AND p.conditions = '{"status": { "$eq": "active" }}';
+
+INSERT INTO "role_permission" (role_id, permission_id)
+SELECT r.id, p.id FROM "role" r CROSS JOIN "permission" p WHERE r.code = 'customer' AND p.action = 'read' AND p.subject = 'PickupPointEntity' AND p.conditions = '{"status": { "$eq": "active" }}';
+
+INSERT INTO "role_permission" (role_id, permission_id)
+SELECT r.id, p.id FROM "role" r CROSS JOIN "permission" p WHERE r.code = 'customer' AND p.action = 'read' AND p.subject = 'ProductEntity';
+
+INSERT INTO "role_permission" (role_id, permission_id)
+SELECT r.id, p.id FROM "role" r CROSS JOIN "permission" p WHERE r.code = 'customer' AND p.action = 'read' AND p.subject = 'ProductVariantEntity';
+
+INSERT INTO "role_permission" (role_id, permission_id)
+SELECT r.id, p.id FROM "role" r CROSS JOIN "permission" p WHERE r.code = 'customer' AND p.action = 'read' AND p.subject = 'SizeEntity';
+
+INSERT INTO "role_permission" (role_id, permission_id)
+SELECT r.id, p.id FROM "role" r CROSS JOIN "permission" p WHERE r.code = 'customer' AND p.action = 'read' AND p.subject = 'UserEntity' AND p.conditions = '{"id": { "$eq": "{{userId}}" }}';
+
+INSERT INTO "role_permission" (role_id, permission_id)
+SELECT r.id, p.id FROM "role" r CROSS JOIN "permission" p WHERE r.code = 'customer' AND p.action = 'read' AND p.subject = 'UserAddressEntity' AND p.conditions = '{"userId": { "$eq": "{{userId}}" }}';
+INSERT INTO "role_permission" (role_id, permission_id)
+SELECT r.id, p.id FROM "role" r CROSS JOIN "permission" p WHERE r.code = 'customer' AND p.action = 'create' AND p.subject = 'UserAddressEntity';
+INSERT INTO "role_permission" (role_id, permission_id)
+SELECT r.id, p.id FROM "role" r CROSS JOIN "permission" p WHERE r.code = 'customer' AND p.action = 'update' AND p.subject = 'UserAddressEntity' AND p.conditions = '{"userId": { "$eq": "{{userId}}" }}';
+INSERT INTO "role_permission" (role_id, permission_id)
+SELECT r.id, p.id FROM "role" r CROSS JOIN "permission" p WHERE r.code = 'customer' AND p.action = 'delete' AND p.subject = 'UserAddressEntity' AND p.conditions = '{"userId": { "$eq": "{{userId}}" }}';
+
+INSERT INTO "role_permission" (role_id, permission_id)
+SELECT r.id, p.id FROM "role" r CROSS JOIN "permission" p WHERE r.code = 'customer' AND p.action = 'read' AND p.subject = 'WishlistEntity' AND p.conditions = '{"userId": { "$eq": "{{userId}}" }}';
+INSERT INTO "role_permission" (role_id, permission_id)
+SELECT r.id, p.id FROM "role" r CROSS JOIN "permission" p WHERE r.code = 'customer' AND p.action = 'update' AND p.subject = 'WishlistEntity' AND p.conditions = '{"userId": { "$eq": "{{userId}}" }}';
+
+-- Partner
+INSERT INTO "role_permission" (role_id, permission_id)
+SELECT r.id, p.id FROM "role" r CROSS JOIN "permission" p WHERE r.code = 'partner' AND p.action = 'read' AND p.subject = 'BrandEntity'AND p.conditions = '{"userId": { "$eq": "{{userId}}" }}';
 INSERT INTO "role_permission" (role_id, permission_id)
 SELECT r.id, p.id FROM "role" r CROSS JOIN "permission" p WHERE r.code = 'partner' AND p.action = 'create' AND p.subject = 'BrandEntity';
 INSERT INTO "role_permission" (role_id, permission_id)
-SELECT r.id, p.id FROM "role" r CROSS JOIN "permission" p WHERE r.code = 'partner' AND p.action = 'update' AND p.subject = 'BrandEntity' AND p.conditions IS NOT NULL;
+SELECT r.id, p.id FROM "role" r CROSS JOIN "permission" p WHERE r.code = 'partner' AND p.action = 'update' AND p.subject = 'BrandEntity' AND p.conditions = '{"userId": { "$eq": "{{userId}}" }}';
 INSERT INTO "role_permission" (role_id, permission_id)
-SELECT r.id, p.id FROM "role" r CROSS JOIN "permission" p WHERE r.code = 'partner' AND p.action = 'delete' AND p.subject = 'BrandEntity' AND p.conditions IS NOT NULL;
+SELECT r.id, p.id FROM "role" r CROSS JOIN "permission" p WHERE r.code = 'partner' AND p.action = 'delete' AND p.subject = 'BrandEntity' AND p.conditions = '{"userId": { "$eq": "{{userId}}" }}';
 
 INSERT INTO "role_permission" (role_id, permission_id)
-SELECT r.id, p.id FROM "role" r CROSS JOIN "permission" p WHERE r.code = 'admin' AND p.action = 'manage';
+SELECT r.id, p.id FROM "role" r CROSS JOIN "permission" p WHERE r.code = 'partner' AND p.action = 'create' AND p.subject = 'ProductEntity' AND p.conditions = '{"brandId": { "$in": "{{brandIds}}" }}';
+INSERT INTO "role_permission" (role_id, permission_id)
+SELECT r.id, p.id FROM "role" r CROSS JOIN "permission" p WHERE r.code = 'partner' AND p.action = 'create' AND p.subject = 'ProductEntity';
+INSERT INTO "role_permission" (role_id, permission_id)
+SELECT r.id, p.id FROM "role" r CROSS JOIN "permission" p WHERE r.code = 'partner' AND p.action = 'update' AND p.subject = 'ProductEntity' AND p.conditions = '{"brandId": { "$in": "{{brandIds}}" }}';
+INSERT INTO "role_permission" (role_id, permission_id)
+SELECT r.id, p.id FROM "role" r CROSS JOIN "permission" p WHERE r.code = 'partner' AND p.action = 'delete' AND p.subject = 'ProductEntity' AND p.conditions = '{"brandId": { "$in": "{{brandIds}}" }}';
 
-INSERT INTO "language" (code, name)
-VALUES
-    ('en', 'English'),
-    ('ru', 'Russian');
+INSERT INTO "role_permission" (role_id, permission_id)
+SELECT r.id, p.id FROM "role" r CROSS JOIN "permission" p WHERE r.code = 'partner' AND p.action = 'read' AND p.subject = 'ProductVariantEntity' AND p.conditions = '{"product": {"brandId": { "$in": "{{brandIds}}" }}}';
+INSERT INTO "role_permission" (role_id, permission_id)
+SELECT r.id, p.id FROM "role" r CROSS JOIN "permission" p WHERE r.code = 'partner' AND p.action = 'create' AND p.subject = 'ProductVariantEntity';
+INSERT INTO "role_permission" (role_id, permission_id)
+SELECT r.id, p.id FROM "role" r CROSS JOIN "permission" p WHERE r.code = 'partner' AND p.action = 'update' AND p.subject = 'ProductVariantEntity' AND p.conditions = '{"product.brandId": { "$in": "{{brandIds}}" }}';
+INSERT INTO "role_permission" (role_id, permission_id)
+SELECT r.id, p.id FROM "role" r CROSS JOIN "permission" p WHERE r.code = 'partner' AND p.action = 'delete' AND p.subject = 'ProductVariantEntity' AND p.conditions = '{"product.brandId": { "$in": "{{brandIds}}" }}';
+
+INSERT INTO "role_permission" (role_id, permission_id)
+SELECT r.id, p.id FROM "role" r CROSS JOIN "permission" p WHERE r.code = 'partner' AND p.action = 'read' AND p.subject = 'WarehouseEntity' AND p.conditions = '{"status": { "$eq": "active" }}';
+INSERT INTO "role_permission" (role_id, permission_id)
+SELECT r.id, p.id FROM "role" r CROSS JOIN "permission" p WHERE r.code = 'partner' AND p.action = 'update' AND p.subject = 'WarehouseItemEntity' AND p.conditions = '{"warehouseItem.productVariant.product.brandId": {"$in": "{{brandIds}}"}}';
+
+-- Admin
+INSERT INTO "role_permission" (role_id, permission_id)
+SELECT r.id, p.id FROM "role" r CROSS JOIN "permission" p WHERE r.code = 'admin' AND p.action = 'manage' AND p.subject = 'all';
 
 -- Customer user
 WITH new_email_address AS (
@@ -87,7 +379,18 @@ WITH new_email_address AS (
 INSERT INTO "user" (email_address_id, first_name, last_name, password)
 SELECT e.id, 'User', 'Partner', '$argon2id$v=19$m=65536,t=3,p=4$513t2PfDXwcVaWJy1ycC$gJhSyuk+EzHbQ3aoSv4KfTad0o1VrsCB+jg9tVeyyH0' FROM new_email_address e;
 INSERT INTO "user_role" (user_id, role_id)
-SELECT u.id, r.id FROM "user" u INNER JOIN "email_address" ea on ea.id = u.email_address_id CROSS JOIN "role" r WHERE ea.address = 'partner@gmail.com' AND r.code = 'partner';
+SELECT u.id, r.id FROM "user" u INNER JOIN "email_address" ea on ea.id = u.email_address_id CROSS JOIN "role" r WHERE ea.address = 'partner@gmail.com' AND r.code IN ('customer','partner');
+
+WITH new_email_address AS (
+    INSERT INTO "email_address" (address, name)
+        VALUES
+            ('partner2@gmail.com', 'User Partner 2')
+        RETURNING id
+)
+INSERT INTO "user" (email_address_id, first_name, last_name, password)
+SELECT e.id, 'User', 'Partner 2', '$argon2id$v=19$m=65536,t=3,p=4$513t2PfDXwcVaWJy1ycC$gJhSyuk+EzHbQ3aoSv4KfTad0o1VrsCB+jg9tVeyyH0' FROM new_email_address e;
+INSERT INTO "user_role" (user_id, role_id)
+SELECT u.id, r.id FROM "user" u INNER JOIN "email_address" ea on ea.id = u.email_address_id CROSS JOIN "role" r WHERE ea.address = 'partner2@gmail.com' AND r.code IN ('customer','partner');
 
 -- Customer support user
 WITH new_email_address AS (
@@ -138,6 +441,14 @@ WITH cart_price AS (
         RETURNING id
 )
 INSERT INTO "cart" (user_id, price_id)
+SELECT u.id, cp.id FROM "cart_price" cp CROSS JOIN "user" u INNER JOIN "email_address" ea on ea.id = u.email_address_id WHERE ea.address = 'partner2@gmail.com';
+
+WITH cart_price AS (
+    INSERT INTO "price" (amount)
+        SELECT 0
+        RETURNING id
+)
+INSERT INTO "cart" (user_id, price_id)
 SELECT u.id, cp.id FROM "cart_price" cp CROSS JOIN "user" u INNER JOIN "email_address" ea on ea.id = u.email_address_id WHERE ea.address = 'customer_support@gmail.com';
 
 WITH cart_price AS (
@@ -153,6 +464,8 @@ INSERT INTO "wishlist" (user_id)
 SELECT u.id FROM "user" u INNER JOIN "email_address" ea on ea.id = u.email_address_id WHERE ea.address = 'customer@gmail.com';
 INSERT INTO "wishlist" (user_id)
 SELECT u.id FROM "user" u INNER JOIN "email_address" ea on ea.id = u.email_address_id WHERE ea.address = 'partner@gmail.com';
+INSERT INTO "wishlist" (user_id)
+SELECT u.id FROM "user" u INNER JOIN "email_address" ea on ea.id = u.email_address_id WHERE ea.address = 'partner2@gmail.com';
 INSERT INTO "wishlist" (user_id)
 SELECT u.id FROM "user" u INNER JOIN "email_address" ea on ea.id = u.email_address_id WHERE ea.address = 'customer_support@gmail.com';
 INSERT INTO "wishlist" (user_id)
@@ -272,6 +585,11 @@ SELECT 'bershka', 'Bershka', u.id FROM "user" u INNER JOIN email_address ea ON u
 
 INSERT INTO "brand" (code, name, user_id)
 SELECT 'h_and_m', 'H&M', u.id FROM "user" u INNER JOIN email_address ea ON u.email_address_id = ea.id WHERE ea.address = 'partner@gmail.com';
+INSERT INTO "brand" (code, name, user_id)
+SELECT 'versago', 'Versago', u.id FROM "user" u INNER JOIN email_address ea ON u.email_address_id = ea.id WHERE ea.address = 'partner@gmail.com';
+
+INSERT INTO "brand" (code, name, user_id)
+SELECT 'zara', 'ZARA', u.id FROM "user" u INNER JOIN email_address ea ON u.email_address_id = ea.id WHERE ea.address = 'partner2@gmail.com';
 
 -- Category
 INSERT INTO "category" (code, name, description, parent_id)

@@ -2,11 +2,13 @@ import { FilterableField } from "@nestjs-query/query-graphql";
 import { ID } from "@nestjs/graphql";
 import { Column, ManyToOne, Unique } from "typeorm";
 import { Entity, ObjectType } from "../../../common/decorators";
+import { Authorize } from "../../../common/decorators/graphql/authorize.decorator";
 import { FilterableRelation } from "../../../common/decorators/graphql/relation.decorator";
 import { Id } from "../../../common/types/id.type";
 import { BaseEntity } from "../../base.entity";
 import { CountryEntity } from "../../country/entities/country.entity";
 
+@Authorize()
 @FilterableRelation("country", () => CountryEntity)
 @ObjectType()
 @Unique("UNQ_city_name_and_county", ["name", "country"])

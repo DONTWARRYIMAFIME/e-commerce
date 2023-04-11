@@ -6,11 +6,11 @@ import { CartModule } from "./cart/cart.module";
 import { CategoryModule } from "./category/category.module";
 import { CityModule } from "./city/city.module";
 import { ColorModule } from "./color/color.module";
+import { CommentModule } from "./comment/comment.module";
 import { CountryModule } from "./country/country.module";
 import { DeliveryMethodModule } from "./delivery-method/delivery-method.module";
 import { EmailAddressConfirmationModule } from "./email-address-confirmation/email-address-confirmation.module";
 import { EmailAddressModule } from "./email-address/email-address.module";
-import { LanguageModule } from "./language/language.module";
 import { MediaModule } from "./media/media.module";
 import { OrderItemModule } from "./order-item/order-item.module";
 import { OrderModule } from "./order/order.module";
@@ -22,7 +22,6 @@ import { ProductVariantModule } from "./product-variant/product-variant.module";
 import { ProductModule } from "./product/product.module";
 import { RoleModule } from "./role/role.module";
 import { SizeModule } from "./size/size.module";
-import { TranslationModule } from "./translation/translation.module";
 import { UserAddressModule } from "./user-address/user-address.module";
 import { UserModule } from "./user/user.module";
 import { WarehouseItemModule } from "./warehouse-item/warehouse-item.module";
@@ -32,8 +31,6 @@ import { WishlistModule } from "./wishlist/wishlist.module";
 @Module({
   imports: [
     UserModule,
-    LanguageModule,
-    TranslationModule,
     EmailAddressModule,
     EmailAddressConfirmationModule,
     MediaModule,
@@ -60,6 +57,7 @@ import { WishlistModule } from "./wishlist/wishlist.module";
     RoleModule,
     PermissionModule,
     UserAddressModule,
+    CommentModule,
   ],
 })
 export class ModelsModule {}

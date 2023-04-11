@@ -10,6 +10,7 @@ import { CartService } from "./cart.service";
 import { CreateCartInput } from "./dto/create-cart.input";
 import { UpdateCartInput } from "./dto/update-cart.input";
 import { CartEntity } from "./entities/cart.entity";
+import { CartHook } from "./hooks/cart.hook";
 import { UserCreatedListener } from "./listeners/user-create.listener";
 
 @Module({
@@ -33,18 +34,18 @@ import { UserCreatedListener } from "./listeners/user-create.listener";
             disabled: true,
           },
           update: {
-            decorators: [CheckAbility(Actions.UPDATE, CartEntity)],
+            decorators: [CheckAbility(Actions.UPDATE, CartEntity, CartHook)],
             disabled: true,
           },
           delete: {
-            decorators: [CheckAbility(Actions.DELETE, CartEntity)],
+            decorators: [CheckAbility(Actions.DELETE, CartEntity, CartHook)],
             disabled: true,
           },
         },
       ],
     }),
   ],
-  providers: [CartResolver, CartService, UserCreatedListener],
+  providers: [CartResolver, CartService, UserCreatedListener, CartHook],
   exports: [CartService],
 })
 export class CartModule {}

@@ -38,7 +38,7 @@ export class AuthResolver {
     return this.authService.signupAsCustomer(input, response);
   }
 
-  @UseGuards(RefreshTokenAuthGuard)
+  @UseGuards(RefreshTokenAuthGuard, AccessGuard)
   @Mutation(() => AccessTokenResponse)
   public reissueAccessToken(@CaslUser() userProxy: UserProxy<CachedUser>): Promise<AccessTokenResponse> {
     const user = userProxy.getFromRequest();

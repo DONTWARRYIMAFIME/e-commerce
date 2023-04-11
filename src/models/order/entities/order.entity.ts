@@ -2,6 +2,7 @@ import { FilterableField } from "@nestjs-query/query-graphql";
 import { ID } from "@nestjs/graphql";
 import { Column, Index, JoinColumn, ManyToOne, OneToMany, OneToOne } from "typeorm";
 import { Entity, ObjectType } from "../../../common/decorators";
+import { Authorize } from "../../../common/decorators/graphql/authorize.decorator";
 import { FilterableRelation, FilterableUnPagedRelation } from "../../../common/decorators/graphql/relation.decorator";
 import { Id } from "../../../common/types/id.type";
 import { AddressEntity } from "../../address/entities/address.entity";
@@ -13,6 +14,7 @@ import { PriceEntity } from "../../price/entities/price.entity";
 import { UserEntity } from "../../user/entities/user.entity";
 import { OrderStatus } from "../enums/order-status.enum";
 
+@Authorize()
 @FilterableRelation("user", () => UserEntity)
 @FilterableRelation("paymentMethod", () => PaymentMethodEntity)
 @FilterableRelation("deliveryMethod", () => DeliveryMethodEntity)

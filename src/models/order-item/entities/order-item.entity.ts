@@ -2,6 +2,7 @@ import { FilterableField } from "@nestjs-query/query-graphql";
 import { ID, Int } from "@nestjs/graphql";
 import { Column, Index, JoinColumn, ManyToOne, OneToOne, Unique } from "typeorm";
 import { Entity, ObjectType } from "../../../common/decorators";
+import { Authorize } from "../../../common/decorators/graphql/authorize.decorator";
 import { FilterableRelation } from "../../../common/decorators/graphql/relation.decorator";
 import { Id } from "../../../common/types/id.type";
 import { BaseEntity } from "../../base.entity";
@@ -10,6 +11,7 @@ import { PriceEntity } from "../../price/entities/price.entity";
 import { ProductVariantEntity } from "../../product-variant/entities/product-variant.entity";
 import { WarehouseEntity } from "../../warehouse/entities/warehouse.entity";
 
+@Authorize()
 @FilterableRelation("order", () => OrderEntity)
 @FilterableRelation("productVariant", () => ProductVariantEntity)
 @FilterableRelation("warehouse", () => WarehouseEntity)

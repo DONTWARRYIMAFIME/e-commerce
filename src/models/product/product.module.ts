@@ -1,10 +1,14 @@
 import { NestjsQueryGraphQLModule } from "@nestjs-query/query-graphql";
 import { NestjsQueryTypeOrmModule } from "@nestjs-query/query-typeorm";
 import { Module } from "@nestjs/common";
+import { AccessGuard } from "../../providers/security/casl/access.guard";
+import { Actions } from "../../providers/security/casl/actions.enum";
+import { CheckAbility } from "../../providers/security/casl/decorators/check-ability";
 import { MediaModule } from "../media/media.module";
 import { CreateProductInput } from "./dto/create-product.input";
 import { UpdateProductInput } from "./dto/update-product.input";
 import { ProductEntity } from "./entities/product.entity";
+import { ProductHook } from "./hooks/product.hook";
 import { ProductResolver } from "./product.resolver";
 import { ProductService } from "./product.service";
 
@@ -20,11 +24,26 @@ import { ProductService } from "./product.service";
           CreateDTOClass: CreateProductInput,
           UpdateDTOClass: UpdateProductInput,
           ServiceClass: ProductService,
-          create: { disabled: true },
+          guards: [AccessGuard],
+          read: {
+            decorators: [CheckAbility(Actions.READ, ProductEntity)],
+          },
+          create: {
+            decorators: [CheckAbility(Actions.CREATE, ProductEntity)],
+            disabled: true,
+          },
+          update: {
+            decorators: [CheckAbility(Actions.UPDATE, ProductEntity, ProductHook)],
+            many: { disabled: true },
+          },
+          delete: {
+            decorators: [CheckAbility(Actions.DELETE, ProductEntity, ProductHook)],
+            many: { disabled: true },
+          },
         },
       ],
     }),
   ],
-  providers: [ProductResolver, ProductService],
+  providers: [ProductResolver, ProductService, ProductHook],
 })
 export class ProductModule {}

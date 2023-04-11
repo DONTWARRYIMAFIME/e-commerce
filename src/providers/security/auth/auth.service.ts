@@ -3,7 +3,8 @@ import { EventEmitter2 } from "@nestjs/event-emitter";
 import { UserInputError } from "apollo-server-core";
 import { verify } from "argon2";
 import { Response } from "express";
-import { render } from "mustache";
+import { map } from "lodash";
+import { PermissionEntity } from "../../../models/permission/entities/permission.entity";
 import { Roles } from "../../../models/role/enums/roles.enum";
 import { RoleService } from "../../../models/role/role.service";
 import { UserEntity } from "../../../models/user/entities/user.entity";
@@ -54,12 +55,13 @@ export class AuthService {
       id: user.id,
       permissions: user.roles.flatMap(role => {
         return role.permissions.map(permission => {
-          console.log(JSON.parse(render(JSON.stringify(permission.conditions), { id: user.id })));
-          // console.log(JSON.parse(JSON.parse(render(JSON.stringify(permission.conditions), { id: user.id }))));
+          //console.log(map(user.brands, "id"));
+          //console.log(JSON.parse(render(JSON.stringify(permission.conditions), { userId: user.id, brandIds: JSON.stringify(map(user.brands, "id")) })));
+          console.log(PermissionEntity.parseCondition(permission.conditions, { userId: user.id, brandIds: map(user.brands, "id") }));
           return {
             action: permission.action,
             subject: permission.subject,
-            conditions: JSON.parse(render(JSON.stringify(permission.conditions), { id: user.id })),
+            conditions: PermissionEntity.parseCondition(permission.conditions, { userId: user.id, brandIds: map(user.brands, "id") }),
           };
         });
       }),

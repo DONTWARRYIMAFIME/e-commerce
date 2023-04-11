@@ -1,7 +1,7 @@
 import { QueryService } from "@nestjs-query/core";
 import { TypeOrmQueryService } from "@nestjs-query/query-typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
-import { FindOptionsWhere, Repository } from "typeorm";
+import { Repository } from "typeorm";
 import { Id } from "../../common/types/id.type";
 import { ProductVariantEntity } from "./entities/product-variant.entity";
 
@@ -11,7 +11,11 @@ export class ProductVariantService extends TypeOrmQueryService<ProductVariantEnt
     super(repo);
   }
 
-  public findOneById(id: Id, opts?: FindOptionsWhere<ProductVariantEntity>): Promise<ProductVariantEntity | undefined> {
-    return this.repo.findOneBy({ id, ...opts });
+  public findById(id: Id): Promise<ProductVariantEntity> {
+    return this.repo.findOne({ where: { id } });
+  }
+
+  public findByIdWithProduct(id: Id): Promise<ProductVariantEntity> {
+    return this.repo.findOne({ where: { id }, relations: { product: true } });
   }
 }

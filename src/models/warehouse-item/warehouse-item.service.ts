@@ -13,6 +13,10 @@ export class WarehouseItemService extends TypeOrmQueryService<WarehouseItemEntit
     super(repo);
   }
 
+  public findByIdWithRelations(id: Id): Promise<WarehouseItemEntity> {
+    return this.repo.findOne({ where: { id }, relations: { productVariant: { product: true } } });
+  }
+
   public findOneByWarehouseIdAndProductVariantId(warehouseId: Id, productVariantId: Id): Promise<WarehouseItemEntity> {
     return this.repo.findOneBy({ warehouseId, productVariantId });
   }

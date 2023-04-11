@@ -4,7 +4,6 @@ import { Module } from "@nestjs/common";
 import { AccessGuard } from "../../providers/security/casl/access.guard";
 import { Actions } from "../../providers/security/casl/actions.enum";
 import { CheckAbility } from "../../providers/security/casl/decorators/check-ability";
-import { BrandReadResolver } from "./brand.resolver";
 import { BrandService } from "./brand.service";
 import { CreateBrandInput } from "./dto/create-brand.input";
 import { UpdateBrandInput } from "./dto/update-brand.input";
@@ -25,8 +24,7 @@ import { BrandHook } from "./hooks/brand.hook";
           ServiceClass: BrandService,
           guards: [AccessGuard],
           read: {
-            decorators: [CheckAbility(Actions.READ, BrandEntity, BrandHook)],
-            many: { disabled: true },
+            decorators: [CheckAbility(Actions.READ, BrandEntity)],
           },
           create: {
             decorators: [CheckAbility(Actions.CREATE, BrandEntity)],
@@ -44,7 +42,7 @@ import { BrandHook } from "./hooks/brand.hook";
       ],
     }),
   ],
-  providers: [BrandReadResolver, BrandService],
+  providers: [BrandService, BrandHook],
   exports: [BrandService],
 })
 export class BrandModule {}

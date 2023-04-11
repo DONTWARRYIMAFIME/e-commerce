@@ -2,11 +2,13 @@ import { FilterableField } from "@nestjs-query/query-graphql";
 import { ID } from "@nestjs/graphql";
 import { Column, Index, ManyToOne } from "typeorm";
 import { Entity, ObjectType } from "../../../common/decorators";
+import { Authorize } from "../../../common/decorators/graphql/authorize.decorator";
 import { FilterableRelation } from "../../../common/decorators/graphql/relation.decorator";
 import { Id } from "../../../common/types/id.type";
 import { BaseEntity } from "../../base.entity";
 import { CityEntity } from "../../city/entities/city.entity";
 
+@Authorize()
 @FilterableRelation("city", () => CityEntity)
 @ObjectType()
 @Index("INX_address_city", ["city"])
