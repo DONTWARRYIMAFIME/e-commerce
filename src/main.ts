@@ -1,4 +1,5 @@
 import { NestFactory } from "@nestjs/core";
+import { useContainer } from "class-validator";
 import * as cookieParser from "cookie-parser";
 import { graphqlUploadExpress } from "graphql-upload";
 import { I18nValidationExceptionFilter, I18nValidationPipe } from "nestjs-i18n";
@@ -29,6 +30,9 @@ import { AppConfigService } from "./config/app/app.service";
       next();
     }
   });
+
+  // Enable DI for class-validator
+  useContainer(app.select(AppModule), { fallbackOnErrors: true });
 
   await app.listen(port, () => {
     console.log("[WEB]", baseUrl + ":" + port);

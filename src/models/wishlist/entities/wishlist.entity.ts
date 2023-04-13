@@ -2,13 +2,15 @@ import { FilterableField } from "@nestjs-query/query-graphql";
 import { ID } from "@nestjs/graphql";
 import { Column, Index, JoinColumn, JoinTable, ManyToMany, OneToOne } from "typeorm";
 import { Entity, ObjectType } from "../../../common/decorators";
+import { Authorize } from "../../../common/decorators/graphql/authorize.decorator";
 import { FilterableRelation, FilterableUnPagedRelation } from "../../../common/decorators/graphql/relation.decorator";
 import { BaseEntity } from "../../base.entity";
 import { ProductEntity } from "../../product/entities/product.entity";
 import { UserEntity } from "../../user/entities/user.entity";
 
+@Authorize()
 @FilterableRelation("user", () => UserEntity)
-@FilterableUnPagedRelation("products", () => ProductEntity, { disableUpdate: false, disableRemove: false })
+@FilterableUnPagedRelation("products", () => ProductEntity)
 @ObjectType()
 @Index("INX_wishlist_user", ["user"])
 @Entity()

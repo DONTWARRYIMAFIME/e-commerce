@@ -2,7 +2,7 @@ import { RedisService } from "@liaoliaots/nestjs-redis";
 import { Query, Resolver } from "@nestjs/graphql";
 import Redis from "ioredis";
 import { RedisConfigService } from "../../../config/cache/redis/redis.service";
-import { IsPublic } from "../../security/authentication/decorators/isPublic.decorator";
+import { IsPublic } from "../../security/auth/decorators/is-public.decorator";
 
 @Resolver()
 export class RedisResolver {

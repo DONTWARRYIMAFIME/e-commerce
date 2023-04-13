@@ -1,8 +1,10 @@
 import { FilterableField } from "@nestjs-query/query-graphql";
 import { Unique, Column } from "typeorm";
 import { Entity, ObjectType } from "../../../common/decorators";
+import { Authorize } from "../../../common/decorators/graphql/authorize.decorator";
 import { BaseEntity } from "../../base.entity";
 
+@Authorize()
 @ObjectType()
 @Unique("UNQ_color_code", ["code"])
 @Entity()

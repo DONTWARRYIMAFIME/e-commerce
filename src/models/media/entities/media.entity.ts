@@ -1,9 +1,11 @@
 import { FilterableField } from "@nestjs-query/query-graphql";
 import { Column, Unique } from "typeorm";
 import { Entity, ObjectType } from "../../../common/decorators";
+import { Authorize } from "../../../common/decorators/graphql/authorize.decorator";
 import { BaseEntity } from "../../base.entity";
 import { MediaType } from "../media.enum";
 
+@Authorize()
 @ObjectType()
 @Unique("UNQ_media_secure_id", ["publicId"])
 @Unique("UNQ_media_url", ["url"])

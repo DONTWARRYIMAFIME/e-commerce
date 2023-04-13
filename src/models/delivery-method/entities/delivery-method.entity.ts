@@ -2,6 +2,7 @@ import { FilterableField } from "@nestjs-query/query-graphql";
 import { ID, Int } from "@nestjs/graphql";
 import { Column, Index, ManyToOne, Unique } from "typeorm";
 import { Entity, ObjectType } from "../../../common/decorators";
+import { Authorize } from "../../../common/decorators/graphql/authorize.decorator";
 import { FilterableRelation } from "../../../common/decorators/graphql/relation.decorator";
 import { Id } from "../../../common/types/id.type";
 import { BaseEntity } from "../../base.entity";
@@ -9,6 +10,7 @@ import { PriceEntity } from "../../price/entities/price.entity";
 import { DeliveryMethodStatus } from "../enums/delivery-method-status.enum";
 import { DeliveryMethod } from "../enums/delivery-method.enum";
 
+@Authorize()
 @FilterableRelation("price", () => PriceEntity)
 @ObjectType()
 @Unique("UNQ_delivery_method_code", ["code"])

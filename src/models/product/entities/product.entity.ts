@@ -2,6 +2,7 @@ import { FilterableField } from "@nestjs-query/query-graphql";
 import { ID } from "@nestjs/graphql";
 import { BeforeInsert, Column, Index, JoinTable, ManyToMany, ManyToOne, OneToMany } from "typeorm";
 import { Entity, ObjectType } from "../../../common/decorators";
+import { Authorize } from "../../../common/decorators/graphql/authorize.decorator";
 import { FilterableRelation, FilterableUnPagedRelation, UnPagedRelation } from "../../../common/decorators/graphql/relation.decorator";
 import { generateSku } from "../../../common/helpers/sku-generator.helper";
 import { Id } from "../../../common/types/id.type";
@@ -13,6 +14,7 @@ import { MediaEntity } from "../../media/entities/media.entity";
 import { ProductVariantEntity } from "../../product-variant/entities/product-variant.entity";
 import { SizeEntity } from "../../size/entities/size.entity";
 
+@Authorize()
 @FilterableRelation("category", () => CategoryEntity)
 @FilterableRelation("brand", () => BrandEntity)
 @FilterableUnPagedRelation("productVariants", () => ProductVariantEntity)
@@ -34,14 +36,20 @@ export class ProductEntity extends BaseEntity {
   @Column()
   categoryId!: Id;
 
-  @ManyToOne(() => CategoryEntity)
+  @ManyToOne(() => CategoryEntity, {
+    onUpdate: "CASCADE",
+    onDelete: "CASCADE",
+  })
   category!: CategoryEntity;
 
   @FilterableField(() => ID)
   @Column()
   brandId!: Id;
 
-  @ManyToOne(() => BrandEntity)
+  @ManyToOne(() => BrandEntity, {
+    onUpdate: "CASCADE",
+    onDelete: "CASCADE",
+  })
   brand!: BrandEntity;
 
   @OneToMany(() => ProductVariantEntity, productVariant => productVariant.product, {

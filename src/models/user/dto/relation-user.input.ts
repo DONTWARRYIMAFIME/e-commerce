@@ -1,16 +1,12 @@
 import { MutationArgsType, UpdateOneInputType } from "@nestjs-query/query-graphql";
-import { ArgsType, Field, InputType } from "@nestjs/graphql";
-import { IsArrayI18N } from "../../../providers/i18n/i18n.decorators";
-import { CreateAddressInput } from "../../address/dto/create-address.input";
-import { SelectAddressInput } from "../../address/dto/select-address.input";
-import { AddressEntity } from "../../address/entities/address.entity";
+import { ArgsType, InputType } from "@nestjs/graphql";
 import { UserEntity } from "../entities/user.entity";
 
 @InputType()
 export class AddAddressesToUserInput implements Partial<UserEntity> {
-  @IsArrayI18N()
-  @Field(() => [CreateAddressInput])
-  addresses!: AddressEntity[];
+  // @IsArrayI18N()
+  // @Field(() => [CreateAddressInput])
+  // addresses!: AddressEntity[];
 }
 
 @InputType()
@@ -21,9 +17,9 @@ export class AddAddressesToUserArgsType extends MutationArgsType(AddAddressesToU
 
 @InputType()
 export class RemoveAddressesFromUserInput implements Partial<UserEntity> {
-  @IsArrayI18N()
-  @Field(() => [SelectAddressInput])
-  addresses!: AddressEntity[];
+  // @IsArrayI18N()
+  // @Field(() => [SelectAddressInput])
+  // addresses!: AddressEntity[];
 }
 
 @InputType()

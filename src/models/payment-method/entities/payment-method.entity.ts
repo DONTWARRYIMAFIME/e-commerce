@@ -1,10 +1,12 @@
 import { FilterableField } from "@nestjs-query/query-graphql";
 import { Column, Unique } from "typeorm";
 import { Entity, ObjectType } from "../../../common/decorators";
+import { Authorize } from "../../../common/decorators/graphql/authorize.decorator";
 import { BaseEntity } from "../../base.entity";
 import { PaymentMethodStatus } from "../enums/payment-method-status.enum";
 import { PaymentMethods } from "../enums/payment-methods.enum";
 
+@Authorize()
 @ObjectType()
 @Unique("UNQ_payment_method_code", ["code"])
 @Entity()

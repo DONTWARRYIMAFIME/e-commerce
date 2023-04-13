@@ -9,9 +9,12 @@
   "IS_UPPER_CASE": "Field: [{property}] must be in a upper case format",
   "IS_BIG_INT": "Field: [{property}] must be a BigInt",
   "IS_NOT_EMPTY": "Field: [{property}] cannot be empty",
+  "IS_NOT_EMPTY_OBJECT": "Field: [{property}] cannot be an empty object",
   "IS_UUID": "Field: [{property}] must be a UUID v4 format",
   "IS_POSITIVE": "Field: [{property}] should have a positive number",
   "IS_ENUM": "Field: [{property}] should be a enum value",
   "IS_POSTAL_CODE": "Field: [{property}] should be a valid Postal Code",
-  "IS_ARRAY": "Field: [{property}] should be an array"
+  "IS_ARRAY": "Field: [{property}] should be an array",
+  "IS_EQUAL_TO": "Field: [{property}] must match [{constraints.0}] exactly",
+  "IS_EMAIL_NOT_EXISTS": "User with email [{value}] already exists"
 }

@@ -1,8 +1,10 @@
 import { FilterableField } from "@nestjs-query/query-graphql";
 import { Column, Index, Unique } from "typeorm";
 import { Entity, ObjectType } from "../../../common/decorators";
+import { Authorize } from "../../../common/decorators/graphql/authorize.decorator";
 import { BaseEntity } from "../../base.entity";
 
+@Authorize()
 @ObjectType()
 @Unique("UNQ_email_address_address", ["address"])
 @Index("INX_email_address_email_name", ["address", "name"])

@@ -15,6 +15,10 @@ export class CartService extends TypeOrmQueryService<CartEntity> {
     super(repo);
   }
 
+  public findById(id: Id): Promise<CartEntity> {
+    return this.repo.findOneBy({ id });
+  }
+
   public findOneByIdOrFail(id: Id, opts?: FindOptionsWhere<CartEntity>): Promise<CartEntity> {
     return this.repo.findOneByOrFail({ id, ...opts });
   }

@@ -29,6 +29,10 @@ export class OrderService extends TypeOrmQueryService<OrderEntity> {
     super(repo);
   }
 
+  public findById(id: Id): Promise<OrderEntity | undefined> {
+    return this.repo.findOneBy({ id });
+  }
+
   /* Client place an order ->
    OrderService create order (with warehouse split logic) ->
    return order ->
@@ -41,25 +45,19 @@ export class OrderService extends TypeOrmQueryService<OrderEntity> {
   public async createOne(record: DeepPartial<OrderEntity>): Promise<OrderEntity> {
     const { userId, deliveryMethodId, deliveryAddressId, paymentMethodId } = record;
     const cart = await this.cartService.findOneByUserId(userId);
-    console.log(cart);
 
     if (cart.quantity <= 0) {
       throw new UserInputError("Cannot create an empty order");
     }
 
-    console.log("here");
     const orderItems = await this.splitOrder(cart.id, cart.cartItems);
 
     // Subtotal price
-    console.log(orderItems);
     const subtotalPrice = omit(cart.price, "id");
-    console.log(subtotalPrice);
 
     // Delivery price
     const deliveryMethod = await this.deliveryMethodService.findOneById(deliveryMethodId);
-    console.log(deliveryMethod);
     const deliveryMethodPrice = omit(deliveryMethod.price, "id");
-    console.log(deliveryMethodPrice);
 
     // Tax
     // TODO: calculate tax amount
@@ -67,7 +65,6 @@ export class OrderService extends TypeOrmQueryService<OrderEntity> {
 
     // Total price
     const totalPrice = { amount: subtotalPrice.amount + deliveryMethodPrice.amount };
-    console.log(totalPrice);
 
     const order = super.createOne({
       userId,
@@ -107,10 +104,10 @@ export class OrderService extends TypeOrmQueryService<OrderEntity> {
     const orderItems: DeepPartial<OrderItemEntity>[] = [];
     for (const cartItem of cartItems) {
       const { productVariantId, quantity, price } = cartItem;
-      const productVariant = await this.productVariantService.findOneById(productVariantId);
+      const productVariant = await this.productVariantService.findById(productVariantId);
 
-      console.log(productVariant.price.amount * quantity);
-      console.log(price.amount);
+      // console.log(productVariant.price.amount * quantity);
+      // console.log(price.amount);
       // if (productVariant.price.amount * quantity !== price.amount) {
       //   await this.cartService.emptyCart(cartId);
       //   throw new UserInputError("Product's price have been changed. Your cart cleared");

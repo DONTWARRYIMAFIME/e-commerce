@@ -75,7 +75,7 @@ export class CartItemService extends TypeOrmQueryService<CartItemEntity> {
   }
 
   private async updatePrice(entity: DeepPartial<CartItemEntity>): Promise<DeepPartial<CartItemEntity>> {
-    const productVariant = await this.productVariantService.findOneById(entity.productVariantId);
+    const productVariant = await this.productVariantService.findById(entity.productVariantId);
     const priceAmount = productVariant.price.amount * entity.quantity;
     return merge<DeepPartial<CartItemEntity>, DeepPartial<CartItemEntity>>(entity, { price: { amount: priceAmount } });
   }

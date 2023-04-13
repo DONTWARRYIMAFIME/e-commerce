@@ -9,8 +9,9 @@ import { GraphQLModule } from "./providers/graphql/graphql.module";
 import { I18nModule } from "./providers/i18n/i18n.module";
 import { StripeModule } from "./providers/payment/stripe/stripe.module";
 import { BullModule } from "./providers/queues/bull/bull.module";
-import { AuthenticationModule } from "./providers/security/authentication/authentication.module";
+import { AuthModule } from "./providers/security/auth/auth.module";
 import { ThrottlerModule } from "./providers/security/throttler/throttler.module";
+import { ValidationModule } from "./providers/validation/validation.module";
 
 @Module({
   imports: [
@@ -20,8 +21,9 @@ import { ThrottlerModule } from "./providers/security/throttler/throttler.module
     EventModule,
     I18nModule,
     EmailModule,
+    ValidationModule,
     ModelsModule,
-    AuthenticationModule,
+    AuthModule,
     CacheModule,
     BullModule,
     ThrottlerModule,

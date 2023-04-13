@@ -1,6 +1,7 @@
 import { Mutation, Resolver } from "@nestjs/graphql";
-import { CaslUser, UserProxy } from "nest-casl";
 import { CartService } from "../../../models/cart/cart.service";
+import { CaslUser } from "../../security/casl/decorators/casl-user";
+import { UserProxy } from "../../security/casl/proxies/user.proxy";
 import { CreateSessionResponse } from "./dto/create-session.response";
 import { StripeService } from "./stripe.service";
 

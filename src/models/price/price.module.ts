@@ -1,6 +1,9 @@
+import { NestjsQueryGraphQLModule } from "@nestjs-query/query-graphql";
 import { NestjsQueryTypeOrmModule } from "@nestjs-query/query-typeorm";
 import { Module } from "@nestjs/common";
-import { CaslGraphQLModule } from "../../providers/security/authorization/casl-graphql.module";
+import { AccessGuard } from "../../providers/security/casl/access.guard";
+import { Actions } from "../../providers/security/casl/actions.enum";
+import { CheckAbility } from "../../providers/security/casl/decorators/check-ability";
 import { CreatePriceInput } from "./dto/create-price.input";
 import { UpdatePriceInput } from "./dto/update-price.input";
 import { PriceEntity } from "./entities/price.entity";
@@ -8,7 +11,7 @@ import { PriceService } from "./price.service";
 
 @Module({
   imports: [
-    CaslGraphQLModule.forFeature({
+    NestjsQueryGraphQLModule.forFeature({
       imports: [NestjsQueryTypeOrmModule.forFeature([PriceEntity])],
       services: [PriceService],
       resolvers: [
@@ -18,6 +21,22 @@ import { PriceService } from "./price.service";
           CreateDTOClass: CreatePriceInput,
           UpdateDTOClass: UpdatePriceInput,
           ServiceClass: PriceService,
+          guards: [AccessGuard],
+          read: {
+            decorators: [CheckAbility(Actions.READ, PriceEntity)],
+          },
+          create: {
+            decorators: [CheckAbility(Actions.CREATE, PriceEntity)],
+            many: { disabled: true },
+          },
+          update: {
+            decorators: [CheckAbility(Actions.UPDATE, PriceEntity)],
+            many: { disabled: true },
+          },
+          delete: {
+            decorators: [CheckAbility(Actions.DELETE, PriceEntity)],
+            many: { disabled: true },
+          },
         },
       ],
     }),

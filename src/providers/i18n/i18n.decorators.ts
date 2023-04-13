@@ -2,10 +2,13 @@
 import {
   IsArray,
   IsBoolean,
-  IsEmail, IsEnum,
+  IsEmail,
+  IsEnum,
   IsHexColor,
   IsNotEmpty,
-  IsPositive, IsPostalCode,
+  IsNotEmptyObject,
+  IsPositive,
+  IsPostalCode,
   IsUppercase,
   IsUUID,
   Length,
@@ -16,7 +19,10 @@ import {
 } from "class-validator";
 import { i18nValidationMessage } from "nestjs-i18n";
 import ValidatorJS from "validator";
-import { IsBigInt, IsSnakeCase } from "../../common/decorators";
+import { IsBigInt } from "../validation/decorators/isBigInt.decorator";
+import { IsEmailNotExists } from "../validation/decorators/IsEmailNotExists.decorator";
+import { IsEqualTo } from "../validation/decorators/isEqualTo.decorator";
+import { IsSnakeCase } from "../validation/decorators/isSnakeCase.decorator";
 import { I18nTranslations } from "./i18n.generated";
 
 export const IsEmailI18N = (options?: ValidatorJS.IsEmailOptions, validationOptions?: ValidationOptions) =>
@@ -54,3 +60,12 @@ export const IsPostalCodeI18N = (locale?: ValidatorJS.PostalCodeLocale, validati
 
 export const IsArrayI18N = (validationOptions?: ValidationOptions) =>
   IsArray({ ...validationOptions, message: i18nValidationMessage<I18nTranslations>("validation.IS_ARRAY") });
+
+export const IsNotEmptyObjectI18N = (options?: { nullable?: boolean; }, validationOptions?: ValidationOptions) =>
+  IsNotEmptyObject(options, { ...validationOptions, message: i18nValidationMessage<I18nTranslations>("validation.IS_NOT_EMPTY_OBJECT") });
+
+export const IsEqualToI18N = <T>(property: keyof T, validationOptions?: ValidationOptions) =>
+  IsEqualTo(property, { ...validationOptions, message: i18nValidationMessage<I18nTranslations>("validation.IS_EQUAL_TO") });
+
+export const IsEmailNotExistsI18N = (validationOptions?: ValidationOptions) =>
+  IsEmailNotExists({ ...validationOptions, message: i18nValidationMessage<I18nTranslations>("validation.IS_EMAIL_NOT_EXISTS") });

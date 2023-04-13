@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { OnEvent } from "@nestjs/event-emitter";
-import { Actions } from "../../../providers/security/authorization/enums/actions.enum";
+import { Actions } from "../../../providers/security/casl/actions.enum";
 import { UserEntity } from "../../user/entities/user.entity";
 import { UserCreateEvent } from "../../user/events/user-create.event";
 import { WishlistService } from "../wishlist.service";

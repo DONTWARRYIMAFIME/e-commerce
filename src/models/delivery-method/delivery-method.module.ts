@@ -1,6 +1,9 @@
+import { NestjsQueryGraphQLModule } from "@nestjs-query/query-graphql";
 import { NestjsQueryTypeOrmModule } from "@nestjs-query/query-typeorm";
 import { Module } from "@nestjs/common";
-import { CaslGraphQLModule } from "../../providers/security/authorization/casl-graphql.module";
+import { AccessGuard } from "../../providers/security/casl/access.guard";
+import { Actions } from "../../providers/security/casl/actions.enum";
+import { CheckAbility } from "../../providers/security/casl/decorators/check-ability";
 import { DeliveryMethodService } from "./delivery-method.service";
 import { CreateDeliveryMethodInput } from "./dto/create-delivery-method.input";
 import { UpdateDeliveryMethodInput } from "./dto/update-delivery-method.input";
@@ -8,7 +11,7 @@ import { DeliveryMethodEntity } from "./entities/delivery-method.entity";
 
 @Module({
   imports: [
-    CaslGraphQLModule.forFeature({
+    NestjsQueryGraphQLModule.forFeature({
       imports: [NestjsQueryTypeOrmModule.forFeature([DeliveryMethodEntity])],
       services: [DeliveryMethodService],
       resolvers: [
@@ -18,6 +21,22 @@ import { DeliveryMethodEntity } from "./entities/delivery-method.entity";
           CreateDTOClass: CreateDeliveryMethodInput,
           UpdateDTOClass: UpdateDeliveryMethodInput,
           ServiceClass: DeliveryMethodService,
+          guards: [AccessGuard],
+          read: {
+            decorators: [CheckAbility(Actions.READ, DeliveryMethodEntity)],
+          },
+          create: {
+            decorators: [CheckAbility(Actions.CREATE, DeliveryMethodEntity)],
+            many: { disabled: true },
+          },
+          update: {
+            decorators: [CheckAbility(Actions.UPDATE, DeliveryMethodEntity)],
+            many: { disabled: true },
+          },
+          delete: {
+            decorators: [CheckAbility(Actions.DELETE, DeliveryMethodEntity)],
+            many: { disabled: true },
+          },
         },
       ],
     }),

@@ -26,7 +26,7 @@ export class CreateProductInput implements Partial<ProductEntity> {
   brandId!: Id;
 
   @IsOptional()
-  @Field(() => [UpdateProductVariantInput], { nullable: true, defaultValue: [] })
+  @Field(() => [UpdateProductVariantInput], { defaultValue: [] })
   productVariants?: ProductVariantEntity[];
 }
 
