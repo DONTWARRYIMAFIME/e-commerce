@@ -4,7 +4,7 @@ import { SecurityConfigService } from "../../../config/security/security.service
 import { COOKIE_REFRESH_TOKEN } from "./auth.constants";
 
 @Injectable()
-export class AuthenticationCookieService {
+export class AuthCookieService {
   constructor(private readonly config: SecurityConfigService) {}
 
   public sendRefreshToken(refreshToken: string, res: Response) {

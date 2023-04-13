@@ -6,9 +6,9 @@ import { SecurityConfigModule } from "../../../config/security/security.module";
 import { RoleModule } from "../../../models/role/role.module";
 import { UserHook } from "../../../models/user/hooks/user.hook";
 import { CaslModule } from "../casl/casl.module";
+import { AuthCookieService } from "./auth-cookie.service";
 import { AuthResolver } from "./auth.resolver";
 import { AuthService } from "./auth.service";
-import { AuthenticationCookieService } from "./cookie.service";
 import { AccessTokenAuthGuard } from "./guards/access-token-auth.guard";
 import { JwtService } from "./jwt.service";
 import { AccessTokenStrategy } from "./strategies/access-token.strategy";
@@ -28,7 +28,7 @@ import { RefreshTokenStrategy } from "./strategies/refresh-token.strategy";
   providers: [
     AuthResolver,
     AuthService,
-    AuthenticationCookieService,
+    AuthCookieService,
     JwtService,
     EmailStrategy,
     AccessTokenStrategy,

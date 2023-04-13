@@ -8,7 +8,7 @@ import { AuthService } from "../auth.service";
 @Injectable()
 export class EmailStrategy extends PassportStrategy(Strategy, AuthenticationType.EMAIL) {
   constructor(private readonly authService: AuthService) {
-    // Define field name for local strategy. Default is username
+    // Define field name for als strategy. Default is username
     super({ usernameField: "email" });
   }
 

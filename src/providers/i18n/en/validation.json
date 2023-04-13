@@ -14,5 +14,7 @@
   "IS_POSITIVE": "Field: [{property}] should have a positive number",
   "IS_ENUM": "Field: [{property}] should be a enum value",
   "IS_POSTAL_CODE": "Field: [{property}] should be a valid Postal Code",
-  "IS_ARRAY": "Field: [{property}] should be an array"
+  "IS_ARRAY": "Field: [{property}] should be an array",
+  "IS_EQUAL_TO": "Field: [{property}] must match [{constraints.0}] exactly",
+  "IS_EMAIL_NOT_EXISTS": "User with email [{value}] already exists"
 }

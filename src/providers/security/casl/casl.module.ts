@@ -6,6 +6,7 @@ import { AbilityFactory } from "./factories/ability.factory";
 import { AuthorizableUser, Permission } from "./interfaces/authorizable-user.interface";
 import { OptionsForRoot } from "./interfaces/options.interface";
 import { AuthorizableRequest } from "./interfaces/request.interface";
+import { UserProxy } from "./proxies/user.proxy";
 
 @Global()
 @Module({
@@ -13,12 +14,13 @@ import { AuthorizableRequest } from "./interfaces/request.interface";
   providers: [
     AccessService,
     AbilityFactory,
+    UserProxy,
     {
       provide: CASL_FEATURE_OPTIONS,
       useValue: {},
     },
   ],
-  exports: [AbilityFactory, AccessService],
+  exports: [AbilityFactory, AccessService, UserProxy],
 })
 export class CaslModule {
   static forRoot<

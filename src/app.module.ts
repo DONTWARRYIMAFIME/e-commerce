@@ -11,6 +11,7 @@ import { StripeModule } from "./providers/payment/stripe/stripe.module";
 import { BullModule } from "./providers/queues/bull/bull.module";
 import { AuthModule } from "./providers/security/auth/auth.module";
 import { ThrottlerModule } from "./providers/security/throttler/throttler.module";
+import { ValidationModule } from "./providers/validation/validation.module";
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { ThrottlerModule } from "./providers/security/throttler/throttler.module
     EventModule,
     I18nModule,
     EmailModule,
+    ValidationModule,
     ModelsModule,
     AuthModule,
     CacheModule,

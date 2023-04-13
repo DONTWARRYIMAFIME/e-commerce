@@ -1,17 +1,14 @@
 import { Injectable } from "@nestjs/common";
 import { EventEmitter2 } from "@nestjs/event-emitter";
-import { UserInputError } from "apollo-server-core";
 import { verify } from "argon2";
 import { Response } from "express";
-import { map } from "lodash";
-import { PermissionEntity } from "../../../models/permission/entities/permission.entity";
 import { Roles } from "../../../models/role/enums/roles.enum";
 import { RoleService } from "../../../models/role/role.service";
 import { UserEntity } from "../../../models/user/entities/user.entity";
 import { UserCreateEvent } from "../../../models/user/events/user-create.event";
 import { UserService } from "../../../models/user/user.service";
 import { Actions } from "../casl/actions.enum";
-import { AuthenticationCookieService } from "./cookie.service";
+import { AuthCookieService } from "./auth-cookie.service";
 import { SignupInput } from "./dto/request/signup.input";
 import { AccessTokenResponse } from "./dto/response/access-token.response";
 import { LoginResponse } from "./dto/response/login.response";
@@ -26,7 +23,7 @@ export class AuthService {
     private readonly userService: UserService,
     private readonly roleService: RoleService,
     private readonly jwtService: JwtService,
-    private readonly cookieService: AuthenticationCookieService,
+    private readonly cookieService: AuthCookieService,
     private readonly eventEmitter: EventEmitter2,
   ) {}
 
@@ -53,16 +50,7 @@ export class AuthService {
   public async login(user: UserEntity, res: Response): Promise<LoginResponse> {
     const payload = {
       id: user.id,
-      permissions: user.roles.flatMap(role => {
-        return role.permissions.map(permission => {
-          //console.log(PermissionEntity.parseCondition(permission.conditions, { userId: user.id, brandIds: map(user.brands, "id") }));
-          return {
-            action: permission.action,
-            subject: permission.subject,
-            conditions: PermissionEntity.parseCondition(permission.conditions, { userId: user.id, brandIds: map(user.brands, "id") }),
-          };
-        });
-      }),
+      permissions: user.permissions,
     };
 
     // Create tokens
@@ -83,16 +71,10 @@ export class AuthService {
   }
 
   public async signupAsPartner(userInput: SignupInput, res: Response): Promise<SignupResponse> {
-    return this.signup(userInput, res, [Roles.PARTNER]);
+    return this.signup(userInput, res, [Roles.CUSTOMER, Roles.PARTNER]);
   }
 
   private async signup(userInput: SignupInput, res: Response, roles: Roles[]): Promise<SignupResponse> {
-    const user = await this.userService.findOneByEmail(userInput.email);
-
-    if (user) {
-      throw new UserInputError("User already exists");
-    }
-
     const roleEntities = await this.roleService.findManyByCodes(roles);
     const createdUser = await this.userService.createOne({
       ...userInput,

@@ -52,6 +52,8 @@ export type I18nTranslations = {
         "IS_ENUM": string;
         "IS_POSTAL_CODE": string;
         "IS_ARRAY": string;
+        "IS_EQUAL_TO": string;
+        "IS_EMAIL_NOT_EXISTS": string;
         "INVALID_BOOLEAN": string;
     };
 };
