@@ -14,6 +14,7 @@ import { EmailAddressModule } from "./email-address/email-address.module";
 import { MediaModule } from "./media/media.module";
 import { OrderItemModule } from "./order-item/order-item.module";
 import { OrderModule } from "./order/order.module";
+import { PaymentIntentModule } from "./payment-intent/payment-intent.module";
 import { PaymentMethodModule } from "./payment-method/payment-method.module";
 import { PermissionModule } from "./permission/permission.module";
 import { PickupPointModule } from "./pickup-point/pickup-point.module";
@@ -58,6 +59,7 @@ import { WishlistModule } from "./wishlist/wishlist.module";
     PermissionModule,
     UserAddressModule,
     CommentModule,
+    PaymentIntentModule,
   ],
 })
 export class ModelsModule {}
