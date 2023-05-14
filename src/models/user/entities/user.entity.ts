@@ -2,7 +2,7 @@ import { FilterableField } from "@nestjs-query/query-graphql";
 import { Field, GraphQLISODateTime, HideField, ID } from "@nestjs/graphql";
 import { hash } from "argon2";
 import { map } from "lodash";
-import { AfterLoad, BeforeInsert, BeforeUpdate, Column, DeleteDateColumn, Index, JoinColumn, JoinTable, ManyToMany, OneToMany, OneToOne } from "typeorm";
+import { AfterInsert, AfterLoad, AfterUpdate, BeforeInsert, BeforeUpdate, Column, DeleteDateColumn, Index, JoinColumn, JoinTable, ManyToMany, OneToMany, OneToOne } from "typeorm";
 import { Entity, ObjectType } from "../../../common/decorators";
 import { Authorize } from "../../../common/decorators/graphql/authorize.decorator";
 import { FilterableRelation, FilterableUnPagedRelation } from "../../../common/decorators/graphql/relation.decorator";
@@ -24,6 +24,7 @@ import { WishlistEntity } from "../../wishlist/entities/wishlist.entity";
 @FilterableRelation("wishlist", () => WishlistEntity)
 @FilterableUnPagedRelation("userAddresses", () => UserAddressEntity)
 @FilterableUnPagedRelation("brands", () => BrandEntity)
+@FilterableUnPagedRelation("roles", () => RoleEntity)
 @ObjectType()
 @Index("INX_user_email_address", ["emailAddress"])
 @Entity()
@@ -82,7 +83,6 @@ export class UserEntity extends BaseEntity {
   @OneToOne(() => WishlistEntity, wishlist => wishlist.user)
   wishlist!: WishlistEntity;
 
-  @HideField()
   @ManyToMany(() => RoleEntity, { eager: true })
   @JoinTable({ name: "user_role" })
   roles!: RoleEntity[];
@@ -108,14 +108,7 @@ export class UserEntity extends BaseEntity {
     this.tempPassword = this.password;
     this.fullName = `${this.firstName} ${this.lastName}`;
 
-    this.permissions = this.roles.flatMap(role => {
-      return role.permissions.map(permission => {
-        return {
-          ...permission,
-          conditions: PermissionEntity.parseCondition(permission.conditions, { userId: this.id, brandIds: map(this.brands, "id") }),
-        } as PermissionEntity;
-      });
-    });
+    this.loadPermissions();
   }
 
   @BeforeInsert()
@@ -126,5 +119,22 @@ export class UserEntity extends BaseEntity {
       this.password = await hash(this.password, { saltLength: 15 });
       this.tempPassword = this.password;
     }
+  }
+
+  @AfterInsert()
+  @AfterUpdate()
+  private async afterInsertOrUpdate() {
+    this.loadPermissions();
+  }
+
+  private loadPermissions() {
+    this.permissions = this.roles.flatMap(role => {
+      return role.permissions?.map(permission => {
+        return {
+          ...permission,
+          conditions: PermissionEntity.parseCondition(permission.conditions, { userId: this.id, brandIds: map(this.brands, "id") }),
+        } as PermissionEntity;
+      });
+    });
   }
 }

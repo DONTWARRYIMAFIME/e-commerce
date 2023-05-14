@@ -31,6 +31,7 @@ DELETE FROM "media" CASCADE;
 DELETE FROM "order" CASCADE;
 DELETE FROM "order_item" CASCADE;
 DELETE FROM "payment_method" CASCADE;
+DELETE FROM "payment_intent" CASCADE;
 
 -- Role
 INSERT INTO "role" (code, name)
@@ -305,6 +306,10 @@ SELECT r.id, p.id FROM "role" r CROSS JOIN "permission" p WHERE r.code = 'custom
 
 INSERT INTO "role_permission" (role_id, permission_id)
 SELECT r.id, p.id FROM "role" r CROSS JOIN "permission" p WHERE r.code = 'customer' AND p.action = 'read' AND p.subject = 'UserEntity' AND p.conditions = '{"id": { "$eq": "{{userId}}" }}';
+INSERT INTO "role_permission" (role_id, permission_id)
+SELECT r.id, p.id FROM "role" r CROSS JOIN "permission" p WHERE r.code = 'customer' AND p.action = 'update' AND p.subject = 'UserEntity' AND p.conditions = '{"id": { "$eq": "{{userId}}" }}';
+INSERT INTO "role_permission" (role_id, permission_id)
+SELECT r.id, p.id FROM "role" r CROSS JOIN "permission" p WHERE r.code = 'customer' AND p.action = 'delete' AND p.subject = 'UserEntity' AND p.conditions = '{"id": { "$eq": "{{userId}}" }}';
 
 INSERT INTO "role_permission" (role_id, permission_id)
 SELECT r.id, p.id FROM "role" r CROSS JOIN "permission" p WHERE r.code = 'customer' AND p.action = 'read' AND p.subject = 'UserAddressEntity' AND p.conditions = '{"userId": { "$eq": "{{userId}}" }}';
@@ -360,9 +365,9 @@ SELECT r.id, p.id FROM "role" r CROSS JOIN "permission" p WHERE r.code = 'admin'
 -- Customer user
 WITH new_email_address AS (
     INSERT INTO "email_address" (address, name)
-    VALUES
-        ('customer@gmail.com', 'User Customer')
-    RETURNING id
+        VALUES
+            ('customer@gmail.com', 'User Customer')
+        RETURNING id
 )
 INSERT INTO "user" (email_address_id, first_name, last_name, password)
 SELECT e.id, 'User', 'Customer', '$argon2id$v=19$m=65536,t=3,p=4$513t2PfDXwcVaWJy1ycC$gJhSyuk+EzHbQ3aoSv4KfTad0o1VrsCB+jg9tVeyyH0' FROM new_email_address e;
@@ -454,7 +459,7 @@ SELECT u.id, cp.id FROM "cart_price" cp CROSS JOIN "user" u INNER JOIN "email_ad
 WITH cart_price AS (
     INSERT INTO "price" (amount)
         SELECT 0
-    RETURNING id
+        RETURNING id
 )
 INSERT INTO "cart" (user_id, price_id)
 SELECT u.id, cp.id FROM "cart_price" cp CROSS JOIN "user" u INNER JOIN "email_address" ea on ea.id = u.email_address_id WHERE ea.address = 'admin@gmail.com';
@@ -605,12 +610,48 @@ SELECT 'skirts', 'Skirts', 'Skirts', c.id FROM "category" c WHERE c.code = 'wome
 INSERT INTO "category" (code, name, description, parent_id)
 SELECT 'blazer', 'Blazer', 'Blazer', c.id FROM "category" c WHERE c.code = 'women';
 
+INSERT INTO "category" (code, name, description, parent_id)
+SELECT 'dresses', 'Dresses', 'Dresses', c.id FROM "category" c WHERE c.code = 'women';
+
+INSERT INTO "category" (code, name, description, parent_id)
+SELECT 'shorts', 'Shorts', 'Shorts', c.id FROM "category" c WHERE c.code = 'women';
+
+INSERT INTO "category" (code, name, description, parent_id)
+SELECT 'sleepwear', 'Sleepwear', 'Sleepwear', c.id FROM "category" c WHERE c.code = 'women';
+
+INSERT INTO "category" (code, name, description, parent_id)
+SELECT 'coats', 'Coats', 'Coats', c.id FROM "category" c WHERE c.code = 'women';
+
+INSERT INTO "category" (code, name, description, parent_id)
+SELECT 'shirts', 'Shirts', 'Shirts', c.id FROM "category" c WHERE c.code = 'women';
+
+INSERT INTO "category" (code, name, description, parent_id)
+SELECT 'tops', 'Tops', 'Tops', c.id FROM "category" c WHERE c.code = 'women';
+
+INSERT INTO "category" (code, name, description, parent_id)
+SELECT 'swimwear', 'Swimwear', 'Swimwear', c.id FROM "category" c WHERE c.code = 'women';
+
 -- Category men
 INSERT INTO "category" (code, name, description, parent_id)
 SELECT 'men', 'Men', 'Men category', c.id FROM "category" c WHERE c.code = 'root';
 
 INSERT INTO "category" (code, name, description, parent_id)
 SELECT 'hoodies', 'Hoodies', 'Hoodies category', c.id FROM "category" c WHERE c.code = 'men';
+
+INSERT INTO "category" (code, name, description, parent_id)
+SELECT 'blazer', 'Blazer', 'Blazer', c.id FROM "category" c WHERE c.code = 'men';
+
+INSERT INTO "category" (code, name, description, parent_id)
+SELECT 'jeans', 'Jeans', 'Jeans', c.id FROM "category" c WHERE c.code = 'men';
+
+INSERT INTO "category" (code, name, description, parent_id)
+SELECT 'shirts', 'Shirts', 'Shirts', c.id FROM "category" c WHERE c.code = 'men';
+
+INSERT INTO "category" (code, name, description, parent_id)
+SELECT 'shorts', 'Shorts', 'Shorts', c.id FROM "category" c WHERE c.code = 'men';
+
+INSERT INTO "category" (code, name, description, parent_id)
+SELECT 'pants', 'Pants', 'Pants', c.id FROM "category" c WHERE c.code = 'men';
 
 -- Payment methods
 INSERT INTO "payment_method" (code, name)
@@ -629,9 +670,9 @@ WITH product_variant_price AS (
 )
 INSERT INTO "product_variant" (sku, product_id, color_id, size_id, price_id)
 SELECT 'SK-B0001RS', p.id, c.id, s.id, pvp.id FROM product_variant_price pvp
-    CROSS JOIN "product" p
-    CROSS JOIN "color" c
-    CROSS JOIN "size" s WHERE p.title = 'test' AND c.code = 'red' AND s.code = 's';
+                                                       CROSS JOIN "product" p
+                                                       CROSS JOIN "color" c
+                                                       CROSS JOIN "size" s WHERE p.title = 'test' AND c.code = 'red' AND s.code = 's';
 
 WITH product_variant_price AS (
     INSERT INTO "price" (amount)
@@ -640,9 +681,9 @@ WITH product_variant_price AS (
 )
 INSERT INTO "product_variant" (sku, product_id, color_id, size_id, price_id)
 SELECT 'SK-B0002RM', p.id, c.id, s.id, pvp.id FROM product_variant_price pvp
-                                         CROSS JOIN "product" p
-                                         CROSS JOIN "color" c
-                                         CROSS JOIN "size" s WHERE p.title = 'test' AND c.code = 'red' AND s.code = 'm';
+                                                       CROSS JOIN "product" p
+                                                       CROSS JOIN "color" c
+                                                       CROSS JOIN "size" s WHERE p.title = 'test' AND c.code = 'red' AND s.code = 'm';
 
 WITH product_variant_price AS (
     INSERT INTO "price" (amount)
@@ -651,9 +692,9 @@ WITH product_variant_price AS (
 )
 INSERT INTO "product_variant" (sku, product_id, color_id, size_id, price_id)
 SELECT 'SK-B0003RL', p.id, c.id, s.id, pvp.id FROM product_variant_price pvp
-                                         CROSS JOIN "product" p
-                                         CROSS JOIN "color" c
-                                         CROSS JOIN "size" s WHERE p.title = 'test' AND c.code = 'red' AND s.code = 'l';
+                                                       CROSS JOIN "product" p
+                                                       CROSS JOIN "color" c
+                                                       CROSS JOIN "size" s WHERE p.title = 'test' AND c.code = 'red' AND s.code = 'l';
 
 WITH product_variant_price AS (
     INSERT INTO "price" (amount)
@@ -662,9 +703,9 @@ WITH product_variant_price AS (
 )
 INSERT INTO "product_variant" (sku, product_id, color_id, size_id, price_id)
 SELECT 'SK-B0004GL', p.id, c.id, s.id, pvp.id FROM product_variant_price pvp
-                                         CROSS JOIN "product" p
-                                         CROSS JOIN "color" c
-                                         CROSS JOIN "size" s WHERE p.title = 'test' AND c.code = 'green' AND s.code = 'l';
+                                                       CROSS JOIN "product" p
+                                                       CROSS JOIN "color" c
+                                                       CROSS JOIN "size" s WHERE p.title = 'test' AND c.code = 'green' AND s.code = 'l';
 
 -- Warehouse items
 INSERT INTO "warehouse_item" AS pv (warehouse_id, product_variant_id, stock, reserved, available)

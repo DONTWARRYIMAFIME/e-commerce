@@ -1,6 +1,7 @@
 import { UseGuards } from "@nestjs/common";
 import { Args, Mutation, Query, Resolver } from "@nestjs/graphql";
 import { Response } from "express";
+import { FileUpload, GraphQLUpload } from "graphql-upload";
 import { UserEntity } from "../../../models/user/entities/user.entity";
 import { UserService } from "../../../models/user/user.service";
 import { NoCache } from "../../cache/redis/noCache.decorator";
@@ -14,7 +15,6 @@ import { LoginInput } from "./dto/request/login.input";
 import { SignupInput } from "./dto/request/signup.input";
 import { AccessTokenResponse } from "./dto/response/access-token.response";
 import { LoginResponse } from "./dto/response/login.response";
-import { LogoutResponse } from "./dto/response/logout.response";
 import { SignupResponse } from "./dto/response/signup.response";
 import { EmailAuthGuard } from "./guards/email.guard";
 import { RefreshTokenAuthGuard } from "./guards/refresh-token-auth.guard";
@@ -34,11 +34,23 @@ export class AuthResolver {
 
   @IsPublic()
   @Mutation(() => SignupResponse)
-  public signup(@Args("input") input: SignupInput, @Res() response: Response): Promise<SignupResponse> {
-    return this.authService.signupAsCustomer(input, response);
+  public async signup(
+    @Args("input") input: SignupInput,
+    @Args("file", { type: () => GraphQLUpload, nullable: true }) file: FileUpload,
+    @Res() response: Response,
+  ): Promise<SignupResponse> {
+    const { user, ...props } = await this.authService.signupAsCustomer(input, response);
+
+    if (!file) {
+      return { ...props, user };
+    }
+
+    const finalUser = await this.userService.uploadAvatar(user.id, file);
+    return { ...props, user: finalUser };
   }
 
-  @UseGuards(RefreshTokenAuthGuard, AccessGuard)
+  @IsPublic()
+  @UseGuards(RefreshTokenAuthGuard)
   @Mutation(() => AccessTokenResponse)
   public reissueAccessToken(@CaslUser() userProxy: UserProxy<CachedUser>): Promise<AccessTokenResponse> {
     const user = userProxy.getFromRequest();
@@ -49,12 +61,12 @@ export class AuthResolver {
   @Query(() => UserEntity, { name: "me", nullable: true })
   public async getLoggedInUser(@CaslUser() userProxy: UserProxy): Promise<UserEntity> {
     const user = userProxy.getFromRequest();
-    return this.userService.findById(user.id);
+    return this.userService.findById(user?.id);
   }
 
   @IsPublic()
-  @Mutation(() => Boolean)
-  public logout(@Res() response): Promise<LogoutResponse> {
+  @Mutation(() => Boolean, { name: "logout" })
+  public logout(@Res() response): Promise<boolean> {
     return this.authService.logout(response);
   }
 }

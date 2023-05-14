@@ -12,7 +12,6 @@ import { AuthCookieService } from "./auth-cookie.service";
 import { SignupInput } from "./dto/request/signup.input";
 import { AccessTokenResponse } from "./dto/response/access-token.response";
 import { LoginResponse } from "./dto/response/login.response";
-import { LogoutResponse } from "./dto/response/logout.response";
 import { SignupResponse } from "./dto/response/signup.response";
 import { JwtService } from "./jwt.service";
 import { CachedUser } from "./types/token-payload.interface";
@@ -94,8 +93,8 @@ export class AuthService {
     return { accessToken: this.jwtService.createAccessToken(user) };
   }
 
-  public async logout(res: Response): Promise<LogoutResponse> {
+  public async logout(res: Response): Promise<boolean> {
     this.cookieService.clearCookies(res);
-    return { status: "success" };
+    return true;
   }
 }

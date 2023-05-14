@@ -1,10 +1,5 @@
-import { Field, InputType, PartialType } from "@nestjs/graphql";
-import { IsEqualToI18N } from "../../../../i18n/i18n.decorators";
-import { LoginInput } from "./login.input";
+import { InputType, PartialType } from "@nestjs/graphql";
+import { CreateUserInput } from "../../../../../models/user/dto/create-user.input";
 
 @InputType()
-export class SignupInput extends PartialType(LoginInput) {
-  @IsEqualToI18N<SignupInput>("password")
-  @Field()
-  passwordConfirmation!: string;
-}
+export class SignupInput extends PartialType(CreateUserInput) {}

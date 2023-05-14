@@ -11,16 +11,13 @@ export class AuthContext {
   constructor(readonly user: UserEntity) {}
 
   static create(ctx: AuthContext, next: (...args: any[]) => void): void {
-    console.log("create called");
     this.storage.run(ctx, next);
   }
 
   static current(context?: ArgumentsHost): AuthContext | undefined {
     const auth = this.storage.getStore() as AuthContext | undefined;
 
-    console.log("here");
     if (!auth && !!context) {
-      console.log("here 2");
       return getContextObject(context)?.auth;
     }
 

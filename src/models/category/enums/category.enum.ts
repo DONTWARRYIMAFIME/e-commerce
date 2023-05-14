@@ -8,6 +8,14 @@ export enum Categories {
   SHIRTS = "shirts",
   SKIRTS = "skirts",
   BLAZERS = "blazer",
+  DRESSES = "dresses",
+  SHORTS = "shorts",
+  SLEEPWEAR = "sleepwear",
+  COATS = "coats",
+  TOPS = "tops",
+  SWIMWEAR = "swimwear",
+  JEANS = "jeans",
+  PANTS = "pants",
 }
 
 registerEnumType(Categories, {

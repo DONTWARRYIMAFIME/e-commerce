@@ -12,7 +12,7 @@ import { Categories } from "../enums/category.enum";
 @FilterableRelation("parent", () => CategoryEntity, { nullable: true })
 @FilterableUnPagedRelation("children", () => CategoryEntity, { nullable: true })
 @ObjectType()
-@Unique("UNQ_category_code", ["code"])
+@Unique("UNQ_category_code_parent", ["code", "parent"])
 @Entity()
 @Tree("nested-set")
 export class CategoryEntity extends BaseEntity {

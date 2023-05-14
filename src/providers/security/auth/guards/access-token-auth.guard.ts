@@ -11,14 +11,14 @@ export class AccessTokenAuthGuard extends AuthGuard(AuthenticationType.JWT_ACCES
     super();
   }
 
-  canActivate(context: ExecutionContext) {
+  handleRequest(err: any, user: any, info: Error, context: ExecutionContext, status): any {
     const isPublic = this.reflector.get<boolean>(IS_PUBLIC, context.getHandler());
 
     if (isPublic) {
-      return true;
+      return user;
     }
 
-    return super.canActivate(context);
+    return super.handleRequest(err, user, info, context, status);
   }
 
   getRequest(context: ExecutionContext) {

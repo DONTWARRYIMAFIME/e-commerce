@@ -5,9 +5,9 @@ import { UserService } from "../../../models/user/user.service";
 export class IsEmailNotExistsDecorator implements ValidatorConstraintInterface {
   constructor(private readonly userService: UserService) {}
 
-  validate(email: any) {
+  validate(email: string) {
     return this.userService.findOneByEmail(email).then(user => {
-      return user === undefined;
+      return !user;
     });
   }
 

@@ -9,7 +9,7 @@ import { Context } from "../../common/types/context.type";
   imports: [
     NestGraphQLModule.forRoot<ApolloDriverConfig>({
       cors: {
-        origin: "https://studio.apollographql.com",
+        origin: ["https://studio.apollographql.com", "http://localhost:3000"],
         credentials: true,
       },
       driver: ApolloDriver,

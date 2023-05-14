@@ -11,6 +11,10 @@ export class CategoryService extends TypeOrmQueryService<CategoryEntity> {
     super(repo);
   }
 
+  public async findCategoryTree() {
+    return this.repo.findTrees();
+  }
+
   public findOneByCode(code: Categories, opts?: FindOptionsWhere<CategoryEntity>): Promise<CategoryEntity> {
     return this.repo.findOneBy({ code, ...opts });
   }

@@ -1,9 +1,11 @@
 import { NestjsQueryGraphQLModule } from "@nestjs-query/query-graphql";
 import { NestjsQueryTypeOrmModule } from "@nestjs-query/query-typeorm";
 import { Module } from "@nestjs/common";
+import { IsPublic } from "../../providers/security/auth/decorators/is-public.decorator";
 import { AccessGuard } from "../../providers/security/casl/access.guard";
 import { Actions } from "../../providers/security/casl/actions.enum";
 import { CheckAbility } from "../../providers/security/casl/decorators/check-ability";
+import { CategoryResolver } from "./category.resolver";
 import { CategoryService } from "./category.service";
 import { CreateCategoryInput } from "./dto/create-category.input";
 import { UpdateCategoryInput } from "./dto/update-category.input";
@@ -23,7 +25,8 @@ import { CategoryEntity } from "./entities/category.entity";
           ServiceClass: CategoryService,
           guards: [AccessGuard],
           read: {
-            decorators: [CheckAbility(Actions.READ, CategoryEntity)],
+            decorators: [IsPublic()],
+            defaultResultSize: 50,
           },
           create: {
             decorators: [CheckAbility(Actions.CREATE, CategoryEntity)],
@@ -41,7 +44,7 @@ import { CategoryEntity } from "./entities/category.entity";
       ],
     }),
   ],
-  providers: [CategoryService],
+  providers: [CategoryResolver, CategoryService],
   exports: [CategoryService],
 })
 export class CategoryModule {}

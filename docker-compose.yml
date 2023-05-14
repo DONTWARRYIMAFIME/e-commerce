@@ -21,7 +21,7 @@ services:
     networks:
       - postgres
   postgres:
-    image: postgres:15.1
+    image: postgres:13.2
     restart:
       always
     networks:

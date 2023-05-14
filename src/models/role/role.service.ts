@@ -12,6 +12,6 @@ export class RoleService extends TypeOrmQueryService<RoleEntity> {
   }
 
   public findManyByCodes(codes: Roles[], opts?: FindOptionsWhere<RoleEntity>): Promise<RoleEntity[]> {
-    return this.repo.findBy({ code: In(codes), ...opts });
+    return this.repo.find({ where: { code: In(codes), ...opts }, relations: { permissions: true } });
   }
 }

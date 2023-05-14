@@ -10,7 +10,7 @@ export function Authorize<DTO>(optsOrAuthorizerOrClass?: CustomAuthorizer<DTO> |
       optsOrAuthorizerOrClass || {
         authorize: (context: Context) => {
           const permission = find(
-            context.req.user.permissions,
+            context.req.user?.permissions,
             permission => permission.action === Actions.READ && permission.subject === target.name && permission.conditions !== null,
           );
           return permission ? JSON.parse(JSON.stringify(permission.conditions).replace("$", "")) : undefined;

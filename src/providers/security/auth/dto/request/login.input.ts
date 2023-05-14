@@ -1,5 +1,10 @@
-import { InputType, PartialType } from "@nestjs/graphql";
-import { CreateUserInput } from "../../../../../models/user/dto/create-user.input";
+import { Field, InputType, OmitType } from "@nestjs/graphql";
+import { IsEmailI18N } from "../../../../i18n/i18n.decorators";
+import { SignupInput } from "./signup.input";
 
 @InputType()
-export class LoginInput extends PartialType(CreateUserInput) {}
+export class LoginInput extends OmitType(SignupInput, ["email", "passwordConfirmation"]) {
+  @IsEmailI18N()
+  @Field()
+  email!: string;
+}

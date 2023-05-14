@@ -7,7 +7,6 @@ export function getContextObject(context?: ExecutionContext | ArgumentsHost): an
     case "http":
       return context.switchToHttp().getRequest();
     case "graphql":
-      console.log("called");
       return context.getArgs()[2];
     case "rpc":
       return context.switchToRpc().getContext();

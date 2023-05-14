@@ -15,6 +15,14 @@ export class EmailAddressConfirmationResolver {
   constructor(private readonly confirmationService: EmailAddressConfirmationService) {}
 
   @UseGuards(AccessTokenAuthGuard, AccessGuard)
+  @CheckAbility(Actions.UPDATE, EmailAddressConfirmationEntity)
+  @Mutation(() => EmailAddressConfirmationEntity)
+  public async confirmEmail(@CaslUser() userProxy: UserProxy<UserEntity>): Promise<EmailAddressConfirmationEntity> {
+    const user = await userProxy.getFromHook();
+    return this.confirmationService.sendConfirmationEmail(user);
+  }
+
+  @UseGuards(AccessTokenAuthGuard, AccessGuard)
   @CheckAbility(Actions.CREATE, EmailAddressConfirmationEntity)
   @Mutation(() => EmailAddressConfirmationEntity)
   public async sendConfirmationEmail(@CaslUser() userProxy: UserProxy<UserEntity>): Promise<EmailAddressConfirmationEntity> {

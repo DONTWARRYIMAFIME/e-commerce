@@ -3,21 +3,20 @@ import { TypeOrmQueryService } from "@nestjs-query/query-typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
 import { FileUpload } from "graphql-upload";
 import { join } from "path";
-import { FindOptionsWhere, Repository } from "typeorm";
+import { DeepPartial, FindOptionsWhere, Repository } from "typeorm";
 import { Id } from "../../common/types/id.type";
-import { AddressService } from "../address/address.service";
 import { USERS_FOLDER } from "../media/media.constants";
 import { MediaService } from "../media/media.service";
 import { UserEntity } from "./entities/user.entity";
 
 @QueryService(UserEntity)
 export class UserService extends TypeOrmQueryService<UserEntity> {
-  constructor(@InjectRepository(UserEntity) repo: Repository<UserEntity>, private readonly mediaService: MediaService, private readonly addressService: AddressService) {
+  constructor(@InjectRepository(UserEntity) repo: Repository<UserEntity>, private readonly mediaService: MediaService) {
     super(repo, { useSoftDelete: true });
   }
 
   public async findById(id: Id): Promise<UserEntity> {
-    return this.repo.findOneBy({ id });
+    return id && this.repo.findOneBy({ id });
   }
 
   public findOneByIdOrFail(id: Id, opts?: FindOptionsWhere<UserEntity>): Promise<UserEntity> {
@@ -34,14 +33,11 @@ export class UserService extends TypeOrmQueryService<UserEntity> {
     return super.updateOne(id, { avatar: media });
   }
 
-  // public async addAddressesToUser(id: Id, update: DeepPartial<UserEntity>): Promise<UserEntity> {
-  //   const addresses = await this.addressService.createMany(update.addresses);
-  //   return super.addRelations("addresses", id, map(addresses, "id"));
-  // }
-  //
-  // public async removeAddressesFromUser(id: Id, update: DeepPartial<UserEntity>): Promise<UserEntity> {
-  //   const ids = map(update.addresses, "id");
-  //   await this.addressService.deleteMany({ id: { in: ids } });
-  //   return this.findOneByIdOrFail(id);
-  // }
+  public createOne(record: DeepPartial<UserEntity>): Promise<UserEntity> {
+    return super.createOne(record);
+  }
+
+  public resetPassword(id: Id, record: Pick<UserEntity, "password">): Promise<UserEntity> {
+    return super.updateOne(id, { password: record.password });
+  }
 }

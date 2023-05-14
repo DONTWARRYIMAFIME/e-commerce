@@ -6,6 +6,7 @@ import { AccessTokenAuthGuard } from "../../providers/security/auth/guards/acces
 import { AccessGuard } from "../../providers/security/casl/access.guard";
 import { Actions } from "../../providers/security/casl/actions.enum";
 import { CheckAbility } from "../../providers/security/casl/decorators/check-ability";
+import { ResetPasswordArgsType } from "./dto/reset-password.input";
 import { SelectUserArgsType } from "./dto/select-user.input";
 import { UserEntity } from "./entities/user.entity";
 import { UserHook } from "./hooks/user.hook";
@@ -28,5 +29,13 @@ export class UserResolver {
   public async updateAvatar(@Args() args: SelectUserArgsType, @Args("file", { type: () => GraphQLUpload }) file: FileUpload): Promise<UserEntity> {
     const { id } = args.input;
     return this.userService.uploadAvatar(id, file);
+  }
+
+  @UseGuards(AccessTokenAuthGuard, AccessGuard)
+  @CheckAbility(Actions.UPDATE, UserEntity, UserHook)
+  @Mutation(() => UserEntity)
+  public resetPassword(@Args() args: ResetPasswordArgsType): Promise<UserEntity> {
+    const { id, update } = args.input;
+    return this.userService.resetPassword(id as Id, update);
   }
 }
