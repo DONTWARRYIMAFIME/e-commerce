@@ -1,4 +1,4 @@
-import { NestjsQueryGraphQLModule } from "@nestjs-query/query-graphql";
+import { NestjsQueryGraphQLModule, PagingStrategies } from "@nestjs-query/query-graphql";
 import { NestjsQueryTypeOrmModule } from "@nestjs-query/query-typeorm";
 import { Module } from "@nestjs/common";
 import { IsPublic } from "../../providers/security/auth/decorators/is-public.decorator";
@@ -23,6 +23,8 @@ import { CategoryEntity } from "./entities/category.entity";
           CreateDTOClass: CreateCategoryInput,
           UpdateDTOClass: UpdateCategoryInput,
           ServiceClass: CategoryService,
+          pagingStrategy: PagingStrategies.OFFSET,
+          enableTotalCount: true,
           guards: [AccessGuard],
           read: {
             decorators: [IsPublic()],

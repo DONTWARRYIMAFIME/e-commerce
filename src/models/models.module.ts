@@ -21,6 +21,8 @@ import { PickupPointModule } from "./pickup-point/pickup-point.module";
 import { PriceModule } from "./price/price.module";
 import { ProductVariantModule } from "./product-variant/product-variant.module";
 import { ProductModule } from "./product/product.module";
+import { PromotionProductModule } from "./promotion-product/promotion-product.module";
+import { PromotionModule } from "./promotion/promotion.module";
 import { RoleModule } from "./role/role.module";
 import { SizeModule } from "./size/size.module";
 import { UserAddressModule } from "./user-address/user-address.module";
@@ -60,6 +62,8 @@ import { WishlistModule } from "./wishlist/wishlist.module";
     UserAddressModule,
     CommentModule,
     PaymentIntentModule,
+    PromotionModule,
+    PromotionProductModule,
   ],
 })
 export class ModelsModule {}

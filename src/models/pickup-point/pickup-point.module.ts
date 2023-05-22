@@ -1,4 +1,4 @@
-import { NestjsQueryGraphQLModule } from "@nestjs-query/query-graphql";
+import { NestjsQueryGraphQLModule, PagingStrategies } from "@nestjs-query/query-graphql";
 import { NestjsQueryTypeOrmModule } from "@nestjs-query/query-typeorm";
 import { Module } from "@nestjs/common";
 import { AccessGuard } from "../../providers/security/casl/access.guard";
@@ -21,6 +21,8 @@ import { PickupPointService } from "./pickup-point.service";
           CreateDTOClass: CreatePickupPointInput,
           UpdateDTOClass: UpdatePickupPointInput,
           ServiceClass: PickupPointService,
+          pagingStrategy: PagingStrategies.OFFSET,
+          enableTotalCount: true,
           guards: [AccessGuard],
           read: {
             decorators: [CheckAbility(Actions.READ, PickupPointEntity)],

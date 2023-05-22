@@ -1,5 +1,5 @@
 import { FilterableField } from "@nestjs-query/query-graphql";
-import { Unique, Column } from "typeorm";
+import { Column, Unique } from "typeorm";
 import { Entity, ObjectType } from "../../../common/decorators";
 import { Authorize } from "../../../common/decorators/graphql/authorize.decorator";
 import { BaseEntity } from "../../base.entity";

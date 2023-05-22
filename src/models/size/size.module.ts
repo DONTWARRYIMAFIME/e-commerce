@@ -1,6 +1,7 @@
-import { NestjsQueryGraphQLModule } from "@nestjs-query/query-graphql";
+import { NestjsQueryGraphQLModule, PagingStrategies } from "@nestjs-query/query-graphql";
 import { NestjsQueryTypeOrmModule } from "@nestjs-query/query-typeorm";
 import { Module } from "@nestjs/common";
+import { IsPublic } from "../../providers/security/auth/decorators/is-public.decorator";
 import { AccessGuard } from "../../providers/security/casl/access.guard";
 import { Actions } from "../../providers/security/casl/actions.enum";
 import { CheckAbility } from "../../providers/security/casl/decorators/check-ability";
@@ -21,9 +22,11 @@ import { SizeService } from "./size.service";
           CreateDTOClass: CreateSizeInput,
           UpdateDTOClass: UpdateSizeInput,
           ServiceClass: SizeService,
+          pagingStrategy: PagingStrategies.OFFSET,
+          enableTotalCount: true,
           guards: [AccessGuard],
           read: {
-            decorators: [CheckAbility(Actions.READ, SizeEntity)],
+            decorators: [IsPublic()],
           },
           create: {
             decorators: [CheckAbility(Actions.CREATE, SizeEntity)],

@@ -9,6 +9,7 @@ import { AddressEntity } from "../../address/entities/address.entity";
 import { BaseEntity } from "../../base.entity";
 import { DeliveryMethodEntity } from "../../delivery-method/entities/delivery-method.entity";
 import { OrderItemEntity } from "../../order-item/entities/order-item.entity";
+import { PaymentIntentEntity } from "../../payment-intent/entities/payment-intent.entity";
 import { PaymentMethodEntity } from "../../payment-method/entities/payment-method.entity";
 import { PriceEntity } from "../../price/entities/price.entity";
 import { UserEntity } from "../../user/entities/user.entity";
@@ -23,6 +24,7 @@ import { OrderStatus } from "../enums/order-status.enum";
 @FilterableRelation("deliveryPrice", () => PriceEntity)
 @FilterableRelation("taxPrice", () => PriceEntity)
 @FilterableRelation("totalPrice", () => PriceEntity)
+@FilterableRelation("paymentIntent", () => PaymentIntentEntity, { nullable: true })
 @FilterableUnPagedRelation("orderItems", () => OrderItemEntity)
 @ObjectType()
 @Index("INX_order_index", ["user"])
@@ -110,6 +112,18 @@ export class OrderEntity extends BaseEntity {
   })
   @JoinColumn()
   totalPrice!: PriceEntity;
+
+  @FilterableField(() => ID)
+  @Column()
+  orderId!: Id;
+
+  @OneToOne(() => PaymentIntentEntity, {
+    eager: true,
+    cascade: true,
+    nullable: true,
+  })
+  @JoinColumn()
+  paymentIntent!: PaymentIntentEntity;
 
   @OneToMany(() => OrderItemEntity, orderItems => orderItems.order, { cascade: true })
   orderItems!: OrderItemEntity[];

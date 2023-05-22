@@ -6,18 +6,15 @@ import { Authorize } from "../../../common/decorators/graphql/authorize.decorato
 import { FilterableRelation } from "../../../common/decorators/graphql/relation.decorator";
 import { Id } from "../../../common/types/id.type";
 import { BaseEntity } from "../../base.entity";
-import { OrderEntity } from "../../order/entities/order.entity";
 import { PaymentMethodEntity } from "../../payment-method/entities/payment-method.entity";
 import { PriceEntity } from "../../price/entities/price.entity";
 
 @Authorize()
 @FilterableRelation("paymentMethod", () => PaymentMethodEntity)
-@FilterableRelation("order", () => OrderEntity)
 @FilterableRelation("price", () => PaymentMethodEntity)
 @ObjectType()
 @Unique("UNQ_payment_intent_client_secret", ["clientSecret"])
 @Index("INX_payment_intent_payment_method", ["paymentMethod"])
-@Index("INX_payment_intent_order", ["order"])
 @Entity()
 export class PaymentIntentEntity extends BaseEntity {
   @FilterableField()
@@ -33,16 +30,6 @@ export class PaymentIntentEntity extends BaseEntity {
     onDelete: "CASCADE",
   })
   paymentMethod!: PaymentMethodEntity;
-
-  @FilterableField(() => ID)
-  @Column()
-  orderId!: Id;
-
-  @ManyToOne(() => OrderEntity, {
-    onUpdate: "CASCADE",
-    onDelete: "CASCADE",
-  })
-  order!: OrderEntity;
 
   @FilterableField(() => ID)
   @Column()

@@ -1,4 +1,4 @@
-import { NestjsQueryGraphQLModule } from "@nestjs-query/query-graphql";
+import { NestjsQueryGraphQLModule, PagingStrategies } from "@nestjs-query/query-graphql";
 import { NestjsQueryTypeOrmModule } from "@nestjs-query/query-typeorm";
 import { Global, Module } from "@nestjs/common";
 import { SecurityConfigModule } from "../../config/security/security.module";
@@ -27,6 +27,8 @@ import { UserService } from "./user.service";
           CreateDTOClass: CreateUserInput,
           UpdateDTOClass: UpdateUserInput,
           ServiceClass: UserService,
+          pagingStrategy: PagingStrategies.OFFSET,
+          enableTotalCount: true,
           guards: [AccessGuard],
           read: {
             decorators: [CheckAbility(Actions.READ, UserEntity)],

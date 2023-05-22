@@ -1,4 +1,4 @@
-import { NestjsQueryGraphQLModule } from "@nestjs-query/query-graphql";
+import { NestjsQueryGraphQLModule, PagingStrategies } from "@nestjs-query/query-graphql";
 import { NestjsQueryTypeOrmModule } from "@nestjs-query/query-typeorm";
 import { Module } from "@nestjs/common";
 import { AppConfigModule } from "../../config/app/app.module";
@@ -18,6 +18,8 @@ import { UserCreatedListener } from "./listeners/user-create.listener";
         {
           DTOClass: EmailAddressConfirmationEntity,
           EntityClass: EmailAddressConfirmationEntity,
+          pagingStrategy: PagingStrategies.OFFSET,
+          enableTotalCount: true,
           create: { disabled: true },
           update: { disabled: true },
           delete: { disabled: true },

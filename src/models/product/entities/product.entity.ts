@@ -1,6 +1,7 @@
 import { FilterableField } from "@nestjs-query/query-graphql";
-import { ID } from "@nestjs/graphql";
-import { BeforeInsert, Column, Index, JoinTable, ManyToMany, ManyToOne, OneToMany } from "typeorm";
+import { Field, ID } from "@nestjs/graphql";
+import { map, uniqBy } from "lodash";
+import { AfterLoad, BeforeInsert, Column, Index, JoinTable, ManyToMany, ManyToOne, OneToMany } from "typeorm";
 import { Entity, ObjectType } from "../../../common/decorators";
 import { Authorize } from "../../../common/decorators/graphql/authorize.decorator";
 import { FilterableRelation, FilterableUnPagedRelation, UnPagedRelation } from "../../../common/decorators/graphql/relation.decorator";
@@ -10,6 +11,7 @@ import { BaseEntity } from "../../base.entity";
 import { BrandEntity } from "../../brand/entities/brand.entity";
 import { CategoryEntity } from "../../category/entities/category.entity";
 import { ColorEntity } from "../../color/entities/color.entity";
+import { CommentEntity } from "../../comment/entities/comment.entity";
 import { MediaEntity } from "../../media/entities/media.entity";
 import { ProductVariantEntity } from "../../product-variant/entities/product-variant.entity";
 import { SizeEntity } from "../../size/entities/size.entity";
@@ -19,6 +21,7 @@ import { SizeEntity } from "../../size/entities/size.entity";
 @FilterableRelation("brand", () => BrandEntity)
 @FilterableUnPagedRelation("productVariants", () => ProductVariantEntity)
 @UnPagedRelation("media", () => MediaEntity)
+@FilterableUnPagedRelation("comments", () => CommentEntity)
 @ObjectType()
 @Index("INX_product_category", ["category"])
 @Index("INX_product_brand", ["brand"])
@@ -64,6 +67,22 @@ export class ProductEntity extends BaseEntity {
   })
   @JoinTable({ name: "product_media" })
   media!: MediaEntity[];
+
+  @Field(() => [ColorEntity], { defaultValue: [] })
+  colors!: ColorEntity[];
+
+  @Field(() => [SizeEntity], { defaultValue: [] })
+  sizes!: SizeEntity[];
+
+  @OneToMany(() => CommentEntity, comments => comments.product)
+  comments!: CommentEntity[];
+
+  @AfterLoad()
+  private async afterLoad() {
+    const variants = await ProductVariantEntity.findBy({ productId: this.id });
+    this.colors = uniqBy(map(variants, "color"), productVariant => productVariant.id).reverse();
+    this.sizes = uniqBy(map(variants, "size"), productVariant => productVariant.id).reverse();
+  }
 
   @BeforeInsert()
   private async generateSKU() {

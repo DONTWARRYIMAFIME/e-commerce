@@ -1,6 +1,6 @@
 import { FilterableField } from "@nestjs-query/query-graphql";
 import { ID } from "@nestjs/graphql";
-import { Column, Index, JoinColumn, ManyToOne, OneToOne, Unique } from "typeorm";
+import { AfterLoad, Column, Index, JoinColumn, ManyToOne, OneToOne, Unique } from "typeorm";
 import { Entity, ObjectType } from "../../../common/decorators";
 import { Authorize } from "../../../common/decorators/graphql/authorize.decorator";
 import { FilterableRelation } from "../../../common/decorators/graphql/relation.decorator";
@@ -10,6 +10,8 @@ import { ColorEntity } from "../../color/entities/color.entity";
 import { PriceEntity } from "../../price/entities/price.entity";
 import { ProductEntity } from "../../product/entities/product.entity";
 import { SizeEntity } from "../../size/entities/size.entity";
+import { WarehouseItemEntity } from "../../warehouse-item/entities/warehouse-item.entity";
+import { WarehouseStatus } from "../../warehouse/enums/warehouse-status.enum";
 
 @Authorize()
 @FilterableRelation("product", () => ProductEntity)
@@ -61,4 +63,15 @@ export class ProductVariantEntity extends BaseEntity {
   })
   @JoinColumn()
   price!: PriceEntity;
+
+  @FilterableField({ defaultValue: 0 })
+  stock!: number;
+
+  @AfterLoad()
+  private async afterLoad() {
+    const stock = await WarehouseItemEntity.sum("available", { productVariantId: this.id, warehouse: { status: WarehouseStatus.ACTIVE } });
+    if (stock) {
+      this.stock = stock;
+    }
+  }
 }

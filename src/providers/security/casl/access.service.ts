@@ -32,8 +32,6 @@ export class AccessService {
       return false;
     }
 
-    console.log("user", user);
-
     const userAbilities = this.abilityFactory.createAbility(user.permissions as any);
     const relevantRules = userAbilities.rulesFor(ability.action, ability.subject.name);
 

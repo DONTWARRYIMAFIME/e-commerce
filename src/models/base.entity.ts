@@ -9,11 +9,11 @@ export class BaseEntity extends TBaseEntity {
   @PrimaryGeneratedColumn("uuid")
   id!: Id;
 
-  @FilterableField(() => GraphQLISODateTime, { filterOnly: true })
+  @FilterableField(() => GraphQLISODateTime)
   @CreateDateColumn()
   createdAt!: Date;
 
-  @FilterableField(() => GraphQLISODateTime, { filterOnly: true })
+  @FilterableField(() => GraphQLISODateTime)
   @UpdateDateColumn()
   updatedAt!: Date;
 }

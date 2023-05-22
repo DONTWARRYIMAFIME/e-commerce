@@ -23,6 +23,14 @@ export class MediaEntity extends BaseEntity {
   @Column({ type: "text" })
   url!: string;
 
+  @FilterableField({ nullable: true })
+  @Column({ nullable: true })
+  width?: number;
+
+  @FilterableField({ nullable: true })
+  @Column({ nullable: true })
+  height?: number;
+
   @FilterableField(() => MediaType)
   @Column()
   format!: MediaType;

@@ -22,16 +22,16 @@ export class MediaService extends TypeOrmQueryService<MediaEntity> {
 
   public async createOneMedia(record: CreateOneMedia): Promise<MediaEntity> {
     const { file, path } = record;
-    const { public_id: publicId, url, resource_type: format } = await this.cloudinaryService.uploadFile(file.createReadStream(), extname(file.filename), path);
-    return super.createOne({ publicId, filename: basename(publicId), url, format });
+    const { public_id: publicId, url, resource_type: format, width, height } = await this.cloudinaryService.uploadFile(file.createReadStream(), extname(file.filename), path);
+    return super.createOne({ publicId, filename: basename(publicId), url, format, width, height });
   }
 
   public async updateOneMedia(record: UpdateOneMedia): Promise<MediaEntity> {
     const { id, file, path } = record;
     const media = await this.findByIdOrFail(id);
     await this.cloudinaryService.removeFile(media.publicId);
-    const { public_id: publicId, url, resource_type: format } = await this.cloudinaryService.uploadFile(file.createReadStream(), extname(file.filename), path);
-    return super.updateOne(id, { publicId, filename: basename(publicId), url, format });
+    const { public_id: publicId, url, resource_type: format, width, height } = await this.cloudinaryService.uploadFile(file.createReadStream(), extname(file.filename), path);
+    return super.updateOne(id, { publicId, filename: basename(publicId), url, format, width, height });
   }
 
   public async saveOneMedia(record: SaveOneMedia): Promise<MediaEntity> {
