@@ -13,6 +13,21 @@ export class CreateCartInput implements Partial<CartEntity> {
   userId!: Id;
 
   @IsOptional()
-  @Field(() => [UpdateCartItemInput], { defaultValue: [] })
+  @IsUUIDI18N()
+  @Field({ nullable: true })
+  deliveryAddressId!: Id;
+
+  @IsOptional()
+  @IsUUIDI18N()
+  @Field({ nullable: true })
+  deliveryMethodId!: Id;
+
+  @IsOptional()
+  @IsUUIDI18N()
+  @Field({ nullable: true })
+  paymentMethodId!: Id;
+
+  @IsOptional()
+  @Field(() => [UpdateCartItemInput], { nullable: true })
   cartItems!: CartItemEntity[];
 }

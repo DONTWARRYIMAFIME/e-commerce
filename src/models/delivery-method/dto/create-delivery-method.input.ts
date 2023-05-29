@@ -5,13 +5,13 @@ import { CreatePriceInput } from "../../price/dto/create-price.input";
 import { PriceEntity } from "../../price/entities/price.entity";
 import { DeliveryMethodEntity } from "../entities/delivery-method.entity";
 import { DeliveryMethodStatus } from "../enums/delivery-method-status.enum";
-import { DeliveryMethod } from "../enums/delivery-method.enum";
+import { DeliveryMethods } from "../enums/delivery-method.enum";
 
 @InputType()
 export class CreateDeliveryMethodInput implements Partial<DeliveryMethodEntity> {
-  @IsEnumI18N(DeliveryMethod)
+  @IsEnumI18N(DeliveryMethods)
   @Field()
-  code!: DeliveryMethod;
+  code!: DeliveryMethods;
 
   @LengthI18N(2, 64)
   @Field()

@@ -1,6 +1,6 @@
 import { FilterableField } from "@nestjs-query/query-graphql";
 import { ID } from "@nestjs/graphql";
-import { Column, Index, ManyToOne, OneToOne, Unique } from "typeorm";
+import { Column, Index, JoinColumn, ManyToOne, OneToOne, Unique } from "typeorm";
 import { Entity, ObjectType } from "../../../common/decorators";
 import { Authorize } from "../../../common/decorators/graphql/authorize.decorator";
 import { FilterableRelation } from "../../../common/decorators/graphql/relation.decorator";
@@ -11,7 +11,7 @@ import { PriceEntity } from "../../price/entities/price.entity";
 
 @Authorize()
 @FilterableRelation("paymentMethod", () => PaymentMethodEntity)
-@FilterableRelation("price", () => PaymentMethodEntity)
+@FilterableRelation("price", () => PriceEntity, { nullable: true })
 @ObjectType()
 @Unique("UNQ_payment_intent_client_secret", ["clientSecret"])
 @Index("INX_payment_intent_payment_method", ["paymentMethod"])
@@ -26,18 +26,20 @@ export class PaymentIntentEntity extends BaseEntity {
   paymentMethodId!: Id;
 
   @ManyToOne(() => PaymentMethodEntity, {
+    eager: true,
     onUpdate: "CASCADE",
     onDelete: "CASCADE",
   })
   paymentMethod!: PaymentMethodEntity;
 
-  @FilterableField(() => ID)
-  @Column()
+  @FilterableField(() => ID, { nullable: true })
+  @Column({ nullable: true })
   priceId!: Id;
 
   @OneToOne(() => PriceEntity, {
     eager: true,
     cascade: true,
   })
+  @JoinColumn()
   price!: PriceEntity;
 }

@@ -22,5 +22,6 @@ export class CreateCommentInput implements Partial<CommentEntity> {
   @IsNumber()
   @Min(1.0)
   @Max(5.0)
+  @Field()
   rating!: number;
 }

@@ -4,15 +4,18 @@ import { Module } from "@nestjs/common";
 import { AccessGuard } from "../../providers/security/casl/access.guard";
 import { Actions } from "../../providers/security/casl/actions.enum";
 import { CheckAbility } from "../../providers/security/casl/decorators/check-ability";
+import { CartModule } from "../cart/cart.module";
+import { PaymentMethodModule } from "../payment-method/payment-method.module";
 import { CreatePaymentIntentInput } from "./dto/create-payment-intent.input";
 import { UpdatePaymentIntentInput } from "./dto/update-payment-intent.input";
 import { PaymentIntentEntity } from "./entities/payment-intent.entity";
+import { PaymentIntentResolver } from "./payment-intent.resolver";
 import { PaymentIntentService } from "./payment-intent.service";
 
 @Module({
   imports: [
     NestjsQueryGraphQLModule.forFeature({
-      imports: [NestjsQueryTypeOrmModule.forFeature([PaymentIntentEntity])],
+      imports: [CartModule, PaymentMethodModule, NestjsQueryTypeOrmModule.forFeature([PaymentIntentEntity])],
       services: [PaymentIntentService],
       resolvers: [
         {
@@ -43,7 +46,7 @@ import { PaymentIntentService } from "./payment-intent.service";
       ],
     }),
   ],
-  providers: [PaymentIntentService],
+  providers: [PaymentIntentResolver, PaymentIntentService],
   exports: [PaymentIntentService],
 })
 export class PaymentIntentModule {}

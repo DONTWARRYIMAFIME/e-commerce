@@ -1,16 +1,17 @@
 import { Injectable } from "@nestjs/common";
 import { PassportStrategy } from "@nestjs/passport";
-import { omit } from "lodash";
 import { Strategy } from "passport-jwt";
 import { decodeFromBase64 } from "../../../../common/helpers/base64.helper";
 import { SecurityConfigService } from "../../../../config/security/security.service";
+import { UserEntity } from "../../../../models/user/entities/user.entity";
+import { UserService } from "../../../../models/user/user.service";
 import { AuthCookieService } from "../auth-cookie.service";
 import { AuthenticationType } from "../auth.enum";
-import { CachedUser, TokenPayload } from "../types/token-payload.interface";
+import { TokenPayload } from "../types/token-payload.interface";
 
 @Injectable()
 export class RefreshTokenStrategy extends PassportStrategy(Strategy, AuthenticationType.JWT_REFRESH) {
-  constructor(private readonly cookiesService: AuthCookieService, private readonly config: SecurityConfigService) {
+  constructor(private readonly cookiesService: AuthCookieService, private readonly config: SecurityConfigService, private readonly userService: UserService) {
     const publicKey = decodeFromBase64(config.refreshTokenPublicKey);
 
     super({
@@ -21,7 +22,7 @@ export class RefreshTokenStrategy extends PassportStrategy(Strategy, Authenticat
     });
   }
 
-  public validate(payload: TokenPayload): CachedUser {
-    return omit(payload, "iat", "exp");
+  public validate(payload: TokenPayload): Promise<UserEntity> {
+    return this.userService.findById(payload.sub);
   }
 }

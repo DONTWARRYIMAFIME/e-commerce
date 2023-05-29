@@ -4,7 +4,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { FindOptionsWhere, Repository } from "typeorm";
 import { Id } from "../../common/types/id.type";
 import { DeliveryMethodEntity } from "./entities/delivery-method.entity";
-import { DeliveryMethod } from "./enums/delivery-method.enum";
+import { DeliveryMethods } from "./enums/delivery-method.enum";
 
 @QueryService(DeliveryMethodEntity)
 export class DeliveryMethodService extends TypeOrmQueryService<DeliveryMethodEntity> {
@@ -16,7 +16,7 @@ export class DeliveryMethodService extends TypeOrmQueryService<DeliveryMethodEnt
     return this.repo.findOneBy({ id, ...opts });
   }
 
-  public findOneByCode(code: DeliveryMethod, opts?: FindOptionsWhere<DeliveryMethodEntity>): Promise<DeliveryMethodEntity> {
+  public findOneByCode(code: DeliveryMethods, opts?: FindOptionsWhere<DeliveryMethodEntity>): Promise<DeliveryMethodEntity> {
     return this.repo.findOneBy({ code, ...opts });
   }
 }

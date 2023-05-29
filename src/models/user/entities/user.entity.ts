@@ -128,7 +128,7 @@ export class UserEntity extends BaseEntity {
   }
 
   private loadPermissions() {
-    this.permissions = this.roles.flatMap(role => {
+    this.permissions = this.roles?.flatMap(role => {
       return role.permissions?.map(permission => {
         return {
           ...permission,

@@ -22,7 +22,7 @@ export class CreateAddressInput implements Partial<AddressEntity> {
   street?: string;
 
   @IsOptional()
-  @LengthI18N(2, 12)
+  @LengthI18N(1, 12)
   @Field({ nullable: true })
   building?: string;
 

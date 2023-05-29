@@ -1,18 +1,22 @@
+import { SortDirection } from "@nestjs-query/core";
 import { NestjsQueryGraphQLModule, PagingStrategies } from "@nestjs-query/query-graphql";
 import { NestjsQueryTypeOrmModule } from "@nestjs-query/query-typeorm";
 import { Module } from "@nestjs/common";
+import { IsPublic } from "../../providers/security/auth/decorators/is-public.decorator";
 import { AccessGuard } from "../../providers/security/casl/access.guard";
 import { Actions } from "../../providers/security/casl/actions.enum";
 import { CheckAbility } from "../../providers/security/casl/decorators/check-ability";
+import { MediaModule } from "../media/media.module";
 import { CreatePaymentMethodInput } from "./dto/create-payment-method.input";
 import { UpdatePaymentMethodInput } from "./dto/update-payment-method.input";
 import { PaymentMethodEntity } from "./entities/payment-method.entity";
+import { PaymentMethodResolver } from "./payment-method.resolver";
 import { PaymentMethodService } from "./payment-method.service";
 
 @Module({
   imports: [
     NestjsQueryGraphQLModule.forFeature({
-      imports: [NestjsQueryTypeOrmModule.forFeature([PaymentMethodEntity])],
+      imports: [MediaModule, NestjsQueryTypeOrmModule.forFeature([PaymentMethodEntity])],
       services: [PaymentMethodService],
       resolvers: [
         {
@@ -25,12 +29,10 @@ import { PaymentMethodService } from "./payment-method.service";
           enableTotalCount: true,
           guards: [AccessGuard],
           read: {
-            decorators: [CheckAbility(Actions.READ, PaymentMethodEntity)],
+            decorators: [IsPublic()],
+            defaultSort: [{ field: "createdAt", direction: SortDirection.ASC }],
           },
-          create: {
-            decorators: [CheckAbility(Actions.CREATE, PaymentMethodEntity)],
-            many: { disabled: true },
-          },
+          create: { disabled: true },
           update: {
             decorators: [CheckAbility(Actions.UPDATE, PaymentMethodEntity)],
             many: { disabled: true },
@@ -43,7 +45,7 @@ import { PaymentMethodService } from "./payment-method.service";
       ],
     }),
   ],
-  providers: [PaymentMethodService],
+  providers: [PaymentMethodResolver, PaymentMethodService],
   exports: [PaymentMethodService],
 })
 export class PaymentMethodModule {}

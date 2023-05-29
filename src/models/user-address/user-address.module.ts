@@ -1,3 +1,4 @@
+import { SortDirection } from "@nestjs-query/core";
 import { NestjsQueryGraphQLModule, PagingStrategies } from "@nestjs-query/query-graphql";
 import { NestjsQueryTypeOrmModule } from "@nestjs-query/query-typeorm";
 import { Module } from "@nestjs/common";
@@ -27,6 +28,7 @@ import { UserAddressService } from "./user-address.service";
           guards: [AccessGuard],
           read: {
             decorators: [CheckAbility(Actions.READ, UserAddressEntity)],
+            defaultSort: [{ field: "createdAt", direction: SortDirection.DESC }],
           },
           create: {
             decorators: [CheckAbility(Actions.CREATE, UserAddressEntity)],

@@ -326,7 +326,7 @@ INSERT INTO "role_permission" (role_id, permission_id)
 SELECT r.id, p.id FROM "role" r CROSS JOIN "permission" p WHERE r.code = 'customer' AND p.action = 'update' AND p.subject = 'UserEntity' AND p.conditions = '{"id": { "$eq": "{{userId}}" }}';
 INSERT INTO "role_permission" (role_id, permission_id)
 SELECT r.id, p.id FROM "role" r CROSS JOIN "permission" p WHERE r.code = 'customer' AND p.action = 'delete' AND p.subject = 'UserEntity' AND p.conditions = '{"id": { "$eq": "{{userId}}" }}';
- ps
+
 INSERT INTO "role_permission" (role_id, permission_id)
 SELECT r.id, p.id FROM "role" r CROSS JOIN "permission" p WHERE r.code = 'customer' AND p.action = 'read' AND p.subject = 'UserAddressEntity' AND p.conditions = '{"userId": { "$eq": "{{userId}}" }}';
 INSERT INTO "role_permission" (role_id, permission_id)
@@ -341,10 +341,10 @@ SELECT r.id, p.id FROM "role" r CROSS JOIN "permission" p WHERE r.code = 'custom
 INSERT INTO "role_permission" (role_id, permission_id)
 SELECT r.id, p.id FROM "role" r CROSS JOIN "permission" p WHERE r.code = 'customer' AND p.action = 'update' AND p.subject = 'WishlistEntity' AND p.conditions = '{"userId": { "$eq": "{{userId}}" }}';
 
+-- Partner
 INSERT INTO "role_permission" (role_id, permission_id)
 SELECT r.id, p.id FROM "role" r CROSS JOIN "permission" p WHERE r.code = 'partner' AND p.action = 'read' AND p.subject = 'PromotionProductEntity';
 
--- Partner
 INSERT INTO "role_permission" (role_id, permission_id)
 SELECT r.id, p.id FROM "role" r CROSS JOIN "permission" p WHERE r.code = 'partner' AND p.action = 'create' AND p.subject = 'ProductEntity';
 INSERT INTO "role_permission" (role_id, permission_id)
@@ -456,7 +456,7 @@ WITH cart_price AS (
         SELECT 0
         RETURNING id
 )
-INSERT INTO "cart" (user_id, price_id)
+INSERT INTO "cart" (user_id, subtotal_price_id)
 SELECT u.id, cp.id FROM "cart_price" cp CROSS JOIN "user" u INNER JOIN "email_address" ea on ea.id = u.email_address_id WHERE ea.address = 'customer@gmail.com';
 
 WITH cart_price AS (
@@ -464,7 +464,7 @@ WITH cart_price AS (
         SELECT 0
         RETURNING id
 )
-INSERT INTO "cart" (user_id, price_id)
+INSERT INTO "cart" (user_id, subtotal_price_id)
 SELECT u.id, cp.id FROM "cart_price" cp CROSS JOIN "user" u INNER JOIN "email_address" ea on ea.id = u.email_address_id WHERE ea.address = 'partner@gmail.com';
 
 WITH cart_price AS (
@@ -472,7 +472,7 @@ WITH cart_price AS (
         SELECT 0
         RETURNING id
 )
-INSERT INTO "cart" (user_id, price_id)
+INSERT INTO "cart" (user_id, subtotal_price_id)
 SELECT u.id, cp.id FROM "cart_price" cp CROSS JOIN "user" u INNER JOIN "email_address" ea on ea.id = u.email_address_id WHERE ea.address = 'partner2@gmail.com';
 
 WITH cart_price AS (
@@ -480,7 +480,7 @@ WITH cart_price AS (
         SELECT 0
         RETURNING id
 )
-INSERT INTO "cart" (user_id, price_id)
+INSERT INTO "cart" (user_id, subtotal_price_id)
 SELECT u.id, cp.id FROM "cart_price" cp CROSS JOIN "user" u INNER JOIN "email_address" ea on ea.id = u.email_address_id WHERE ea.address = 'pull_and_bear_partner@gmail.com';
 
 
@@ -489,7 +489,7 @@ WITH cart_price AS (
         SELECT 0
         RETURNING id
 )
-INSERT INTO "cart" (user_id, price_id)
+INSERT INTO "cart" (user_id, subtotal_price_id)
 SELECT u.id, cp.id FROM "cart_price" cp CROSS JOIN "user" u INNER JOIN "email_address" ea on ea.id = u.email_address_id WHERE ea.address = 'customer_support@gmail.com';
 
 WITH cart_price AS (
@@ -497,7 +497,7 @@ WITH cart_price AS (
         SELECT 0
         RETURNING id
 )
-INSERT INTO "cart" (user_id, price_id)
+INSERT INTO "cart" (user_id, subtotal_price_id)
 SELECT u.id, cp.id FROM "cart_price" cp CROSS JOIN "user" u INNER JOIN "email_address" ea on ea.id = u.email_address_id WHERE ea.address = 'admin@gmail.com';
 
 -- Wishlist
@@ -543,6 +543,11 @@ SELECT 'Minsk', c.id FROM "country" c WHERE c.code = 'BY';
 INSERT INTO "city" (name, country_id)
 SELECT 'Mogilev', c.id FROM "country" c WHERE c.code = 'BY';
 
+INSERT INTO "city" (name, country_id)
+SELECT 'Moscow', c.id FROM "country" c WHERE c.code = 'RU';
+INSERT INTO "city" (name, country_id)
+SELECT 'Saint Petersburg', c.id FROM "country" c WHERE c.code = 'RU';
+
 -- Color
 INSERT INTO "color" (code, name, hex)
 VALUES
@@ -577,8 +582,8 @@ WITH delivery_method_price AS (
         SELECT 0
         RETURNING id
 )
-INSERT INTO "delivery_method" (code, name, price_id)
-SELECT 'pickup', 'Self-delivery', dmp.id FROM delivery_method_price dmp;
+INSERT INTO "delivery_method" (code, name, type, price_id)
+SELECT 'standard_pickup', 'Deliver to pickup point', 'pickup_point_delivery', dmp.id FROM delivery_method_price dmp;
 
 WITH delivery_method_price AS (
     INSERT INTO "price" (amount)
@@ -586,7 +591,7 @@ WITH delivery_method_price AS (
         RETURNING id
 )
 INSERT INTO "delivery_method" (code, name, price_id)
-SELECT 'standard', 'Standard', dmp.id FROM delivery_method_price dmp;
+SELECT 'standard_home', 'Standard Free', dmp.id FROM delivery_method_price dmp;
 
 WITH delivery_method_price AS (
     INSERT INTO "price" (amount)
@@ -702,10 +707,10 @@ INSERT INTO "category" (code, name, description, parent_id)
 SELECT 'pants', 'Pants', 'Pants', c.id FROM "category" c WHERE c.code = 'men';
 
 -- Payment methods
-INSERT INTO "payment_method" (code, name)
-VALUES
-    ('cash_on_delivery', 'Cash on delivery'),
-    ('card', 'Card');
+-- INSERT INTO "payment_method" (code, name)
+-- VALUES
+--     ('cash', 'Cash'),
+--     ('card', 'Card');
 
 -- Products
 INSERT INTO "product" (title, description, category_id, brand_id)

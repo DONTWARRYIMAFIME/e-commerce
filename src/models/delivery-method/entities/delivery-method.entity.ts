@@ -8,7 +8,8 @@ import { Id } from "../../../common/types/id.type";
 import { BaseEntity } from "../../base.entity";
 import { PriceEntity } from "../../price/entities/price.entity";
 import { DeliveryMethodStatus } from "../enums/delivery-method-status.enum";
-import { DeliveryMethod } from "../enums/delivery-method.enum";
+import { DeliveryMethodTypes } from "../enums/delivery-method-type";
+import { DeliveryMethods } from "../enums/delivery-method.enum";
 
 @Authorize()
 @FilterableRelation("price", () => PriceEntity)
@@ -20,13 +21,21 @@ export class DeliveryMethodEntity extends BaseEntity {
   @FilterableField()
   @Column({
     type: "enum",
-    enum: DeliveryMethod,
+    enum: DeliveryMethods,
   })
-  code!: DeliveryMethod;
+  code!: DeliveryMethods;
 
   @FilterableField()
   @Column({ length: 64 })
   name!: string;
+
+  @FilterableField()
+  @Column({
+    type: "enum",
+    enum: DeliveryMethodTypes,
+    default: DeliveryMethodTypes.HOME_DELIVERY,
+  })
+  type!: DeliveryMethodTypes;
 
   @FilterableField(() => DeliveryMethodStatus)
   @Column({

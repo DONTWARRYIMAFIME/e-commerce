@@ -1,12 +1,12 @@
 import { registerEnumType } from "@nestjs/graphql";
 
-export enum DeliveryMethod {
-  PICKUP = "pickup",
-  STANDARD = "standard",
+export enum DeliveryMethods {
+  STANDARD_PICKUP = "standard_pickup",
+  STANDARD_HOME = "standard_home",
   YANDEX = "yandex",
   DHL = "dhl",
 }
 
-registerEnumType(DeliveryMethod, {
+registerEnumType(DeliveryMethods, {
   name: "DeliveryMethod",
 });

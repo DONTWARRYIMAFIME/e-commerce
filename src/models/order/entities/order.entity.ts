@@ -113,16 +113,11 @@ export class OrderEntity extends BaseEntity {
   @JoinColumn()
   totalPrice!: PriceEntity;
 
-  @FilterableField(() => ID)
-  @Column()
-  orderId!: Id;
-
-  @OneToOne(() => PaymentIntentEntity, {
+  @ManyToOne(() => PaymentIntentEntity, {
     eager: true,
     cascade: true,
     nullable: true,
   })
-  @JoinColumn()
   paymentIntent!: PaymentIntentEntity;
 
   @OneToMany(() => OrderItemEntity, orderItems => orderItems.order, { cascade: true })

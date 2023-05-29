@@ -14,7 +14,7 @@ import { AccessTokenResponse } from "./dto/response/access-token.response";
 import { LoginResponse } from "./dto/response/login.response";
 import { SignupResponse } from "./dto/response/signup.response";
 import { JwtService } from "./jwt.service";
-import { CachedUser } from "./types/token-payload.interface";
+import { CachedUser, TokenPayload } from "./types/token-payload.interface";
 
 @Injectable()
 export class AuthService {
@@ -47,10 +47,7 @@ export class AuthService {
   }
 
   public async login(user: UserEntity, res: Response): Promise<LoginResponse> {
-    const payload = {
-      id: user.id,
-      permissions: user.permissions,
-    };
+    const payload: TokenPayload = { sub: user.id };
 
     // Create tokens
     const accessToken = this.jwtService.createAccessToken(payload);
@@ -90,7 +87,7 @@ export class AuthService {
   }
 
   public async reissueAccessToken(user: CachedUser): Promise<AccessTokenResponse> {
-    return { accessToken: this.jwtService.createAccessToken(user) };
+    return { accessToken: this.jwtService.createAccessToken({ sub: user.id }) };
   }
 
   public async logout(res: Response): Promise<boolean> {

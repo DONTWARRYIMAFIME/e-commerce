@@ -15,10 +15,6 @@ export class CreatePaymentIntentInput implements Partial<PaymentIntentEntity> {
   @Field(() => ID)
   paymentMethodId!: Id;
 
-  @IsUUIDI18N()
-  @Field(() => ID)
-  orderId!: Id;
-
   @IsNotEmptyObjectI18N()
   @Field(() => CreatePriceInput)
   price!: PriceEntity;

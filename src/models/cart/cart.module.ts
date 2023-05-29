@@ -5,6 +5,7 @@ import { AccessGuard } from "../../providers/security/casl/access.guard";
 import { Actions } from "../../providers/security/casl/actions.enum";
 import { CheckAbility } from "../../providers/security/casl/decorators/check-ability";
 import { CartItemModule } from "../cart-item/cart-item.module";
+import { DeliveryMethodModule } from "../delivery-method/delivery-method.module";
 import { CartResolver } from "./cart.resolver";
 import { CartService } from "./cart.service";
 import { CreateCartInput } from "./dto/create-cart.input";
@@ -16,7 +17,7 @@ import { UserCreatedListener } from "./listeners/user-create.listener";
 @Module({
   imports: [
     NestjsQueryGraphQLModule.forFeature({
-      imports: [CartItemModule, NestjsQueryTypeOrmModule.forFeature([CartEntity])],
+      imports: [CartItemModule, DeliveryMethodModule, NestjsQueryTypeOrmModule.forFeature([CartEntity])],
       services: [CartService],
       resolvers: [
         {
@@ -33,11 +34,10 @@ import { UserCreatedListener } from "./listeners/user-create.listener";
           },
           create: {
             decorators: [CheckAbility(Actions.CREATE, CartEntity)],
-            disabled: true,
+            // TODO: SET DISABLED
           },
           update: {
             decorators: [CheckAbility(Actions.UPDATE, CartEntity, CartHook)],
-            disabled: true,
           },
           delete: {
             decorators: [CheckAbility(Actions.DELETE, CartEntity, CartHook)],

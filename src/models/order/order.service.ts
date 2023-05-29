@@ -53,7 +53,7 @@ export class OrderService extends TypeOrmQueryService<OrderEntity> {
     const orderItems = await this.splitOrder(cart.id, cart.cartItems);
 
     // Subtotal price
-    const subtotalPrice = omit(cart.price, "id");
+    const subtotalPrice = omit(cart.subtotalPrice, "id");
 
     // Delivery price
     const deliveryMethod = await this.deliveryMethodService.findOneById(deliveryMethodId);

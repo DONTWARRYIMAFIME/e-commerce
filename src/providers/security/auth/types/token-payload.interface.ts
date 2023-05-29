@@ -4,7 +4,8 @@ import { AuthorizableUser } from "../../casl/interfaces/authorizable-user.interf
 
 export type CachedUser = AuthorizableUser<PermissionEntity, Id>;
 
-export interface TokenPayload extends CachedUser {
+export interface TokenPayload {
+  sub: Id;
   iat?: number;
   exp?: number;
 }

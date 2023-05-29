@@ -8,6 +8,7 @@ import { DeliveryMethodService } from "./delivery-method.service";
 import { CreateDeliveryMethodInput } from "./dto/create-delivery-method.input";
 import { UpdateDeliveryMethodInput } from "./dto/update-delivery-method.input";
 import { DeliveryMethodEntity } from "./entities/delivery-method.entity";
+import { DeliveryMethodTypes } from "./enums/delivery-method-type";
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { DeliveryMethodEntity } from "./entities/delivery-method.entity";
           guards: [AccessGuard],
           read: {
             decorators: [CheckAbility(Actions.READ, DeliveryMethodEntity)],
+            defaultFilter: { type: { eq: DeliveryMethodTypes.HOME_DELIVERY } },
           },
           create: {
             decorators: [CheckAbility(Actions.CREATE, DeliveryMethodEntity)],

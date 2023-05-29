@@ -1,6 +1,6 @@
 import { FilterableField } from "@nestjs-query/query-graphql";
-import { ID } from "@nestjs/graphql";
-import { Column, Index, ManyToOne } from "typeorm";
+import { Field, ID } from "@nestjs/graphql";
+import { AfterLoad, Column, Index, ManyToOne } from "typeorm";
 import { Entity, ObjectType } from "../../../common/decorators";
 import { Authorize } from "../../../common/decorators/graphql/authorize.decorator";
 import { FilterableRelation } from "../../../common/decorators/graphql/relation.decorator";
@@ -41,4 +41,13 @@ export class AddressEntity extends BaseEntity {
     onDelete: "CASCADE",
   })
   city!: CityEntity;
+
+  @Field()
+  formattedAddress!: string;
+
+  @AfterLoad()
+  private async afterLoad() {
+    const city = await CityEntity.findOneOrFail({ where: { id: this.cityId }, relations: { country: true } });
+    this.formattedAddress = [city.country.name, this.postalCode, this.state, city.name, `${this.street} ${this.building}`].join(", ");
+  }
 }
