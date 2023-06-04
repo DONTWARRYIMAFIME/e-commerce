@@ -1,5 +1,5 @@
-import { MutationArgsType } from "@nestjs-query/query-graphql";
 import { ArgsType, InputType, OmitType, PartialType } from "@nestjs/graphql";
+import { MutationArgsType } from "@ptc-org/nestjs-query-graphql";
 import { CreateUserInput } from "./create-user.input";
 
 @InputType()

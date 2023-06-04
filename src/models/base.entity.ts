@@ -1,5 +1,5 @@
-import { FilterableField, IDField } from "@nestjs-query/query-graphql";
 import { GraphQLISODateTime, ID, ObjectType } from "@nestjs/graphql";
+import { FilterableField, IDField } from "@ptc-org/nestjs-query-graphql";
 import { BaseEntity as TBaseEntity, CreateDateColumn, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { Id } from "../common/types/id.type";
 

@@ -1,6 +1,6 @@
-import { QueryService, UpdateOneOptions } from "@nestjs-query/core";
-import { TypeOrmQueryService } from "@nestjs-query/query-typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
+import { QueryService, UpdateOneOptions } from "@ptc-org/nestjs-query-core";
+import { TypeOrmQueryService } from "@ptc-org/nestjs-query-typeorm";
 import { UserInputError } from "apollo-server-core";
 import { groupBy, map, sumBy } from "lodash";
 import { DeepPartial, Repository } from "typeorm";

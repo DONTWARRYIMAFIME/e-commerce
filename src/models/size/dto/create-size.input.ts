@@ -1,5 +1,5 @@
-import { FilterableField } from "@nestjs-query/query-graphql";
 import { Field, InputType } from "@nestjs/graphql";
+import { FilterableField } from "@ptc-org/nestjs-query-graphql";
 import { IsUppercase, Length } from "class-validator";
 import { IsEnumI18N } from "../../../providers/i18n/i18n.decorators";
 import { SizeEntity } from "../entities/size.entity";

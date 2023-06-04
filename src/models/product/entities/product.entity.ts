@@ -1,11 +1,10 @@
-import { SortDirection } from "@nestjs-query/core";
-import { FilterableField } from "@nestjs-query/query-graphql";
 import { Field, ID } from "@nestjs/graphql";
+import { SortDirection } from "@ptc-org/nestjs-query-core";
+import { FilterableField, FilterableRelation, FilterableUnPagedRelation, QueryOptions, UnPagedRelation } from "@ptc-org/nestjs-query-graphql";
 import { map, uniqBy } from "lodash";
 import { AfterLoad, BeforeInsert, Column, Index, JoinTable, ManyToMany, ManyToOne, OneToMany } from "typeorm";
 import { Entity, ObjectType } from "../../../common/decorators";
 import { Authorize } from "../../../common/decorators/graphql/authorize.decorator";
-import { FilterableRelation, FilterableUnPagedRelation, UnPagedRelation } from "../../../common/decorators/graphql/relation.decorator";
 import { compare } from "../../../common/helpers/date.helper";
 import { generateSku } from "../../../common/helpers/sku-generator.helper";
 import { Id } from "../../../common/types/id.type";
@@ -19,6 +18,7 @@ import { ProductVariantEntity } from "../../product-variant/entities/product-var
 import { SizeEntity } from "../../size/entities/size.entity";
 
 @Authorize()
+@QueryOptions({ filterDepth: 3 })
 @FilterableRelation("category", () => CategoryEntity)
 @FilterableRelation("brand", () => BrandEntity)
 @FilterableUnPagedRelation("productVariants", () => ProductVariantEntity, { defaultSort: [{ field: "createdAt", direction: SortDirection.ASC }] })
@@ -82,8 +82,12 @@ export class ProductEntity extends BaseEntity {
   @AfterLoad()
   private async afterLoad() {
     const variants = await ProductVariantEntity.findBy({ productId: this.id });
-    this.colors = uniqBy(map(variants, "color"), productVariant => productVariant.id).sort((p1, p2) => compare(p1.createdAt, p2.createdAt));
-    this.sizes = uniqBy(map(variants, "size"), productVariant => productVariant.id).sort((p1, p2) => compare(p1.createdAt, p2.createdAt));
+    this.colors = uniqBy(map(variants, "color"), productVariant => productVariant.id)
+      .sort((p1, p2) => compare(p1.createdAt, p2.createdAt))
+      .reverse();
+    this.sizes = uniqBy(map(variants, "size"), productVariant => productVariant.id)
+      .sort((p1, p2) => compare(p1.createdAt, p2.createdAt))
+      .reverse();
   }
 
   @BeforeInsert()

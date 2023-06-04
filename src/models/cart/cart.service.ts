@@ -1,7 +1,7 @@
-import { UpdateOneOptions } from "@nestjs-query/core";
-import { TypeOrmQueryService } from "@nestjs-query/query-typeorm";
 import { Injectable, Logger } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
+import { UpdateOneOptions } from "@ptc-org/nestjs-query-core";
+import { TypeOrmQueryService } from "@ptc-org/nestjs-query-typeorm";
 import { merge, omit, sumBy } from "lodash";
 import { DeepPartial, FindOptionsWhere, Repository } from "typeorm";
 import { Id } from "../../common/types/id.type";

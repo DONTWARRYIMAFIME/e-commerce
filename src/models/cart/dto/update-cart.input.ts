@@ -1,5 +1,5 @@
-import { MutationArgsType, UpdateOneInputType } from "@nestjs-query/query-graphql";
 import { ArgsType, InputType, OmitType, PartialType } from "@nestjs/graphql";
+import { MutationArgsType, UpdateOneInputType } from "@ptc-org/nestjs-query-graphql";
 import { CartEntity } from "../entities/cart.entity";
 import { CreateCartInput } from "./create-cart.input";
 

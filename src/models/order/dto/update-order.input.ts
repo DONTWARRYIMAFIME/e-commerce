@@ -1,5 +1,5 @@
-import { DeleteOneInputType, MutationArgsType } from "@nestjs-query/query-graphql";
 import { ArgsType, InputType, OmitType, PartialType } from "@nestjs/graphql";
+import { DeleteOneInputType, MutationArgsType } from "@ptc-org/nestjs-query-graphql";
 import { OrderEntity } from "../entities/order.entity";
 import { CreateOrderInput } from "./create-order.input";
 

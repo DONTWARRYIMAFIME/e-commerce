@@ -1,6 +1,6 @@
-import { QueryService } from "@nestjs-query/core";
-import { TypeOrmQueryService } from "@nestjs-query/query-typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
+import { QueryService } from "@ptc-org/nestjs-query-core";
+import { TypeOrmQueryService } from "@ptc-org/nestjs-query-typeorm";
 import { FindOptionsWhere, Repository } from "typeorm";
 import { Id } from "../../common/types/id.type";
 import { DeliveryMethodEntity } from "./entities/delivery-method.entity";

@@ -1,7 +1,7 @@
-import { QueryService } from "@nestjs-query/core";
-import { TypeOrmQueryService } from "@nestjs-query/query-typeorm";
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import { InjectRepository } from "@nestjs/typeorm";
+import { QueryService } from "@ptc-org/nestjs-query-core";
+import { TypeOrmQueryService } from "@ptc-org/nestjs-query-typeorm";
 import { InjectStripe } from "nestjs-stripe";
 import Stripe from "stripe";
 import { Repository } from "typeorm";

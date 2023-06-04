@@ -1,6 +1,6 @@
-import { NestjsQueryGraphQLModule } from "@nestjs-query/query-graphql";
-import { NestjsQueryTypeOrmModule } from "@nestjs-query/query-typeorm";
 import { Module } from "@nestjs/common";
+import { NestjsQueryGraphQLModule } from "@ptc-org/nestjs-query-graphql";
+import { NestjsQueryTypeOrmModule } from "@ptc-org/nestjs-query-typeorm";
 import { WarehouseItemModule } from "../warehouse-item/warehouse-item.module";
 import { WarehouseModule } from "../warehouse/warehouse.module";
 import { CreateOrderItemInput } from "./dto/create-order-item.input";

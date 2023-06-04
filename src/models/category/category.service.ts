@@ -1,6 +1,6 @@
-import { TypeOrmQueryService } from "@nestjs-query/query-typeorm";
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
+import { TypeOrmQueryService } from "@ptc-org/nestjs-query-typeorm";
 import { FindOptionsWhere, TreeRepository } from "typeorm";
 import { CategoryEntity } from "./entities/category.entity";
 import { Categories } from "./enums/category.enum";

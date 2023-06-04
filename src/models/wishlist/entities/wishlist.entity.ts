@@ -1,9 +1,8 @@
-import { FilterableField } from "@nestjs-query/query-graphql";
 import { ID } from "@nestjs/graphql";
+import { FilterableField, FilterableRelation, FilterableUnPagedRelation } from "@ptc-org/nestjs-query-graphql";
 import { Column, Index, JoinColumn, JoinTable, ManyToMany, OneToOne } from "typeorm";
 import { Entity, ObjectType } from "../../../common/decorators";
 import { Authorize } from "../../../common/decorators/graphql/authorize.decorator";
-import { FilterableRelation, FilterableUnPagedRelation } from "../../../common/decorators/graphql/relation.decorator";
 import { BaseEntity } from "../../base.entity";
 import { ProductEntity } from "../../product/entities/product.entity";
 import { UserEntity } from "../../user/entities/user.entity";

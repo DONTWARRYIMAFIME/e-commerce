@@ -1,5 +1,5 @@
-import { MutationArgsType } from "@nestjs-query/query-graphql";
 import { ArgsType, Field, InputType } from "@nestjs/graphql";
+import { MutationArgsType } from "@ptc-org/nestjs-query-graphql";
 import { Id } from "../../../common/types/id.type";
 import { IsUUIDI18N } from "../../../providers/i18n/i18n.decorators";
 import { MediaEntity } from "../entities/media.entity";

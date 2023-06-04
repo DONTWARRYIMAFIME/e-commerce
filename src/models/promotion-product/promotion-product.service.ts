@@ -1,6 +1,6 @@
-import { QueryService, UpdateOneOptions } from "@nestjs-query/core";
-import { TypeOrmQueryService } from "@nestjs-query/query-typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
+import { QueryService, UpdateOneOptions } from "@ptc-org/nestjs-query-core";
+import { TypeOrmQueryService } from "@ptc-org/nestjs-query-typeorm";
 import * as moment from "moment";
 import { DeepPartial, Repository } from "typeorm";
 import { Id } from "../../common/types/id.type";

@@ -1,6 +1,6 @@
-import { TypeOrmQueryService } from "@nestjs-query/query-typeorm";
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
+import { TypeOrmQueryService } from "@ptc-org/nestjs-query-typeorm";
 import { FindOptionsWhere, Repository } from "typeorm";
 import { Id } from "../../common/types/id.type";
 import { ManageWarehouseItem } from "../warehouse-item/dto/manage-warehouse-item.input";

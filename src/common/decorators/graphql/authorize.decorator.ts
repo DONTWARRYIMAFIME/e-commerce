@@ -1,5 +1,5 @@
-import { Class } from "@nestjs-query/core";
-import { Authorize as DefaultAuthorize, AuthorizerOptions, CustomAuthorizer } from "@nestjs-query/query-graphql";
+import { Class } from "@ptc-org/nestjs-query-core";
+import { Authorize as DefaultAuthorize, AuthorizerOptions, CustomAuthorizer } from "@ptc-org/nestjs-query-graphql";
 import { find } from "lodash";
 import { Actions } from "../../../providers/security/casl/actions.enum";
 import { Context } from "../../types/context.type";

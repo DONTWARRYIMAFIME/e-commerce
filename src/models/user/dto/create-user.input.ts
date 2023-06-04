@@ -1,5 +1,5 @@
-import { CreateOneInputType, MutationArgsType } from "@nestjs-query/query-graphql";
 import { ArgsType, Field, InputType } from "@nestjs/graphql";
+import { CreateOneInputType, MutationArgsType } from "@ptc-org/nestjs-query-graphql";
 import { Allow, IsOptional, IsPhoneNumber } from "class-validator";
 import { IsEmailI18N, IsEmailNotExistsI18N, IsEqualToI18N, LengthI18N } from "../../../providers/i18n/i18n.decorators";
 import { UserEntity } from "../entities/user.entity";

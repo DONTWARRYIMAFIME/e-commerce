@@ -1,6 +1,6 @@
-import { NestjsQueryGraphQLModule } from "@nestjs-query/query-graphql";
-import { NestjsQueryTypeOrmModule } from "@nestjs-query/query-typeorm";
 import { Module } from "@nestjs/common";
+import { NestjsQueryGraphQLModule } from "@ptc-org/nestjs-query-graphql";
+import { NestjsQueryTypeOrmModule } from "@ptc-org/nestjs-query-typeorm";
 import { CreateWishlistInput } from "./dto/create-wishlist.input";
 import { UpdateWishlistInput } from "./dto/update-wishlist.input";
 import { WishlistEntity } from "./entities/wishlist.entity";

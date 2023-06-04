@@ -1,5 +1,5 @@
-import { MutationArgsType, UpdateOneInputType } from "@nestjs-query/query-graphql";
 import { ArgsType, Field, InputType, OmitType, PartialType } from "@nestjs/graphql";
+import { MutationArgsType, UpdateOneInputType } from "@ptc-org/nestjs-query-graphql";
 import { IsArrayI18N } from "../../../providers/i18n/i18n.decorators";
 import { ManageWarehouseItem, WarehouseItemsInput } from "../../warehouse-item/dto/manage-warehouse-item.input";
 import { WarehouseEntity } from "../entities/warehouse.entity";

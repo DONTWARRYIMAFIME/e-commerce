@@ -1,6 +1,6 @@
-import { NestjsQueryGraphQLModule, PagingStrategies } from "@nestjs-query/query-graphql";
-import { NestjsQueryTypeOrmModule } from "@nestjs-query/query-typeorm";
 import { Global, Module } from "@nestjs/common";
+import { NestjsQueryGraphQLModule, PagingStrategies } from "@ptc-org/nestjs-query-graphql";
+import { NestjsQueryTypeOrmModule } from "@ptc-org/nestjs-query-typeorm";
 import { SecurityConfigModule } from "../../config/security/security.module";
 import { AccessGuard } from "../../providers/security/casl/access.guard";
 import { Actions } from "../../providers/security/casl/actions.enum";

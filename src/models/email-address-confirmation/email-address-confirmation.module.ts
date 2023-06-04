@@ -1,6 +1,6 @@
-import { NestjsQueryGraphQLModule, PagingStrategies } from "@nestjs-query/query-graphql";
-import { NestjsQueryTypeOrmModule } from "@nestjs-query/query-typeorm";
 import { Module } from "@nestjs/common";
+import { NestjsQueryGraphQLModule, PagingStrategies } from "@ptc-org/nestjs-query-graphql";
+import { NestjsQueryTypeOrmModule } from "@ptc-org/nestjs-query-typeorm";
 import { AppConfigModule } from "../../config/app/app.module";
 import { EmailAddressModule } from "../email-address/email-address.module";
 import { EmailAddressConfirmationController } from "./email-address-confirmation.controller";

@@ -1,6 +1,6 @@
-import { QueryService } from "@nestjs-query/core";
-import { TypeOrmQueryService } from "@nestjs-query/query-typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
+import { QueryService } from "@ptc-org/nestjs-query-core";
+import { TypeOrmQueryService } from "@ptc-org/nestjs-query-typeorm";
 import { FileUpload } from "graphql-upload";
 import { join } from "path";
 import { DeepPartial, FindOptionsWhere, Repository } from "typeorm";

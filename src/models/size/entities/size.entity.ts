@@ -1,4 +1,4 @@
-import { FilterableField } from "@nestjs-query/query-graphql";
+import { FilterableField } from "@ptc-org/nestjs-query-graphql";
 import { Column, Unique } from "typeorm";
 import { Entity, ObjectType } from "../../../common/decorators";
 import { Authorize } from "../../../common/decorators/graphql/authorize.decorator";

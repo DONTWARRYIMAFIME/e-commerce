@@ -1,7 +1,7 @@
-import { SortDirection } from "@nestjs-query/core";
-import { NestjsQueryGraphQLModule, PagingStrategies } from "@nestjs-query/query-graphql";
-import { NestjsQueryTypeOrmModule } from "@nestjs-query/query-typeorm";
 import { Module } from "@nestjs/common";
+import { SortDirection } from "@ptc-org/nestjs-query-core";
+import { NestjsQueryGraphQLModule, PagingStrategies } from "@ptc-org/nestjs-query-graphql";
+import { NestjsQueryTypeOrmModule } from "@ptc-org/nestjs-query-typeorm";
 import { IsPublic } from "../../providers/security/auth/decorators/is-public.decorator";
 import { AccessGuard } from "../../providers/security/casl/access.guard";
 import { Actions } from "../../providers/security/casl/actions.enum";

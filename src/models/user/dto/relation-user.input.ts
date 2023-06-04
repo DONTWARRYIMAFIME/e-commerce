@@ -1,5 +1,5 @@
-import { MutationArgsType, UpdateOneInputType } from "@nestjs-query/query-graphql";
 import { ArgsType, InputType } from "@nestjs/graphql";
+import { MutationArgsType, UpdateOneInputType } from "@ptc-org/nestjs-query-graphql";
 import { UserEntity } from "../entities/user.entity";
 
 @InputType()

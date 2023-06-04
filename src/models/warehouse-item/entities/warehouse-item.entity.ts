@@ -1,10 +1,9 @@
-import { FilterableField } from "@nestjs-query/query-graphql";
 import { ID, Int } from "@nestjs/graphql";
+import { FilterableField, FilterableRelation } from "@ptc-org/nestjs-query-graphql";
 import { max } from "lodash";
 import { BeforeInsert, BeforeUpdate, Column, Index, ManyToOne, Unique } from "typeorm";
 import { Entity, ObjectType } from "../../../common/decorators";
 import { Authorize } from "../../../common/decorators/graphql/authorize.decorator";
-import { FilterableRelation } from "../../../common/decorators/graphql/relation.decorator";
 import { Id } from "../../../common/types/id.type";
 import { BaseEntity } from "../../base.entity";
 import { ProductVariantEntity } from "../../product-variant/entities/product-variant.entity";

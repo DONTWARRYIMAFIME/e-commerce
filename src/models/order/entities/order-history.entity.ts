@@ -1,8 +1,7 @@
-import { FilterableField } from "@nestjs-query/query-graphql";
 import { ID } from "@nestjs/graphql";
+import { FilterableField, FilterableRelation } from "@ptc-org/nestjs-query-graphql";
 import { Column, Index, ManyToOne } from "typeorm";
 import { Entity, ObjectType } from "../../../common/decorators";
-import { FilterableRelation } from "../../../common/decorators/graphql/relation.decorator";
 import { Id } from "../../../common/types/id.type";
 import { BaseEntity } from "../../base.entity";
 import { OrderStatus } from "../enums/order-status.enum";

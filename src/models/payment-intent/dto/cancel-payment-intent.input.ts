@@ -1,5 +1,5 @@
-import { DeleteOneInputType, MutationArgsType } from "@nestjs-query/query-graphql";
 import { ArgsType, InputType } from "@nestjs/graphql";
+import { DeleteOneInputType, MutationArgsType } from "@ptc-org/nestjs-query-graphql";
 import { PaymentIntentEntity } from "../entities/payment-intent.entity";
 
 @InputType()

@@ -1,6 +1,6 @@
-import { QueryService } from "@nestjs-query/core";
-import { TypeOrmQueryService } from "@nestjs-query/query-typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
+import { QueryService } from "@ptc-org/nestjs-query-core";
+import { TypeOrmQueryService } from "@ptc-org/nestjs-query-typeorm";
 import { ApolloError } from "apollo-server-express";
 import { Repository } from "typeorm";
 import { v4 as uuidv4 } from "uuid";
