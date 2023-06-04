@@ -50,6 +50,23 @@ export class AuthResolver {
   }
 
   @IsPublic()
+  @Mutation(() => SignupResponse)
+  public async signupAsPartner(
+    @Args("input") input: SignupInput,
+    @Args("file", { type: () => GraphQLUpload, nullable: true }) file: FileUpload,
+    @Res() response: Response,
+  ): Promise<SignupResponse> {
+    const { user, ...props } = await this.authService.signupAsPartner(input, response);
+
+    if (!file) {
+      return { ...props, user };
+    }
+
+    const finalUser = await this.userService.uploadAvatar(user.id, file);
+    return { ...props, user: finalUser };
+  }
+
+  @IsPublic()
   @UseGuards(RefreshTokenAuthGuard)
   @Mutation(() => AccessTokenResponse)
   public reissueAccessToken(@CaslUser() userProxy: UserProxy<CachedUser>): Promise<AccessTokenResponse> {

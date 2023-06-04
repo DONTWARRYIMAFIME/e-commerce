@@ -7,19 +7,30 @@ import { CheckAbility } from "../../providers/security/casl/decorators/check-abi
 import { CartModule } from "../cart/cart.module";
 import { DeliveryMethodModule } from "../delivery-method/delivery-method.module";
 import { OrderItemModule } from "../order-item/order-item.module";
+import { PaymentMethodModule } from "../payment-method/payment-method.module";
 import { ProductVariantModule } from "../product-variant/product-variant.module";
 import { WarehouseItemModule } from "../warehouse-item/warehouse-item.module";
 import { CreateOrderInput } from "./dto/create-order.input";
 import { UpdateOrderInput } from "./dto/update-order.input";
+import { OrderHistoryEntity } from "./entities/order-history.entity";
 import { OrderEntity } from "./entities/order.entity";
 import { OrderHook } from "./hooks/order.hook";
+import { PaymentIntentUpdateListener } from "./listenters/payment-intent-update.listener";
 import { OrderResolver } from "./order.resolver";
 import { OrderService } from "./order.service";
 
 @Module({
   imports: [
     NestjsQueryGraphQLModule.forFeature({
-      imports: [CartModule, DeliveryMethodModule, WarehouseItemModule, OrderItemModule, ProductVariantModule, NestjsQueryTypeOrmModule.forFeature([OrderEntity])],
+      imports: [
+        CartModule,
+        PaymentMethodModule,
+        DeliveryMethodModule,
+        WarehouseItemModule,
+        OrderItemModule,
+        ProductVariantModule,
+        NestjsQueryTypeOrmModule.forFeature([OrderEntity, OrderHistoryEntity]),
+      ],
       services: [OrderService],
       resolvers: [
         {
@@ -50,7 +61,7 @@ import { OrderService } from "./order.service";
       ],
     }),
   ],
-  providers: [OrderResolver, OrderService, OrderHook],
+  providers: [OrderResolver, OrderService, OrderHook, PaymentIntentUpdateListener],
   exports: [OrderResolver, OrderService],
 })
 export class OrderModule {}

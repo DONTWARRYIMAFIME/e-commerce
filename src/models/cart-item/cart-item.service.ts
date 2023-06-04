@@ -38,7 +38,7 @@ export class CartItemService extends TypeOrmQueryService<CartItemEntity> {
     return super.updateOne(id, entity, opts);
   }
 
-  public async increaseQuantity(cartId: Id, productVariantId: Id, quantity: number): Promise<CartItemEntity> {
+  public async increaseQuantity(cartId: Id, productVariantId: Id, quantity = 1): Promise<CartItemEntity> {
     const cartItem = await this.findOneByCartIdAndProductVariantId(cartId, productVariantId);
     const stock = await this.warehouseItemService.countAvailable(productVariantId);
 
@@ -57,7 +57,7 @@ export class CartItemService extends TypeOrmQueryService<CartItemEntity> {
     return cartItem ? this.updateOne(cartItem.id, omit(entity, "id")) : this.createOne(entity);
   }
 
-  public async decreaseQuantity(cartId: Id, productVariantId: Id, quantity: number): Promise<CartItemEntity> {
+  public async decreaseQuantity(cartId: Id, productVariantId: Id, quantity = 1): Promise<CartItemEntity> {
     const cartItem = await this.findOneByCartIdAndProductVariantIdOrFail(cartId, productVariantId);
     const targetQuantity = cartItem.quantity - quantity;
 

@@ -31,7 +31,7 @@ export class CartService extends TypeOrmQueryService<CartEntity> {
   }
 
   public findOneByUserId(userId: Id, opts?: FindOptionsWhere<CartEntity>): Promise<CartEntity> {
-    return this.repo.findOneBy({ userId, ...opts });
+    return this.repo.findOne({ where: { userId }, relations: { cartItems: { productVariant: { product: true } } }, ...opts });
   }
 
   public async updateOne(cartId: Id, update: DeepPartial<CartEntity>, opts?: UpdateOneOptions<CartEntity>): Promise<CartEntity> {
@@ -65,9 +65,15 @@ export class CartService extends TypeOrmQueryService<CartEntity> {
   }
 
   public async removeCartItemsFromCart(id: Id, cartItems: DeepPartial<CartItemEntity>[]): Promise<CartEntity> {
-    await Promise.all(cartItems.map(cartItem => this.cartItemService.decreaseQuantity(id, cartItem.productVariantId, cartItem.quantity)));
+    console.log("cartItems", cartItems);
+    await Promise.all(cartItems.map(cartItem => this.cartItemService.decreaseQuantity(id, cartItem.productVariantId, cartItem?.quantity)));
     const cart = await this.findOneByIdOrFail(id);
     return this.recalculateCartTotal(id, omit(cart, ["id"]));
+  }
+
+  public async resetCart(id: Id): Promise<CartEntity> {
+    await super.updateOne(id, { paymentMethodId: null, deliveryAddressId: null, deliveryMethodId: null });
+    return this.emptyCart(id);
   }
 
   public async emptyCart(id: Id): Promise<CartEntity> {

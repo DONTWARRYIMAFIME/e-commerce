@@ -11,7 +11,7 @@ export class GqlThrottlerGuard extends ThrottlerGuard {
         const ctx = gqlCtx.getContext();
         return { req: ctx.req, res: ctx.res };
       default:
-        super.getRequestResponse(context);
+        return super.getRequestResponse(context);
     }
   }
 }

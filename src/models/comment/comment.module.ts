@@ -5,6 +5,8 @@ import { Module } from "@nestjs/common";
 import { AccessGuard } from "../../providers/security/casl/access.guard";
 import { Actions } from "../../providers/security/casl/actions.enum";
 import { CheckAbility } from "../../providers/security/casl/decorators/check-ability";
+import { MediaModule } from "../media/media.module";
+import { CommentResolver } from "./comment.resolver";
 import { CommentService } from "./comment.service";
 import { CreateCommentInput } from "./dto/create-comment.input";
 import { UpdateCommentInput } from "./dto/update-comment.input";
@@ -14,7 +16,7 @@ import { CommentHook } from "./hooks/comment.hook";
 @Module({
   imports: [
     NestjsQueryGraphQLModule.forFeature({
-      imports: [NestjsQueryTypeOrmModule.forFeature([CommentEntity])],
+      imports: [MediaModule, NestjsQueryTypeOrmModule.forFeature([CommentEntity])],
       services: [CommentService],
       resolvers: [
         {
@@ -31,8 +33,7 @@ import { CommentHook } from "./hooks/comment.hook";
             defaultSort: [{ field: "createdAt", direction: SortDirection.DESC }],
           },
           create: {
-            decorators: [CheckAbility(Actions.CREATE, CommentEntity)],
-            many: { disabled: true },
+            disabled: true,
           },
           update: {
             decorators: [CheckAbility(Actions.UPDATE, CommentEntity, CommentHook)],
@@ -46,7 +47,7 @@ import { CommentHook } from "./hooks/comment.hook";
       ],
     }),
   ],
-  providers: [CommentService, CommentHook],
+  providers: [CommentService, CommentResolver, CommentHook],
   exports: [CommentService],
 })
 export class CommentModule {}

@@ -7,8 +7,7 @@ import { Actions } from "../../providers/security/casl/actions.enum";
 import { CaslUser } from "../../providers/security/casl/decorators/casl-user";
 import { CheckAbility } from "../../providers/security/casl/decorators/check-ability";
 import { UserProxy } from "../../providers/security/casl/proxies/user.proxy";
-import { CreateOneOrderFromCurrentUserCartArgsType } from "./dto/create-order.input";
-import { CancelOrderArgsType } from "./dto/update-order.input";
+import { UpdateOrderArgsType } from "./dto/update-order.input";
 import { OrderEntity } from "./entities/order.entity";
 import { OrderHook } from "./hooks/order.hook";
 import { OrderService } from "./order.service";
@@ -19,17 +18,32 @@ export class OrderResolver {
 
   @UseGuards(AccessTokenAuthGuard, AccessGuard)
   @CheckAbility(Actions.CREATE, OrderEntity)
-  @Mutation(() => OrderEntity)
-  public createOneOrderFromCurrentUserCart(@Args() args: CreateOneOrderFromCurrentUserCartArgsType, @CaslUser() userProxy: UserProxy): Promise<OrderEntity> {
-    const { input } = args.input;
+  @Mutation(() => [OrderEntity])
+  public placeOrderFromUserCart(@CaslUser() userProxy: UserProxy): Promise<OrderEntity[]> {
     const user = userProxy.getFromRequest();
-    return this.orderService.createOne({ ...input, userId: user.id });
+    return this.orderService.placeOrderFromUserCart(user.id);
   }
 
   @UseGuards(AccessTokenAuthGuard, AccessGuard)
   @CheckAbility(Actions.UPDATE, OrderEntity, OrderHook)
   @Mutation(() => OrderEntity)
-  public cancelOrder(@Args() args: CancelOrderArgsType): Promise<OrderEntity> {
+  public transferOrderToDelivery(@Args() args: UpdateOrderArgsType): Promise<OrderEntity> {
+    const { id } = args.input;
+    return this.orderService.transferOrderToShipping(id as Id);
+  }
+
+  @UseGuards(AccessTokenAuthGuard, AccessGuard)
+  @CheckAbility(Actions.UPDATE, OrderEntity, OrderHook)
+  @Mutation(() => OrderEntity)
+  public completeOrder(@Args() args: UpdateOrderArgsType): Promise<OrderEntity> {
+    const { id } = args.input;
+    return this.orderService.completeOrder(id as Id);
+  }
+
+  @UseGuards(AccessTokenAuthGuard, AccessGuard)
+  @CheckAbility(Actions.UPDATE, OrderEntity, OrderHook)
+  @Mutation(() => OrderEntity)
+  public cancelOrder(@Args() args: UpdateOrderArgsType): Promise<OrderEntity> {
     const { id } = args.input;
     return this.orderService.cancelOrder(id as Id);
   }

@@ -8,6 +8,7 @@ import { Id } from "../../../common/types/id.type";
 import { BaseEntity } from "../../base.entity";
 import { PaymentMethodEntity } from "../../payment-method/entities/payment-method.entity";
 import { PriceEntity } from "../../price/entities/price.entity";
+import { PaymentIntentStatus } from "../enum/payment-intent-status.enum";
 
 @Authorize()
 @FilterableRelation("paymentMethod", () => PaymentMethodEntity)
@@ -19,7 +20,18 @@ import { PriceEntity } from "../../price/entities/price.entity";
 export class PaymentIntentEntity extends BaseEntity {
   @FilterableField()
   @Column()
+  intentId!: string;
+
+  @FilterableField()
+  @Column()
   clientSecret!: string;
+
+  @FilterableField(() => PaymentIntentStatus)
+  @Column({
+    type: "enum",
+    enum: PaymentIntentStatus,
+  })
+  status!: PaymentIntentStatus;
 
   @FilterableField(() => ID)
   @Column()

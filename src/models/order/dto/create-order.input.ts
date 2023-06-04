@@ -21,6 +21,10 @@ export class CreateOrderInput implements Partial<OrderEntity> {
   @IsUUIDI18N()
   @Field()
   deliveryAddressId!: Id;
+
+  @IsUUIDI18N()
+  @Field()
+  paymentIntentId!: Id;
 }
 
 @InputType()

@@ -28,6 +28,10 @@ export class CreateAddressInput implements Partial<AddressEntity> {
 
   @IsUUIDI18N()
   @Field()
+  countryId: Id;
+
+  @IsUUIDI18N()
+  @Field()
   cityId: Id;
 }
 

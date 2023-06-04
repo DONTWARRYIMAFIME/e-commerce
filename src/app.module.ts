@@ -17,6 +17,7 @@ import { ValidationModule } from "./providers/validation/validation.module";
   imports: [
     AppConfigModule,
     DatabaseModule,
+    CacheModule,
     GraphQLModule,
     EventModule,
     I18nModule,
@@ -24,7 +25,6 @@ import { ValidationModule } from "./providers/validation/validation.module";
     ValidationModule,
     ModelsModule,
     AuthModule,
-    CacheModule,
     BullModule,
     ThrottlerModule,
     StripeModule,

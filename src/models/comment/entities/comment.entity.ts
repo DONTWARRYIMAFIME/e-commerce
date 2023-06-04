@@ -37,6 +37,10 @@ export class CommentEntity extends BaseEntity {
   })
   product!: ProductEntity;
 
+  @FilterableField()
+  @Column({ length: 256 })
+  title: string;
+
   @FilterableField({ nullable: true })
   @Column({ type: "text", nullable: true })
   description?: string;

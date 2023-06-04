@@ -5,6 +5,7 @@ import { CreateWishlistInput } from "./dto/create-wishlist.input";
 import { UpdateWishlistInput } from "./dto/update-wishlist.input";
 import { WishlistEntity } from "./entities/wishlist.entity";
 import { WishlistHook } from "./hooks/wishlist.hook";
+import { UserCreatedListener } from "./listeners/user-create.listener";
 import { WishlistResolver } from "./wishlist.resolver";
 import { WishlistService } from "./wishlist.service";
 
@@ -28,7 +29,7 @@ import { WishlistService } from "./wishlist.service";
       ],
     }),
   ],
-  providers: [WishlistResolver, WishlistService, WishlistHook],
+  providers: [WishlistResolver, WishlistService, UserCreatedListener, WishlistHook],
   exports: [WishlistService],
 })
 export class WishlistModule {}

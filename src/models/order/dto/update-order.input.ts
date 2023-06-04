@@ -7,7 +7,7 @@ import { CreateOrderInput } from "./create-order.input";
 export class UpdateOrderInput extends OmitType(PartialType(CreateOrderInput), ["userId"]) {}
 
 @InputType()
-export class CancelOrderInputType extends DeleteOneInputType(OrderEntity) {}
+export class UpdateOrderInputType extends DeleteOneInputType(OrderEntity) {}
 
 @ArgsType()
-export class CancelOrderArgsType extends MutationArgsType(CancelOrderInputType) {}
+export class UpdateOrderArgsType extends MutationArgsType(UpdateOrderInputType) {}

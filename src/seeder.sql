@@ -155,6 +155,12 @@ VALUES
     ('delete', 'PaymentMethodEntity', null),
     ('manage', 'PaymentMethodEntity', null),
 
+    ('read', 'PaymentIntentEntity', null),
+    ('create', 'PaymentIntentEntity', null),
+    ('update', 'PaymentIntentEntity', null),
+    ('delete', 'PaymentIntentEntity', null),
+    ('manage', 'PaymentIntentEntity', null),
+
     ('read', 'PermissionEntity', null),
     ('create', 'PermissionEntity', null),
     ('update', 'PermissionEntity', null),
@@ -307,6 +313,11 @@ SELECT r.id, p.id FROM "role" r CROSS JOIN "permission" p WHERE r.code = 'custom
 
 INSERT INTO "role_permission" (role_id, permission_id)
 SELECT r.id, p.id FROM "role" r CROSS JOIN "permission" p WHERE r.code = 'customer' AND p.action = 'read' AND p.subject = 'PaymentMethodEntity' AND p.conditions = '{"status": { "$eq": "active" }}';
+
+INSERT INTO "role_permission" (role_id, permission_id)
+SELECT r.id, p.id FROM "role" r CROSS JOIN "permission" p WHERE r.code = 'customer' AND p.action = 'create' AND p.subject = 'PaymentIntentEntity';
+INSERT INTO "role_permission" (role_id, permission_id)
+SELECT r.id, p.id FROM "role" r CROSS JOIN "permission" p WHERE r.code = 'customer' AND p.action = 'update' AND p.subject = 'PaymentIntentEntity';
 
 INSERT INTO "role_permission" (role_id, permission_id)
 SELECT r.id, p.id FROM "role" r CROSS JOIN "permission" p WHERE r.code = 'customer' AND p.action = 'read' AND p.subject = 'PickupPointEntity' AND p.conditions = '{"status": { "$eq": "active" }}';
@@ -494,10 +505,10 @@ SELECT u.id, cp.id FROM "cart_price" cp CROSS JOIN "user" u INNER JOIN "email_ad
 
 WITH cart_price AS (
     INSERT INTO "price" (amount)
-        SELECT 0
-        RETURNING id
+    VALUES (0),(0),(0),(0)
+    RETURNING *
 )
-INSERT INTO "cart" (user_id, subtotal_price_id)
+INSERT INTO "cart" (user_id, subtotal_price_id, tax_price_id, delivery_price_id, total_price_id)
 SELECT u.id, cp.id FROM "cart_price" cp CROSS JOIN "user" u INNER JOIN "email_address" ea on ea.id = u.email_address_id WHERE ea.address = 'admin@gmail.com';
 
 -- Wishlist
@@ -611,24 +622,24 @@ SELECT 'yandex', 'Yandex delivery', dmp.id FROM delivery_method_price dmp;
 
 -- Pickup-points
 WITH pickup_point_address AS (
-    INSERT INTO "address" (postal_code, state, street, building, city_id)
-        SELECT 220055, null, 'Chichurina', '12', c.id FROM city c INNER JOIN country cn on cn.id = c.country_id WHERE cn.code = 'BY' AND c.name = 'Minsk'
+    INSERT INTO "address" (postal_code, state, street, building, city_id, country_id)
+        SELECT 220055, null, 'Chichurina', '12', c.id, cn.id FROM city c INNER JOIN country cn on cn.id = c.country_id WHERE cn.code = 'BY' AND c.name = 'Minsk'
         RETURNING id
 )
 INSERT INTO "pickup_point" (code, name, address_id)
 SELECT 'BY0001', 'Test pickup point 1', ppa.id FROM pickup_point_address ppa;
 
 WITH pickup_point_address AS (
-    INSERT INTO "address" (postal_code, state, street, building, city_id)
-        SELECT 220055, null, 'Chichurina', '18', c.id FROM city c INNER JOIN country cn on cn.id = c.country_id WHERE cn.code = 'BY' AND c.name = 'Minsk'
+    INSERT INTO "address" (postal_code, state, street, building, city_id, country_id)
+        SELECT 220055, null, 'Chichurina', '18', c.id, cn.id FROM city c INNER JOIN country cn on cn.id = c.country_id WHERE cn.code = 'BY' AND c.name = 'Minsk'
         RETURNING id
 )
 INSERT INTO "pickup_point" (code, name, address_id)
 SELECT 'BY0002', 'Test pickup point 2', ppa.id FROM pickup_point_address ppa;
 
 WITH pickup_point_address AS (
-    INSERT INTO "address" (postal_code, state, street, building, city_id)
-        SELECT 220055, null, 'Chichurina', '22', c.id FROM city c INNER JOIN country cn on cn.id = c.country_id WHERE cn.code = 'BY' AND c.name = 'Minsk'
+    INSERT INTO "address" (postal_code, state, street, building, city_id, country_id)
+        SELECT 220055, null, 'Chichurina', '22', c.id, cn.id FROM city c INNER JOIN country cn on cn.id = c.country_id  WHERE cn.code = 'BY' AND c.name = 'Minsk'
         RETURNING id
 )
 INSERT INTO "pickup_point" (code, name, address_id, status)
@@ -710,7 +721,7 @@ SELECT 'pants', 'Pants', 'Pants', c.id FROM "category" c WHERE c.code = 'men';
 -- INSERT INTO "payment_method" (code, name)
 -- VALUES
 --     ('cash', 'Cash'),
---     ('card', 'Card');
+--     ('cards', 'Cards');
 
 -- Products
 INSERT INTO "product" (title, description, category_id, brand_id)

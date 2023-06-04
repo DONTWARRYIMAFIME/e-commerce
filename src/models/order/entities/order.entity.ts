@@ -1,3 +1,4 @@
+import { SortDirection } from "@nestjs-query/core";
 import { FilterableField } from "@nestjs-query/query-graphql";
 import { ID } from "@nestjs/graphql";
 import { Column, Index, JoinColumn, ManyToOne, OneToMany, OneToOne } from "typeorm";
@@ -14,6 +15,7 @@ import { PaymentMethodEntity } from "../../payment-method/entities/payment-metho
 import { PriceEntity } from "../../price/entities/price.entity";
 import { UserEntity } from "../../user/entities/user.entity";
 import { OrderStatus } from "../enums/order-status.enum";
+import { OrderHistoryEntity } from "./order-history.entity";
 
 @Authorize()
 @FilterableRelation("user", () => UserEntity)
@@ -26,6 +28,7 @@ import { OrderStatus } from "../enums/order-status.enum";
 @FilterableRelation("totalPrice", () => PriceEntity)
 @FilterableRelation("paymentIntent", () => PaymentIntentEntity, { nullable: true })
 @FilterableUnPagedRelation("orderItems", () => OrderItemEntity)
+@FilterableUnPagedRelation("orderHistories", () => OrderHistoryEntity, { defaultSort: [{ field: "createdAt", direction: SortDirection.ASC }] })
 @ObjectType()
 @Index("INX_order_index", ["user"])
 @Index("INX_order_status", ["status"])
@@ -113,13 +116,23 @@ export class OrderEntity extends BaseEntity {
   @JoinColumn()
   totalPrice!: PriceEntity;
 
+  @FilterableField(() => ID, { nullable: true })
+  @Column({ nullable: true })
+  paymentIntentId!: Id;
+
   @ManyToOne(() => PaymentIntentEntity, {
+    nullable: true,
     eager: true,
     cascade: true,
-    nullable: true,
   })
   paymentIntent!: PaymentIntentEntity;
 
   @OneToMany(() => OrderItemEntity, orderItems => orderItems.order, { cascade: true })
   orderItems!: OrderItemEntity[];
+
+  @OneToMany(() => OrderHistoryEntity, orderHistory => orderHistory.order, {
+    eager: true,
+    cascade: true,
+  })
+  orderHistories: OrderHistoryEntity[];
 }

@@ -1,9 +1,7 @@
 import { RedisModule as DefaultRedisModule } from "@liaoliaots/nestjs-redis";
 import { Module } from "@nestjs/common";
-import { APP_INTERCEPTOR } from "@nestjs/core";
 import { RedisConfigModule } from "../../../config/cache/redis/redis.module";
 import { RedisConfigService } from "../../../config/cache/redis/redis.service";
-import { RedisInterceptor } from "./redis.interceptor";
 import { RedisResolver } from "./redis.resolver";
 
 @Module({
@@ -24,12 +22,6 @@ import { RedisResolver } from "./redis.resolver";
       },
     }),
   ],
-  providers: [
-    RedisResolver,
-    {
-      provide: APP_INTERCEPTOR,
-      useClass: RedisInterceptor,
-    },
-  ],
+  providers: [RedisResolver],
 })
 export class RedisModule {}

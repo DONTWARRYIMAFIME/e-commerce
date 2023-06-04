@@ -2,7 +2,7 @@ import { QueryService } from "@nestjs-query/core";
 import { TypeOrmQueryService } from "@nestjs-query/query-typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
 import { UserInputError } from "apollo-server-core";
-import { FindOptionsWhere, Repository } from "typeorm";
+import { FindOptionsWhere, MoreThan, Repository } from "typeorm";
 import { Id } from "../../common/types/id.type";
 import { WarehouseStatus } from "../warehouse/enums/warehouse-status.enum";
 import { WarehouseItemEntity } from "./entities/warehouse-item.entity";
@@ -26,7 +26,7 @@ export class WarehouseItemService extends TypeOrmQueryService<WarehouseItemEntit
   }
 
   public findManyByProductVariantId(productVariantId, opts?: FindOptionsWhere<WarehouseItemEntity>) {
-    return this.repo.findBy({ productVariantId, warehouse: { status: WarehouseStatus.ACTIVE }, ...opts });
+    return this.repo.findBy({ productVariantId, available: MoreThan(0), warehouse: { status: WarehouseStatus.ACTIVE }, ...opts });
   }
 
   /**
@@ -86,6 +86,10 @@ export class WarehouseItemService extends TypeOrmQueryService<WarehouseItemEntit
   public async reserve(warehouseId: Id, productVariantId: Id, quantity: number): Promise<WarehouseItemEntity> {
     const { id: warehouseItemId, reserved, available, ...rest } = await this.findOneByWarehouseIdAndProductVariantIdOrFail(warehouseId, productVariantId);
 
+    if (quantity === 0) {
+      throw new UserInputError("An attempt to reserve 0 amount of products");
+    }
+
     if (available < quantity) {
       throw new UserInputError("Can not reserve " + quantity + " products. Available value is " + available);
     }
@@ -104,6 +108,10 @@ export class WarehouseItemService extends TypeOrmQueryService<WarehouseItemEntit
   public async cancelReservation(warehouseId: Id, productVariantId: Id, quantity: number): Promise<WarehouseItemEntity> {
     const { id: warehouseItemId, reserved, ...rest } = await this.findOneByWarehouseIdAndProductVariantIdOrFail(warehouseId, productVariantId);
 
+    if (quantity === 0) {
+      throw new UserInputError("An attempt to cancel reservation for 0 products");
+    }
+
     if (reserved < quantity) {
       throw new UserInputError("Can not release " + quantity + " products. Reserved value is " + reserved);
     }
@@ -121,6 +129,10 @@ export class WarehouseItemService extends TypeOrmQueryService<WarehouseItemEntit
    */
   public async completeReservation(warehouseId: Id, productVariantId: Id, quantity: number): Promise<WarehouseItemEntity> {
     const { id: warehouseItemId, stock, reserved, ...rest } = await this.findOneByWarehouseIdAndProductVariantIdOrFail(warehouseId, productVariantId);
+
+    if (quantity === 0) {
+      throw new UserInputError("An attempt to complete reservation for 0 products");
+    }
 
     if (stock < quantity || reserved < quantity) {
       throw new UserInputError("Can not complete reservation for " + quantity + " products. Incorrect value received: " + reserved);

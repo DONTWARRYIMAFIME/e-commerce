@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
-import { STRIPE_API_KEY, STRIPE_API_VERSION } from "./stripe.constants";
+import { STRIPE_API_KEY, STRIPE_API_VERSION, STRIPE_WEBHOOK_SECRET } from "./stripe.constants";
 
 @Injectable()
 export class StripeConfigService {
@@ -12,5 +12,9 @@ export class StripeConfigService {
 
   get apiVersion(): string {
     return this.configService.getOrThrow<string>(STRIPE_API_VERSION);
+  }
+
+  get webhookSecret(): string {
+    return this.configService.getOrThrow<string>(STRIPE_WEBHOOK_SECRET);
   }
 }

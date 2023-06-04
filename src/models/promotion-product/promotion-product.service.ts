@@ -1,7 +1,7 @@
 import { QueryService, UpdateOneOptions } from "@nestjs-query/core";
 import { TypeOrmQueryService } from "@nestjs-query/query-typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
-import moment from "moment";
+import * as moment from "moment";
 import { DeepPartial, Repository } from "typeorm";
 import { Id } from "../../common/types/id.type";
 import { PromotionProductEntity } from "./entities/promotion-product.entity";

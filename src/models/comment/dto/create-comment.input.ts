@@ -1,4 +1,5 @@
-import { Field, InputType } from "@nestjs/graphql";
+import { CreateOneInputType, MutationArgsType } from "@nestjs-query/query-graphql";
+import { ArgsType, Field, InputType } from "@nestjs/graphql";
 import { IsNumber, IsOptional, Max, Min } from "class-validator";
 import { Id } from "../../../common/types/id.type";
 import { IsUUIDI18N, LengthI18N } from "../../../providers/i18n/i18n.decorators";
@@ -14,6 +15,10 @@ export class CreateCommentInput implements Partial<CommentEntity> {
   @Field()
   productId!: Id;
 
+  @LengthI18N(2, 256)
+  @Field()
+  title!: string;
+
   @IsOptional()
   @LengthI18N(1, 8192)
   @Field({ nullable: true })
@@ -25,3 +30,9 @@ export class CreateCommentInput implements Partial<CommentEntity> {
   @Field()
   rating!: number;
 }
+
+@InputType()
+export class CreateOneCommentInputType extends CreateOneInputType("comment", CreateCommentInput) {}
+
+@ArgsType()
+export class CreateOneCommentArgsType extends MutationArgsType(CreateOneCommentInputType) {}

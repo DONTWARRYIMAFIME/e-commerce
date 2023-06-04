@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
-import { REDIS_HOST, REDIS_PASSWORD, REDIS_PORT, REDIS_TTL } from "./redis.constants";
+import { REDIS_HOST, REDIS_PASSWORD, REDIS_PORT, REDIS_TTL, REDIS_USER } from "./redis.constants";
 
 @Injectable()
 export class RedisConfigService {
@@ -8,6 +8,10 @@ export class RedisConfigService {
 
   get host(): string {
     return this.configService.getOrThrow<string>(REDIS_HOST);
+  }
+
+  get user(): string {
+    return this.configService.getOrThrow<string>(REDIS_USER);
   }
 
   get password(): string {
