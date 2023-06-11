@@ -15,7 +15,7 @@ import { Categories } from "../enums/category.enum";
 @Entity()
 @Tree("nested-set")
 export class CategoryEntity extends BaseEntity {
-  @FilterableField()
+  @FilterableField(() => Categories)
   @Column({
     type: "enum",
     enum: Categories,

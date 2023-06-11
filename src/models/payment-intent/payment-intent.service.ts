@@ -64,4 +64,15 @@ export class PaymentIntentService extends TypeOrmQueryService<PaymentIntentEntit
     const intent = await this.stripe.paymentIntents.cancel(paymentIntent.intentId);
     return super.updateOne(id, { status: intent.status as PaymentIntentStatus });
   }
+
+  public async refund(id: Id, amount?: number): Promise<PaymentIntentEntity> {
+    const paymentIntent = await super.findById(id);
+
+    await this.stripe.refunds.create({
+      payment_intent: paymentIntent.intentId,
+      amount,
+    });
+
+    return super.updateOne(id, { status: PaymentIntentStatus.REFUNDED });
+  }
 }

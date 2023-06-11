@@ -41,20 +41,14 @@ export class ProductEntity extends BaseEntity {
   @Column()
   categoryId!: Id;
 
-  @ManyToOne(() => CategoryEntity, {
-    onUpdate: "CASCADE",
-    onDelete: "CASCADE",
-  })
+  @ManyToOne(() => CategoryEntity)
   category!: CategoryEntity;
 
   @FilterableField(() => ID)
   @Column()
   brandId!: Id;
 
-  @ManyToOne(() => BrandEntity, {
-    onUpdate: "CASCADE",
-    onDelete: "CASCADE",
-  })
+  @ManyToOne(() => BrandEntity)
   brand!: BrandEntity;
 
   @OneToMany(() => ProductVariantEntity, productVariant => productVariant.product, {

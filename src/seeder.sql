@@ -49,10 +49,10 @@ VALUES
     ('manage', 'all', null),
 
     ('read', 'AddressEntity', null),
-    ('create', 'BrandEntity', null),
-    ('update', 'BrandEntity', null),
-    ('delete', 'BrandEntity', null),
-    ('manage', 'BrandEntity', null),
+    ('create', 'AddressEntity', null),
+    ('update', 'AddressEntity', null),
+    ('delete', 'AddressEntity', null),
+    ('manage', 'AddressEntity', null),
 
     ('read', 'BrandEntity', null),
     ('read', 'BrandEntity', '{"userId": { "$eq": "{{userId}}" }}'),
@@ -147,6 +147,10 @@ VALUES
     ('delete', 'OrderEntity', null),
     ('delete', 'OrderEntity', '{"userId": { "$eq": "{{userId}}" }}'),
     ('manage', 'OrderEntity', null),
+    ('cancel', 'OrderEntity', null),
+    ('reject', 'OrderEntity', null),
+    ('transfer_to_delivery', 'OrderEntity', null),
+    ('complete', 'OrderEntity', null),
 
     ('read', 'PaymentMethodEntity', null),
     ('read', 'PaymentMethodEntity', '{"status": { "$eq": "active" }}'),
@@ -312,6 +316,9 @@ INSERT INTO "role_permission" (role_id, permission_id)
 SELECT r.id, p.id FROM "role" r CROSS JOIN "permission" p WHERE r.code = 'customer' AND p.action = 'update' AND p.subject = 'OrderEntity' AND p.conditions = '{"userId": { "$eq": "{{userId}}" }}';
 
 INSERT INTO "role_permission" (role_id, permission_id)
+SELECT r.id, p.id FROM "role" r CROSS JOIN "permission" p WHERE r.code = 'customer' AND p.action = 'cancel' AND p.subject = 'OrderEntity';
+
+INSERT INTO "role_permission" (role_id, permission_id)
 SELECT r.id, p.id FROM "role" r CROSS JOIN "permission" p WHERE r.code = 'customer' AND p.action = 'read' AND p.subject = 'PaymentMethodEntity' AND p.conditions = '{"status": { "$eq": "active" }}';
 
 INSERT INTO "role_permission" (role_id, permission_id)
@@ -354,6 +361,13 @@ SELECT r.id, p.id FROM "role" r CROSS JOIN "permission" p WHERE r.code = 'custom
 
 -- Partner
 INSERT INTO "role_permission" (role_id, permission_id)
+SELECT r.id, p.id FROM "role" r CROSS JOIN "permission" p WHERE r.code = 'customer' AND p.action = 'create' AND p.subject = 'BrandEntity';
+INSERT INTO "role_permission" (role_id, permission_id)
+SELECT r.id, p.id FROM "role" r CROSS JOIN "permission" p WHERE r.code = 'customer' AND p.action = 'update' AND p.subject = 'BrandEntity' AND p.conditions = '{"userId": { "$eq": "{{userId}}" }}';
+INSERT INTO "role_permission" (role_id, permission_id)
+SELECT r.id, p.id FROM "role" r CROSS JOIN "permission" p WHERE r.code = 'customer' AND p.action = 'delete' AND p.subject = 'BrandEntity' AND p.conditions = '{"userId": { "$eq": "{{userId}}" }}';
+
+INSERT INTO "role_permission" (role_id, permission_id)
 SELECT r.id, p.id FROM "role" r CROSS JOIN "permission" p WHERE r.code = 'partner' AND p.action = 'read' AND p.subject = 'PromotionProductEntity';
 
 INSERT INTO "role_permission" (role_id, permission_id)
@@ -383,6 +397,13 @@ INSERT INTO "role_permission" (role_id, permission_id)
 SELECT r.id, p.id FROM "role" r CROSS JOIN "permission" p WHERE r.code = 'partner' AND p.action = 'update' AND p.subject = 'PromotionProductEntity' AND p.conditions = '{"product.brandId": { "$in": "{{brandIds}}" }}';
 INSERT INTO "role_permission" (role_id, permission_id)
 SELECT r.id, p.id FROM "role" r CROSS JOIN "permission" p WHERE r.code = 'partner' AND p.action = 'delete' AND p.subject = 'PromotionProductEntity' AND p.conditions = '{"product.brandId": { "$in": "{{brandIds}}" }}';
+
+INSERT INTO "role_permission" (role_id, permission_id)
+SELECT r.id, p.id FROM "role" r CROSS JOIN "permission" p WHERE r.code = 'partner' AND p.action = 'reject' AND p.subject = 'OrderEntity';
+INSERT INTO "role_permission" (role_id, permission_id)
+SELECT r.id, p.id FROM "role" r CROSS JOIN "permission" p WHERE r.code = 'partner' AND p.action = 'transfer_to_delivery' AND p.subject = 'OrderEntity';
+INSERT INTO "role_permission" (role_id, permission_id)
+SELECT r.id, p.id FROM "role" r CROSS JOIN "permission" p WHERE r.code = 'partner' AND p.action = 'complete' AND p.subject = 'OrderEntity';
 
 -- Admin
 INSERT INTO "role_permission" (role_id, permission_id)

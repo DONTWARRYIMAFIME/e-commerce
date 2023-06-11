@@ -4,7 +4,6 @@ import { hash } from "argon2";
 import { map } from "lodash";
 import { AfterInsert, AfterLoad, AfterUpdate, BeforeInsert, BeforeUpdate, Column, DeleteDateColumn, Index, JoinColumn, JoinTable, ManyToMany, OneToMany, OneToOne } from "typeorm";
 import { Entity, ObjectType } from "../../../common/decorators";
-import { Authorize } from "../../../common/decorators/graphql/authorize.decorator";
 import { Id } from "../../../common/types/id.type";
 import { BaseEntity } from "../../base.entity";
 import { BrandEntity } from "../../brand/entities/brand.entity";
@@ -16,7 +15,6 @@ import { RoleEntity } from "../../role/entities/role.entity";
 import { UserAddressEntity } from "../../user-address/entities/user-address.entity";
 import { WishlistEntity } from "../../wishlist/entities/wishlist.entity";
 
-@Authorize()
 @FilterableRelation("avatar", () => MediaEntity, { nullable: true })
 @FilterableRelation("emailAddress", () => EmailAddressEntity)
 @FilterableRelation("cart", () => CartEntity)

@@ -1,4 +1,5 @@
 import { Module } from "@nestjs/common";
+import { SortDirection } from "@ptc-org/nestjs-query-core";
 import { NestjsQueryGraphQLModule, PagingStrategies } from "@ptc-org/nestjs-query-graphql";
 import { NestjsQueryTypeOrmModule } from "@ptc-org/nestjs-query-typeorm";
 import { AccessGuard } from "../../providers/security/casl/access.guard";
@@ -7,6 +8,7 @@ import { CheckAbility } from "../../providers/security/casl/decorators/check-abi
 import { CartModule } from "../cart/cart.module";
 import { DeliveryMethodModule } from "../delivery-method/delivery-method.module";
 import { OrderItemModule } from "../order-item/order-item.module";
+import { PaymentIntentModule } from "../payment-intent/payment-intent.module";
 import { PaymentMethodModule } from "../payment-method/payment-method.module";
 import { ProductVariantModule } from "../product-variant/product-variant.module";
 import { WarehouseItemModule } from "../warehouse-item/warehouse-item.module";
@@ -29,6 +31,7 @@ import { OrderService } from "./order.service";
         WarehouseItemModule,
         OrderItemModule,
         ProductVariantModule,
+        PaymentIntentModule,
         NestjsQueryTypeOrmModule.forFeature([OrderEntity, OrderHistoryEntity]),
       ],
       services: [OrderService],
@@ -44,6 +47,7 @@ import { OrderService } from "./order.service";
           guards: [AccessGuard],
           read: {
             decorators: [CheckAbility(Actions.READ, OrderEntity)],
+            defaultSort: [{ field: "createdAt", direction: SortDirection.DESC }],
           },
           create: {
             decorators: [CheckAbility(Actions.CREATE, OrderEntity)],

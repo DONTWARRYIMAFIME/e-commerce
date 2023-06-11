@@ -25,7 +25,7 @@ export class OrderResolver {
   }
 
   @UseGuards(AccessTokenAuthGuard, AccessGuard)
-  @CheckAbility(Actions.UPDATE, OrderEntity, OrderHook)
+  @CheckAbility(Actions.TRANSFER_TO_DELIVERY, OrderEntity, OrderHook)
   @Mutation(() => OrderEntity)
   public transferOrderToDelivery(@Args() args: UpdateOrderArgsType): Promise<OrderEntity> {
     const { id } = args.input;
@@ -33,7 +33,7 @@ export class OrderResolver {
   }
 
   @UseGuards(AccessTokenAuthGuard, AccessGuard)
-  @CheckAbility(Actions.UPDATE, OrderEntity, OrderHook)
+  @CheckAbility(Actions.COMPLETE, OrderEntity, OrderHook)
   @Mutation(() => OrderEntity)
   public completeOrder(@Args() args: UpdateOrderArgsType): Promise<OrderEntity> {
     const { id } = args.input;
@@ -41,7 +41,15 @@ export class OrderResolver {
   }
 
   @UseGuards(AccessTokenAuthGuard, AccessGuard)
-  @CheckAbility(Actions.UPDATE, OrderEntity, OrderHook)
+  @CheckAbility(Actions.REJECT, OrderEntity, OrderHook)
+  @Mutation(() => OrderEntity)
+  public rejectOrder(@Args() args: UpdateOrderArgsType): Promise<OrderEntity> {
+    const { id } = args.input;
+    return this.orderService.rejectOrder(id as Id);
+  }
+
+  @UseGuards(AccessTokenAuthGuard, AccessGuard)
+  @CheckAbility(Actions.CANCEL, OrderEntity, OrderHook)
   @Mutation(() => OrderEntity)
   public cancelOrder(@Args() args: UpdateOrderArgsType): Promise<OrderEntity> {
     const { id } = args.input;

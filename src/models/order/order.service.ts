@@ -10,6 +10,7 @@ import { CartService } from "../cart/cart.service";
 import { DeliveryMethodService } from "../delivery-method/delivery-method.service";
 import { OrderItemEntity } from "../order-item/entities/order-item.entity";
 import { OrderItemService } from "../order-item/order-item.service";
+import { PaymentIntentService } from "../payment-intent/payment-intent.service";
 import { PaymentMethodService } from "../payment-method/payment-method.service";
 import { PriceEntity } from "../price/entities/price.entity";
 import { ProductVariantService } from "../product-variant/product-variant.service";
@@ -30,6 +31,7 @@ export class OrderService extends TypeOrmQueryService<OrderEntity> {
     private readonly warehouseItemService: WarehouseItemService,
     private readonly orderItemService: OrderItemService,
     private readonly productVariantService: ProductVariantService,
+    private readonly paymentIntentService: PaymentIntentService,
   ) {
     super(repo);
   }
@@ -129,7 +131,26 @@ export class OrderService extends TypeOrmQueryService<OrderEntity> {
     return this.updateOne(orderId, { status: OrderStatus.COMPLETED });
   }
 
+  public async rejectOrder(orderId: string): Promise<OrderEntity> {
+    const order = await this.findById(orderId);
+
+    // Return money back to customer for online payments
+    if (order.paymentIntentId) {
+      await this.paymentIntentService.refund(order.paymentIntentId);
+    }
+
+    await this.orderItemService.cancelOrderItems(orderId);
+    return this.updateOne(orderId, { status: OrderStatus.REJECTED });
+  }
+
   public async cancelOrder(orderId: string): Promise<OrderEntity> {
+    const order = await this.findById(orderId);
+
+    // Return money back to customer for online payments
+    if (order.paymentIntentId) {
+      await this.paymentIntentService.refund(order.paymentIntentId);
+    }
+
     await this.orderItemService.cancelOrderItems(orderId);
     return this.updateOne(orderId, { status: OrderStatus.CANCELLED });
   }

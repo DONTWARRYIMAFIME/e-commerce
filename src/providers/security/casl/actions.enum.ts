@@ -9,8 +9,15 @@ export enum DefaultActions {
   MANAGE = "manage",
 }
 
-export type Actions = DefaultActions;
-export const Actions = DefaultActions;
+export enum OrderActions {
+  CANCEL = "cancel",
+  REJECT = "reject",
+  TRANSFER_TO_DELIVERY = "transfer_to_delivery",
+  COMPLETE = "complete",
+}
+
+export type Actions = DefaultActions | OrderActions;
+export const Actions = { ...DefaultActions, ...OrderActions };
 
 registerEnumType(Actions, {
   name: "Actions",
