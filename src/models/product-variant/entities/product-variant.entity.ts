@@ -1,10 +1,14 @@
 import { ID } from "@nestjs/graphql";
+import { SortDirection } from "@ptc-org/nestjs-query-core";
 import { FilterableField, FilterableRelation } from "@ptc-org/nestjs-query-graphql";
-import { AfterLoad, Column, Index, JoinColumn, ManyToOne, OneToOne, Unique } from "typeorm";
+import { AfterLoad, BeforeUpdate, Column, Index, JoinColumn, ManyToOne, OneToOne, Unique } from "typeorm";
 import { Entity, ObjectType } from "../../../common/decorators";
 import { Authorize } from "../../../common/decorators/graphql/authorize.decorator";
+import { generateSku } from "../../../common/helpers/sku-generator.helper";
 import { Id } from "../../../common/types/id.type";
 import { BaseEntity } from "../../base.entity";
+import { BrandEntity } from "../../brand/entities/brand.entity";
+import { CategoryEntity } from "../../category/entities/category.entity";
 import { ColorEntity } from "../../color/entities/color.entity";
 import { PriceEntity } from "../../price/entities/price.entity";
 import { ProductEntity } from "../../product/entities/product.entity";
@@ -15,7 +19,7 @@ import { WarehouseStatus } from "../../warehouse/enums/warehouse-status.enum";
 @Authorize()
 @FilterableRelation("product", () => ProductEntity)
 @FilterableRelation("color", () => ColorEntity)
-@FilterableRelation("size", () => SizeEntity)
+@FilterableRelation("size", () => SizeEntity, { defaultSort: [{ field: "code", direction: SortDirection.ASC }] })
 @FilterableRelation("price", () => PriceEntity)
 @ObjectType()
 @Unique("UNQ_product_variant_sku", ["sku"])
@@ -72,5 +76,19 @@ export class ProductVariantEntity extends BaseEntity {
     if (stock) {
       this.stock = stock;
     }
+  }
+
+  @BeforeUpdate()
+  private async generateSKU() {
+    const product = await ProductEntity.findOneByOrFail({ id: this.productId });
+
+    const [category, brand, color, size] = await Promise.all([
+      CategoryEntity.findOneBy({ id: product.categoryId }),
+      BrandEntity.findOneBy({ id: product.brandId }),
+      ColorEntity.findOneBy({ id: this.colorId }),
+      SizeEntity.findOneBy({ id: this.sizeId }),
+    ]);
+
+    this.sku = generateSku(category.code, brand.code, color.code, size.code);
   }
 }

@@ -32,6 +32,8 @@ export class ProductService extends TypeOrmQueryService<ProductEntity> {
   }
 
   public async addMediaToProduct(id: Id, files: FileUpload[]): Promise<ProductEntity> {
+    console.log("called");
+
     const media = await this.mediaService.createManyMedia(
       files.map(file => {
         return {

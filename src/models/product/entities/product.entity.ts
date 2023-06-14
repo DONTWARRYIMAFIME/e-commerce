@@ -1,11 +1,9 @@
-import { Field, ID } from "@nestjs/graphql";
+import { ID } from "@nestjs/graphql";
 import { SortDirection } from "@ptc-org/nestjs-query-core";
 import { FilterableField, FilterableRelation, FilterableUnPagedRelation, QueryOptions, UnPagedRelation } from "@ptc-org/nestjs-query-graphql";
-import { map, uniqBy } from "lodash";
 import { AfterLoad, BeforeInsert, Column, Index, JoinTable, ManyToMany, ManyToOne, OneToMany } from "typeorm";
 import { Entity, ObjectType } from "../../../common/decorators";
 import { Authorize } from "../../../common/decorators/graphql/authorize.decorator";
-import { compare } from "../../../common/helpers/date.helper";
 import { generateSku } from "../../../common/helpers/sku-generator.helper";
 import { Id } from "../../../common/types/id.type";
 import { BaseEntity } from "../../base.entity";
@@ -52,7 +50,6 @@ export class ProductEntity extends BaseEntity {
   brand!: BrandEntity;
 
   @OneToMany(() => ProductVariantEntity, productVariant => productVariant.product, {
-    eager: true,
     cascade: true,
   })
   productVariants!: ProductVariantEntity[];
@@ -64,24 +61,19 @@ export class ProductEntity extends BaseEntity {
   @JoinTable({ name: "product_media" })
   media!: MediaEntity[];
 
-  @Field(() => [ColorEntity], { defaultValue: [] })
-  colors!: ColorEntity[];
-
-  @Field(() => [SizeEntity], { defaultValue: [] })
-  sizes!: SizeEntity[];
-
   @OneToMany(() => CommentEntity, comments => comments.product)
   comments!: CommentEntity[];
 
   @AfterLoad()
   private async afterLoad() {
-    const variants = await ProductVariantEntity.findBy({ productId: this.id });
-    this.colors = uniqBy(map(variants, "color"), productVariant => productVariant.id)
-      .sort((p1, p2) => compare(p1.createdAt, p2.createdAt))
-      .reverse();
-    this.sizes = uniqBy(map(variants, "size"), productVariant => productVariant.id)
-      .sort((p1, p2) => compare(p1.createdAt, p2.createdAt))
-      .reverse();
+    // console.log("variants", this.productVariants);
+    // const variants = await ProductVariantEntity.findBy({ productId: this.id });
+    // this.colors = uniqBy(map(variants, "color"), productVariant => productVariant.id)
+    //   .sort((p1, p2) => compare(p1.createdAt, p2.createdAt))
+    //   .reverse();
+    // this.sizes = uniqBy(map(variants, "size"), productVariant => productVariant.id)
+    //   .sort((p1, p2) => compare(p1.createdAt, p2.createdAt))
+    //   .reverse();
   }
 
   @BeforeInsert()

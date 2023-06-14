@@ -1,4 +1,5 @@
 import { Module } from "@nestjs/common";
+import { SortDirection } from "@ptc-org/nestjs-query-core";
 import { NestjsQueryGraphQLModule, PagingStrategies } from "@ptc-org/nestjs-query-graphql";
 import { NestjsQueryTypeOrmModule } from "@ptc-org/nestjs-query-typeorm";
 import { IsPublic } from "../../providers/security/auth/decorators/is-public.decorator";
@@ -6,6 +7,7 @@ import { AccessGuard } from "../../providers/security/casl/access.guard";
 import { Actions } from "../../providers/security/casl/actions.enum";
 import { CheckAbility } from "../../providers/security/casl/decorators/check-ability";
 import { MediaModule } from "../media/media.module";
+import { ProductVariantModule } from "../product-variant/product-variant.module";
 import { CreateProductInput } from "./dto/create-product.input";
 import { UpdateProductInput } from "./dto/update-product.input";
 import { ProductEntity } from "./entities/product.entity";
@@ -16,7 +18,7 @@ import { ProductService } from "./product.service";
 @Module({
   imports: [
     NestjsQueryGraphQLModule.forFeature({
-      imports: [MediaModule, NestjsQueryTypeOrmModule.forFeature([ProductEntity])],
+      imports: [MediaModule, ProductVariantModule, NestjsQueryTypeOrmModule.forFeature([ProductEntity])],
       services: [ProductService],
       resolvers: [
         {
@@ -30,6 +32,7 @@ import { ProductService } from "./product.service";
           guards: [AccessGuard],
           read: {
             decorators: [IsPublic()],
+            defaultSort: [{ field: "updatedAt", direction: SortDirection.DESC }],
           },
           create: {
             decorators: [CheckAbility(Actions.CREATE, ProductEntity)],

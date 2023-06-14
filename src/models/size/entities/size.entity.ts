@@ -10,7 +10,7 @@ import { Sizes } from "../enums/size.enum";
 @Unique("UNQ_size_code", ["code"])
 @Entity()
 export class SizeEntity extends BaseEntity {
-  @FilterableField()
+  @FilterableField(() => Sizes)
   @Column({
     type: "enum",
     enum: Sizes,

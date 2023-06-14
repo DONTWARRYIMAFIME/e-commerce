@@ -11,6 +11,7 @@ import { WarehouseEntity } from "../../warehouse/entities/warehouse.entity";
 
 @Authorize()
 @FilterableRelation("productVariant", () => ProductVariantEntity)
+@FilterableRelation("warehouse", () => WarehouseEntity)
 @ObjectType()
 @Unique("UNQ_warehouse_item_warehouse_and_product_variant", ["warehouse", "productVariant"])
 @Index("INX_warehouse_item_warehouse", ["warehouse"])

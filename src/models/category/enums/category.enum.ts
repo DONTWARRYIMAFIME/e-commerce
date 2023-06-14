@@ -16,6 +16,7 @@ export enum Categories {
   SWIMWEAR = "swimwear",
   JEANS = "jeans",
   PANTS = "pants",
+  T_SHIRT = "t_shirt",
 }
 
 registerEnumType(Categories, {

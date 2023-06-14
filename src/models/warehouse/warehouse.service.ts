@@ -27,6 +27,22 @@ export class WarehouseService extends TypeOrmQueryService<WarehouseEntity> {
     return this.findOneByIdOrFail(id);
   }
 
+  public async setWarehouseItemsInWarehouse(id: Id, warehouseItems: ManageWarehouseItem[]): Promise<WarehouseEntity> {
+    for (const warehouseItem of warehouseItems) {
+      const warehouseItemEntity = await this.warehouseItemService.findOneByWarehouseIdAndProductVariantId(id, warehouseItem.productVariantId);
+
+      if (!warehouseItemEntity) {
+        await this.warehouseItemService.increaseStock(id, warehouseItem.productVariantId, warehouseItem.quantity);
+      } else if (warehouseItem.quantity > warehouseItemEntity.stock) {
+        await this.warehouseItemService.increaseStock(id, warehouseItem.productVariantId, warehouseItem.quantity - warehouseItemEntity.stock);
+      } else {
+        await this.warehouseItemService.decreaseStock(id, warehouseItem.productVariantId, warehouseItemEntity.stock - warehouseItem.quantity);
+      }
+    }
+
+    return this.findOneByIdOrFail(id);
+  }
+
   public async reserve(id: Id, warehouseItems: ManageWarehouseItem[]): Promise<WarehouseEntity> {
     await Promise.all(warehouseItems.map(warehouseItem => this.warehouseItemService.reserve(id, warehouseItem.productVariantId, warehouseItem.quantity)));
     return this.findOneByIdOrFail(id);

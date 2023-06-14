@@ -34,6 +34,14 @@ export class WarehouseResolver {
   @UseGuards(AccessTokenAuthGuard, AccessGuard)
   @CheckAbility(Actions.UPDATE, WarehouseItemEntity, WarehouseItemHook)
   @Mutation(() => WarehouseEntity)
+  public async setWarehouseItemsInWarehouse(@Args() input: UpdateOneWarehouseArgsType): Promise<WarehouseEntity> {
+    const { id, update } = input.input;
+    return this.warehouseService.setWarehouseItemsInWarehouse(id as Id, update.warehouseItems);
+  }
+
+  @UseGuards(AccessTokenAuthGuard, AccessGuard)
+  @CheckAbility(Actions.UPDATE, WarehouseItemEntity, WarehouseItemHook)
+  @Mutation(() => WarehouseEntity)
   public async reserveWarehouseItemsInWarehouse(@Args() { input }: UpdateOneWarehouseArgsType): Promise<WarehouseEntity> {
     const { id, update } = input;
     return this.warehouseService.reserve(id as Id, update.warehouseItems);

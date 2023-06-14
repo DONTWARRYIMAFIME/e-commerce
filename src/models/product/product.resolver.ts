@@ -21,10 +21,12 @@ export class ProductResolver {
   @Mutation(() => ProductEntity)
   public async createOneProduct(
     @Args() args: CreateOneProductArgsType,
-    @Args("files", { type: () => [GraphQLUpload], defaultValue: [] }) fileUploads: Promise<FileUpload>[],
+    @Args("files", { type: () => [GraphQLUpload], defaultValue: [] }) fileUploads: FileUpload[],
   ): Promise<ProductEntity> {
+    console.log("here");
     const { input } = args.input;
     const files = await Promise.all(fileUploads);
+    console.log(files);
     return this.productService.createOne(input, files);
   }
 

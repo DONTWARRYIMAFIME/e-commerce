@@ -18,4 +18,8 @@ export class ProductVariantService extends TypeOrmQueryService<ProductVariantEnt
   public findByIdWithProduct(id: Id): Promise<ProductVariantEntity> {
     return this.repo.findOne({ where: { id }, relations: { product: true } });
   }
+
+  public findManyByProductId(productId): Promise<ProductVariantEntity[]> {
+    return this.repo.findBy({ productId });
+  }
 }

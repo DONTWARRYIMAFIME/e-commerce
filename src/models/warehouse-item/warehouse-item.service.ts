@@ -66,9 +66,13 @@ export class WarehouseItemService extends TypeOrmQueryService<WarehouseItemEntit
    * @returns {WarehouseItemEntity} An warehouse item entity
    */
   public async decreaseStock(warehouseId: Id, productVariantId: Id, quantity: number): Promise<WarehouseItemEntity> {
-    const { id: warehouseItemId, stock, ...rest } = await this.findOneByWarehouseIdAndProductVariantIdOrFail(warehouseId, productVariantId);
+    const { id: warehouseItemId, stock, available, ...rest } = await this.findOneByWarehouseIdAndProductVariantIdOrFail(warehouseId, productVariantId);
 
-    if (stock < quantity) {
+    if (quantity === 0) {
+      throw new UserInputError("An attempt to decrease stock by 0 amount of products");
+    }
+
+    if (available < quantity) {
       throw new UserInputError("Can not decrease stock quantity by " + quantity + " products.");
     }
 

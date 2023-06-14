@@ -386,6 +386,9 @@ SELECT r.id, p.id FROM "role" r CROSS JOIN "permission" p WHERE r.code = 'partne
 
 INSERT INTO "role_permission" (role_id, permission_id)
 SELECT r.id, p.id FROM "role" r CROSS JOIN "permission" p WHERE r.code = 'partner' AND p.action = 'read' AND p.subject = 'WarehouseEntity' AND p.conditions = '{"status": { "$eq": "active" }}';
+
+INSERT INTO "role_permission" (role_id, permission_id)
+SELECT r.id, p.id FROM "role" r CROSS JOIN "permission" p WHERE r.code = 'partner' AND p.action = 'read' AND p.subject = 'WarehouseItemEntity';
 INSERT INTO "role_permission" (role_id, permission_id)
 SELECT r.id, p.id FROM "role" r CROSS JOIN "permission" p WHERE r.code = 'partner' AND p.action = 'update' AND p.subject = 'WarehouseItemEntity' AND p.conditions = '{"warehouseItem.productVariant.product.brandId": {"$in": "{{brandIds}}"}}';
 
@@ -716,6 +719,9 @@ SELECT 'tops', 'Tops', 'Tops', c.id FROM "category" c WHERE c.code = 'women';
 INSERT INTO "category" (code, name, description, parent_id)
 SELECT 'swimwear', 'Swimwear', 'Swimwear', c.id FROM "category" c WHERE c.code = 'women';
 
+INSERT INTO "category" (code, name, description, parent_id)
+SELECT 't_shirt', 'T-Shirts', 'T-Shirts', c.id FROM "category" c WHERE c.code = 'women';
+
 -- Category men
 INSERT INTO "category" (code, name, description, parent_id)
 SELECT 'men', 'Men', 'Men category', c.id FROM "category" c WHERE c.code = 'root';
@@ -737,6 +743,9 @@ SELECT 'shorts', 'Shorts', 'Shorts', c.id FROM "category" c WHERE c.code = 'men'
 
 INSERT INTO "category" (code, name, description, parent_id)
 SELECT 'pants', 'Pants', 'Pants', c.id FROM "category" c WHERE c.code = 'men';
+
+INSERT INTO "category" (code, name, description, parent_id)
+SELECT 't_shirt', 'T-Shirts', 'T-Shirts', c.id FROM "category" c WHERE c.code = 'men';
 
 -- Payment methods
 -- INSERT INTO "payment_method" (code, name)
