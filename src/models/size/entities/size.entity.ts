@@ -20,4 +20,8 @@ export class SizeEntity extends BaseEntity {
   @FilterableField()
   @Column({ length: 3 })
   name!: string;
+
+  @FilterableField({ defaultValue: 0 })
+  @Column({ default: 0 })
+  priority!: number;
 }

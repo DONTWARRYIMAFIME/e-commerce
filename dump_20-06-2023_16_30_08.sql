@@ -405,14 +405,14 @@ ALTER TYPE public.role_code_enum OWNER TO postgres;
 --
 
 CREATE TYPE public.size_code_enum AS ENUM (
-    '2xs',
-    'xs',
-    's',
-    'm',
-    'l',
-    'xl',
-    '2xl',
-    '3xl'
+    'XXS',
+    'XS',
+    'S',
+    'M',
+    'L',
+    'XL',
+    'XXL',
+    'XXXL'
 );
 
 
@@ -930,7 +930,8 @@ CREATE TABLE public.size (
     created_at timestamp without time zone DEFAULT now() NOT NULL,
     updated_at timestamp without time zone DEFAULT now() NOT NULL,
     code public.size_code_enum NOT NULL,
-    name character varying(3) NOT NULL
+    name character varying(3) NOT NULL,
+    priority integer DEFAULT 0 NOT NULL
 );
 
 
@@ -4236,15 +4237,15 @@ a1b50707-140f-4228-992d-afa6c622a706	0e8c2ef9-7f85-4146-b2f3-9412e7fd205f
 -- Data for Name: size; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.size (id, created_at, updated_at, code, name) FROM stdin;
-0b287c5c-ebca-485d-b648-3eeeb26f4c74	2023-05-21 12:14:30.972807	2023-05-21 12:14:30.972807	2xs	2XS
-73f222f9-cf20-4b02-92c3-60de3eb8e5f0	2023-05-21 12:14:30.972807	2023-05-21 12:14:30.972807	xs	XS
-925dc306-1fee-4985-83ba-c3ffe1d6fa37	2023-05-21 12:14:30.972807	2023-05-21 12:14:30.972807	s	S
-f3a2b97e-1dba-4a7b-8067-f89e8400d227	2023-05-21 12:14:30.972807	2023-05-21 12:14:30.972807	m	M
-def52206-45aa-48b9-bb32-9f05c45e7461	2023-05-21 12:14:30.972807	2023-05-21 12:14:30.972807	l	L
-2ed55aba-1311-4e78-a262-2712ad7896a9	2023-05-21 12:14:30.972807	2023-05-21 12:14:30.972807	xl	XL
-2d7ed52d-ad40-4942-a107-88a4a3006e57	2023-05-21 12:14:30.972807	2023-05-21 12:14:30.972807	2xl	2XL
-fc500351-9486-4043-8198-77f4c2b58dc0	2023-05-21 12:14:30.972807	2023-05-21 12:14:30.972807	3xl	3XL
+COPY public.size (id, created_at, updated_at, code, name, priority) FROM stdin;
+f3a2b97e-1dba-4a7b-8067-f89e8400d227	2023-05-21 12:14:30.972807	2023-05-21 12:14:30.972807	M	M	4
+2d7ed52d-ad40-4942-a107-88a4a3006e57	2023-05-21 12:14:30.972807	2023-05-21 12:14:30.972807	XXL	2XL	7
+fc500351-9486-4043-8198-77f4c2b58dc0	2023-05-21 12:14:30.972807	2023-05-21 12:14:30.972807	XXXL	3XL	8
+0b287c5c-ebca-485d-b648-3eeeb26f4c74	2023-05-21 12:14:30.972807	2023-05-21 12:14:30.972807	XXS	2XS	1
+def52206-45aa-48b9-bb32-9f05c45e7461	2023-05-21 12:14:30.972807	2023-05-21 12:14:30.972807	L	L	5
+73f222f9-cf20-4b02-92c3-60de3eb8e5f0	2023-05-21 12:14:30.972807	2023-05-21 12:14:30.972807	XS	XS	2
+925dc306-1fee-4985-83ba-c3ffe1d6fa37	2023-05-21 12:14:30.972807	2023-05-21 12:14:30.972807	S	S	3
+2ed55aba-1311-4e78-a262-2712ad7896a9	2023-05-21 12:14:30.972807	2023-05-21 12:14:30.972807	XL	XL	6
 \.
 
 

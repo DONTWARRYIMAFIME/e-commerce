@@ -29,7 +29,6 @@ export class StripeController {
     try {
       event = this.stripe.webhooks.constructEvent(request.rawBody, signature, webhookSecret);
     } catch (err) {
-      console.log(err.message);
       throw new BadRequestException(`Webhook Error: ${err.message}`);
     }
 

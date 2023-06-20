@@ -1,6 +1,7 @@
-import { ID } from "@nestjs/graphql";
+import { Field, ID } from "@nestjs/graphql";
 import { SortDirection } from "@ptc-org/nestjs-query-core";
 import { FilterableField, FilterableRelation, FilterableUnPagedRelation, QueryOptions, UnPagedRelation } from "@ptc-org/nestjs-query-graphql";
+import { map, sortBy, uniqBy } from "lodash";
 import { AfterLoad, BeforeInsert, Column, Index, JoinTable, ManyToMany, ManyToOne, OneToMany } from "typeorm";
 import { Entity, ObjectType } from "../../../common/decorators";
 import { Authorize } from "../../../common/decorators/graphql/authorize.decorator";
@@ -64,16 +65,16 @@ export class ProductEntity extends BaseEntity {
   @OneToMany(() => CommentEntity, comments => comments.product)
   comments!: CommentEntity[];
 
+  @Field(() => [ColorEntity], { defaultValue: [] })
+  colors!: ColorEntity[];
+
+  @Field(() => [SizeEntity], { defaultValue: [] })
+  sizes!: SizeEntity[];
+
   @AfterLoad()
   private async afterLoad() {
-    // console.log("variants", this.productVariants);
-    // const variants = await ProductVariantEntity.findBy({ productId: this.id });
-    // this.colors = uniqBy(map(variants, "color"), productVariant => productVariant.id)
-    //   .sort((p1, p2) => compare(p1.createdAt, p2.createdAt))
-    //   .reverse();
-    // this.sizes = uniqBy(map(variants, "size"), productVariant => productVariant.id)
-    //   .sort((p1, p2) => compare(p1.createdAt, p2.createdAt))
-    //   .reverse();
+    this.colors = uniqBy(map(this.productVariants, "color"), "id");
+    this.sizes = sortBy(uniqBy(map(this.productVariants, "size"), "id"), "priority");
   }
 
   @BeforeInsert()

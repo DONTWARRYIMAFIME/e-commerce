@@ -1,5 +1,5 @@
 import { InjectRepository } from "@nestjs/typeorm";
-import { QueryService } from "@ptc-org/nestjs-query-core";
+import { Query, QueryOptions, QueryService } from "@ptc-org/nestjs-query-core";
 import { TypeOrmQueryService } from "@ptc-org/nestjs-query-typeorm";
 import { FileUpload } from "graphql-upload";
 import { map } from "lodash";
@@ -32,8 +32,6 @@ export class ProductService extends TypeOrmQueryService<ProductEntity> {
   }
 
   public async addMediaToProduct(id: Id, files: FileUpload[]): Promise<ProductEntity> {
-    console.log("called");
-
     const media = await this.mediaService.createManyMedia(
       files.map(file => {
         return {
@@ -48,5 +46,25 @@ export class ProductService extends TypeOrmQueryService<ProductEntity> {
   public async removeMediaFromProduct(id: Id, relationIds: Id[]): Promise<ProductEntity> {
     await this.mediaService.deleteManyMedia(relationIds);
     return this.findOneByIdOrFail(id);
+  }
+
+  public query(query: Query<ProductEntity>, opts?: QueryOptions): Promise<ProductEntity[]> {
+    return super.query(
+      {
+        ...query,
+        relations: [
+          {
+            name: "productVariants",
+            query: {
+              relations: [
+                { name: "color", query: {} },
+                { name: "size", query: {} },
+              ],
+            },
+          },
+        ],
+      },
+      opts,
+    );
   }
 }

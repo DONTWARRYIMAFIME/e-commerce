@@ -65,7 +65,6 @@ export class CartService extends TypeOrmQueryService<CartEntity> {
   }
 
   public async removeCartItemsFromCart(id: Id, cartItems: DeepPartial<CartItemEntity>[]): Promise<CartEntity> {
-    console.log("cartItems", cartItems);
     await Promise.all(cartItems.map(cartItem => this.cartItemService.decreaseQuantity(id, cartItem.productVariantId, cartItem?.quantity)));
     const cart = await this.findOneByIdOrFail(id);
     return this.recalculateCartTotal(id, omit(cart, ["id"]));
