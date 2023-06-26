@@ -32,7 +32,7 @@ import { ProductService } from "./product.service";
           guards: [AccessGuard],
           read: {
             decorators: [IsPublic()],
-            defaultResultSize: 50,
+            defaultResultSize: 12,
             defaultSort: [{ field: "updatedAt", direction: SortDirection.DESC }],
           },
           create: {

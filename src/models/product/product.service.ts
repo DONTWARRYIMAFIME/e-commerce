@@ -4,11 +4,10 @@ import { TypeOrmQueryService } from "@ptc-org/nestjs-query-typeorm";
 import { FileUpload } from "graphql-upload";
 import { map } from "lodash";
 import { join } from "path";
-import { DeepPartial, FindOptionsWhere, Repository } from "typeorm";
+import { DeepPartial, Repository } from "typeorm";
 import { Id } from "../../common/types/id.type";
 import { PRODUCTS_FOLDER } from "../media/media.constants";
 import { MediaService } from "../media/media.service";
-import { UserEntity } from "../user/entities/user.entity";
 import { ProductEntity } from "./entities/product.entity";
 
 @QueryService(ProductEntity)
@@ -17,8 +16,12 @@ export class ProductService extends TypeOrmQueryService<ProductEntity> {
     super(repo);
   }
 
-  public findOneByIdOrFail(id: Id, opts?: FindOptionsWhere<UserEntity>): Promise<ProductEntity> {
-    return this.repo.findOneByOrFail({ id, ...opts });
+  public findById(id: Id): Promise<ProductEntity> {
+    return this.repo.findOne({ where: { id }, relations: { productVariants: { color: true, size: true } } });
+  }
+
+  public findOneByIdOrFail(id: Id): Promise<ProductEntity> {
+    return this.repo.findOneOrFail({ where: { id }, relations: { productVariants: { color: true, size: true } } });
   }
 
   public async createOne(record: DeepPartial<ProductEntity>, files?: FileUpload[]): Promise<ProductEntity> {
@@ -49,9 +52,10 @@ export class ProductService extends TypeOrmQueryService<ProductEntity> {
   }
 
   public query(query: Query<ProductEntity>, opts?: QueryOptions): Promise<ProductEntity[]> {
+    // To hide lib bug using relations + offset pagination strategy. Query should use skip/take instead of limit/offset
+    const correction = 10;
     return super.query(
       {
-        ...query,
         relations: [
           {
             name: "productVariants",
@@ -63,6 +67,9 @@ export class ProductService extends TypeOrmQueryService<ProductEntity> {
             },
           },
         ],
+        ...(Boolean(query.paging) && { paging: { offset: query.paging.offset * correction, limit: query.paging.limit * correction } }),
+        ...(Boolean(query.sorting) && { sorting: query.sorting }),
+        ...(Boolean(query.filter) && { filter: query.filter }),
       },
       opts,
     );
